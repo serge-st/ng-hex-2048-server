@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}

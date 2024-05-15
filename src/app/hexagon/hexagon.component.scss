@@ -1,0 +1,28 @@
+.hexagon {
+    clip-path: polygon(
+        25% 0%, /* Top left point */
+        75% 0%, /* Top right point */
+        100% 50%, /* Right point */
+        75% 100%, /* Bottom right point */
+        25% 100%, /* Bottom left point */
+        0% 50% /* Left point */
+    );
+}
+
+.outer {
+    background-color: #64c7cc;
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 100px;
+    width: var(--width);
+    height: var(--height);
+}
+
+.inner {
+    background-color: #0f0;
+    width: calc(var(--width) - var(--border-width));
+    height: calc(var(--height) - var(--border-width));
+}
