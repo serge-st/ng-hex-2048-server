@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { StyleVariables } from './style-variables';
+import { HexCoord } from './hex-coord';
 
 @Component({
   selector: 'app-hexagon',
@@ -9,11 +10,16 @@ import { StyleVariables } from './style-variables';
   styleUrl: './hexagon.component.scss',
 })
 export class HexagonComponent implements OnChanges {
-  @Input({ required: true }) width!: number;
+  @Input({ required: true }) coord!: HexCoord;
 
-  height!: number;
+  validateHexCoordinates() {
+    if (this.coord.q + this.coord.s + this.coord.r !== 0) {
+      throw new Error('Invalid hex coordinates: q + r + s must equal 0');
+    }
+  }
 
-  border: number = 18;
+  @Input({ required: true }) hexWidth!: number;
+  hexHeight!: number;
 
   styleVariables!: StyleVariables;
 
@@ -22,12 +28,14 @@ export class HexagonComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.height = (Math.sqrt(3) * (this.width / 2));
+    this.validateHexCoordinates();
+
+    this.hexHeight = (Math.sqrt(3) * (this.hexWidth / 2));
 
     this.styleVariables = {
-      width: this.addPixel(this.width),
-      height: this.addPixel(this.height),
-      borderWidth: this.addPixel(this.border),
+      width: this.addPixel(this.hexWidth),
+      height: this.addPixel(this.hexHeight),
     };
+
   }
 }

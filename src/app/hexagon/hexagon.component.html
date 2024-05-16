@@ -1,8 +1,8 @@
 <div
-    class="hexagon outer"
+    class="hexagon"
     [style.--width]="styleVariables.width"
     [style.--height]="styleVariables.height"
-    [style.--border-width]="styleVariables.borderWidth"
->
-    <div class="hexagon inner"></div>
-</div>
+    [attr.data-q]="coord.q"
+    [attr.data-s]="coord.s"
+    [attr.data-r]="coord.r"
+></div>
