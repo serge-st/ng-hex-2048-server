@@ -8,9 +8,11 @@ canvas.width = 1000;
 console.log('canvas.width', canvas.width);
 canvas.height = 1000 * baseLayout.orientation.f2;
 console.log('canvas.height', canvas.height);
-const yPoint = 1000 * baseLayout.orientation.f2 / 2
 
-const layout = new Layout(Layout.flat, new Point(500, 500), new Point(500, yPoint));
+const xOriginOffset = 500; // where is the middle hex drawn on the x-axis
+const yOriginOffset = 1000 * baseLayout.orientation.f2 / 2 // where is the middle hex drawn on the y-axis
+
+const layout = new Layout(Layout.flat, new Point(500, 500), new Point(xOriginOffset, yOriginOffset));
 console.log(JSON.stringify(layout, null, 2));
 const hexes = [
     new Hex(0, 0, 0),
@@ -35,6 +37,25 @@ const colors = [
 const ctx = canvas.getContext('2d');
 
 function drawHex(ctx, layout, hex, color) {
+    // HEX TO PIXEL:
+    // Calculated using q and r coordinates.
+    // x coordinate:
+    //      x = f0 * q + f1 * r
+    // y coordinate:
+    //      y = f2 * q + f3 * r
+    console.log('Hex coord', { q: hex.q, r: hex.r });
+    console.log('Orientation', { f0: layout.orientation.f0, f1: layout.orientation.f1, f2: layout.orientation.f2, f3: layout.orientation.f3 });
+
+    const x = layout.orientation.f0 * hex.q + layout.orientation.f1 * hex.r;
+    console.log('x', x);
+    const y = layout.orientation.f2 * hex.q + layout.orientation.f3 * hex.r;
+    console.log('y', y);
+    console.log(`x and y origin offsets:`, { x: xOriginOffset, y: yOriginOffset });
+
+    console.log(`final coordinates`, { x: x + xOriginOffset, y: y + yOriginOffset });
+
+    
+
     const corners = layout.polygonCorners(hex);
     ctx.beginPath();
     ctx.moveTo(corners[0].x, corners[0].y);
