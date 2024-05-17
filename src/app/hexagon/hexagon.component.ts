@@ -13,8 +13,9 @@ export class HexagonComponent implements OnChanges {
   @Input({ required: true }) coord!: HexCoord;
 
   validateHexCoordinates() {
-    if (this.coord.q + this.coord.s + this.coord.r !== 0) {
-      throw new Error('Invalid hex coordinates: q + r + s must equal 0');
+    if (this.coord.q + this.coord.r + this.coord.s !== 0) {
+      const badCoord = { q: this.coord.q, r: this.coord.r, s: this.coord.s };
+      throw new Error(`Invalid hex coordinates: ${badCoord} q + r + s must equal 0`);
     }
   }
 
@@ -23,7 +24,7 @@ export class HexagonComponent implements OnChanges {
 
   styleVariables!: StyleVariables;
 
-  private addPixel(value: number): string {
+  private getPixelString(value: number): string {
     return value + 'px';
   }
 
@@ -33,8 +34,8 @@ export class HexagonComponent implements OnChanges {
     this.hexHeight = (Math.sqrt(3) * (this.hexWidth / 2));
 
     this.styleVariables = {
-      width: this.addPixel(this.hexWidth),
-      height: this.addPixel(this.hexHeight),
+      width: this.getPixelString(this.hexWidth),
+      height: this.getPixelString(this.hexHeight),
     };
 
   }
