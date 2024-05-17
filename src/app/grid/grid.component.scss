@@ -1,5 +1,6 @@
 .container {
-    width: 100dvw;
-    height: 100dvh;
+    width: var(--width);
+    height: var(--height);
     position: relative;
+    border: 1px solid tomato;
 }

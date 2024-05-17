@@ -1,11 +1,7 @@
-<div class="container">
-    <app-hexagon [hexWidth]="200" [coord]="{ q: -1, r: 0, s: 1 }"></app-hexagon>
-    <app-hexagon [hexWidth]="200" [coord]="{ q: 0, r: -1, s: 1 }"
-        style="left: 200px; top:var(--height)"
-    ></app-hexagon>
-    <!-- <app-hexagon [hexWidth]="200" [coord]="{ q: 1, r: -1, s: 0 }"></app-hexagon>
-    <app-hexagon [hexWidth]="200" [coord]="{ q: 0, r: 0, s: 0 }"></app-hexagon>
-    <app-hexagon [hexWidth]="200" [coord]="{ q: -1, r: 1, s: 0 }"></app-hexagon>
-    <app-hexagon [hexWidth]="200" [coord]="{ q: 0, r: 1, s: -1 }"></app-hexagon>
-    <app-hexagon [hexWidth]="200" [coord]="{ q: 1, r: 0, s: -1 }"></app-hexagon>     -->
+<div
+    class="container"
+    [style.--width]="styleVariables.width"
+    [style.--height]="styleVariables.height"
+>
+    <app-hexagon [hexWidth]="hexWidth" [coord]="{ q: 0, r: 0, s: 0 }"></app-hexagon>
 </div>

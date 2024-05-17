@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { HexagonComponent } from '../hexagon/hexagon.component';
-import { HexCoord } from '../hexagon/hex-coord';
+import { StyleVariables } from '../hexagon/style-variables';
 
 @Component({
   selector: 'app-grid',
@@ -9,30 +9,33 @@ import { HexCoord } from '../hexagon/hex-coord';
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
 })
-export class GridComponent {
+export class GridComponent implements OnChanges {
   @Input({ required: true }) radius!: number;
+  @Input({ required: true }) hexWidth!: number;
 
-  hexLength(hex: HexCoord): number {
-    return (Math.abs(hex.q) + Math.abs(hex.r) + Math.abs(hex.s)) / 2;
+  gridWidth!: number;
+  gridHeight!: number;
+
+  setGridWidth(): void {
+    this.gridWidth = this.hexWidth + (this.hexWidth * 1.5 * this.radius)
   }
 
-  hexAdd(a: HexCoord, b: HexCoord): HexCoord {
-    return {
-      q: a.q + b.q,
-      r: a.r + b.r,
-      s: a.s + b.s,
+  styleVariables!: StyleVariables;
+
+  private getPixelString(value: number): string {
+    return value + 'px';
+  }
+
+  ngOnChanges(): void {
+    this.setGridWidth();
+
+    // MOCK VALUE
+    this.gridHeight = 200;
+
+    this.styleVariables = {
+      width: this.getPixelString(this.gridWidth),
+      height: this.getPixelString(this.gridHeight)
     }
-  }
 
-  hexSubtract(a: HexCoord, b: HexCoord): HexCoord {
-    return {
-      q: a.q - b.q,
-      r: a.r - b.r,
-      s: a.s - b.s
-    }
-  }
-
-  hexDistance(a: HexCoord, b: HexCoord): number {
-    return this.hexLength(this.hexSubtract(a, b));
   }
 }

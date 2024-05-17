@@ -14,8 +14,8 @@ export class HexagonComponent implements OnChanges {
 
   validateHexCoordinates() {
     if (this.coord.q + this.coord.r + this.coord.s !== 0) {
-      const badCoord = { q: this.coord.q, r: this.coord.r, s: this.coord.s };
-      throw new Error(`Invalid hex coordinates: ${badCoord} q + r + s must equal 0`);
+      const badCoord = JSON.stringify({ q: this.coord.q, r: this.coord.r, s: this.coord.s });
+      throw new Error(`Invalid hex coordinates: ${badCoord}; q + r + s must equal 0`);
     }
   }
 
