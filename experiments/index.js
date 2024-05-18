@@ -9,8 +9,8 @@ console.log('canvas.width', canvas.width);
 canvas.height = 1000 * baseLayout.orientation.f2;
 console.log('canvas.height', canvas.height);
 
-const xOriginOffset = 500; // where is the middle hex drawn on the x-axis
-const yOriginOffset = 1000 * baseLayout.orientation.f2 / 2 // where is the middle hex drawn on the y-axis
+const xOriginOffset = canvas.width / 2; // where is the middle hex drawn on the x-axis
+const yOriginOffset = canvas.width  * baseLayout.orientation.f2 / 2 // where is the middle hex drawn on the y-axis
 
 const layout = new Layout(Layout.flat, new Point(500, 500), new Point(xOriginOffset, yOriginOffset));
 console.log(JSON.stringify(layout, null, 2));

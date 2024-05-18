@@ -18,8 +18,11 @@ describe('GridComponent', () => {
     component.hexHeight = 100;
     component.styleVariables = {
       width: '100px',
-      height: '100px'
+      height: '100px',
+      xCoord: '100px',
+      yCoord: '100px',
     }
+    component.offset = { x: 0, y: 0 };
     fixture.detectChanges();
   });
 
@@ -82,6 +85,14 @@ describe('GridComponent', () => {
       component.radius = 5;
       component.setGridHeight()
       expect(component.gridHeight).toBe(1100);
+    });
+  });
+
+  describe('setOffset', () => {
+    it('should calculate the correct offset', () => {
+      component.gridWidth = 100;
+      component.setOffset();
+      expect(component.offset).toEqual({ x: 50, y: 43.30127018922193 });
     });
   });
 });

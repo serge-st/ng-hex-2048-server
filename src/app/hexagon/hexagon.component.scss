@@ -3,6 +3,9 @@
     background-color: rgb(110, 224, 110);
     width: var(--width);
     height: var(--height);
+    left: var(--x-coord);
+    top: var(--y-coord);
+    transform: translate(-50%, -25%);
     clip-path: polygon(
         25% 0%, /* Top left point */
         75% 0%, /* Top right point */

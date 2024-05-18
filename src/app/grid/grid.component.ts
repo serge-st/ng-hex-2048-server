@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { HexagonComponent } from '../hexagon/hexagon.component';
 import { StyleVariables } from '../shared/interfaces/style-variables';
 import { GridUtilityComponent } from '../shared/grid-utility-component';
+import { Offset } from '../shared/interfaces/offset';
 
 @Component({
   selector: 'app-grid',
@@ -26,6 +27,15 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
     this.gridHeight = this.hexHeight + (this.hexHeight * 2 * this.radius)
   }
 
+  offset!: Offset;
+
+  setOffset(): void {
+    this.offset = {
+      x: this.gridWidth / 2,
+      y: this.gridWidth * this.coordToPixel.f2 / 2
+    };
+  }
+
   styleVariables!: StyleVariables;
 
   ngOnChanges(): void {
@@ -33,6 +43,8 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
 
     this.setGridWidth();
     this.setGridHeight();
+
+    this.setOffset();
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
   }
