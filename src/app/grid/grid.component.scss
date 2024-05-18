@@ -2,5 +2,8 @@
     width: var(--width);
     height: var(--height);
     position: relative;
+
+    // !! TODO: remove temporary styles
     border: 1px solid tomato;
+    box-sizing: content-box;
 }
