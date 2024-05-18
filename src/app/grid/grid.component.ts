@@ -3,11 +3,13 @@ import { HexagonComponent } from '../hexagon/hexagon.component';
 import { StyleVariables } from '../shared/interfaces/style-variables';
 import { GridUtilityComponent } from '../shared/grid-utility-component';
 import { Position } from '../shared/interfaces/position';
+import { HexCoord } from '../shared/interfaces/hex-coord';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-grid',
   standalone: true,
-  imports: [HexagonComponent],
+  imports: [HexagonComponent, NgFor],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
 })
@@ -36,6 +38,20 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
     };
   }
 
+  hexCoords!: HexCoord[];
+
+  setHexCoords(): void {
+    this.hexCoords = [];
+
+    for (let q = -this.radius; q <= this.radius; q++) {
+      for (let r = Math.max(-this.radius, -q - this.radius); r <= Math.min(this.radius, -q + this.radius); r++) {
+        // added "|| 0" to prevent "-0" values
+        const s = -q - r || 0;
+        this.hexCoords.push({ q, r, s });
+      }
+    }
+  }
+
   styleVariables!: StyleVariables;
 
   ngOnChanges(): void {
@@ -45,6 +61,9 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
     this.setGridHeight();
 
     this.setOffset();
+
+    this.setHexCoords();
+    console.log(this.hexCoords)
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
   }
