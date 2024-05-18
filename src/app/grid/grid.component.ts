@@ -2,7 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { HexagonComponent } from '../hexagon/hexagon.component';
 import { StyleVariables } from '../shared/interfaces/style-variables';
 import { GridUtilityComponent } from '../shared/grid-utility-component';
-import { Offset } from '../shared/interfaces/offset';
+import { Position } from '../shared/interfaces/position';
 
 @Component({
   selector: 'app-grid',
@@ -27,7 +27,7 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
     this.gridHeight = this.hexHeight + (this.hexHeight * 2 * this.radius)
   }
 
-  offset!: Offset;
+  offset!: Position;
 
   setOffset(): void {
     this.offset = {

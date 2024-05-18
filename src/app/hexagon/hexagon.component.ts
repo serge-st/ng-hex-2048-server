@@ -2,7 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { StyleVariables } from '../shared/interfaces/style-variables';
 import { HexCoord } from './interfaces/hex-coord';
 import { GridUtilityComponent } from '../shared/grid-utility-component';
-import { Offset } from '../shared/interfaces/offset';
+import { Position } from '../shared/interfaces/position';
 
 @Component({
   selector: 'app-hexagon',
@@ -24,15 +24,15 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   hexHeight!: number;
   styleVariables!: StyleVariables;
 
-  @Input({ required: true }) offset!: Offset;
+  @Input({ required: true }) offset!: Position;
 
-  pixelCoord!: Offset;
+  pixelCoord!: Position;
 
   setPixelCoords(): void {
     const hexRadius = this.hexWidth / 2
     const x = (this.coordToPixel.f0 * this.coord.q + this.coordToPixel.f1 * this.coord.r) * hexRadius;
     const y = (this.coordToPixel.f2 * this.coord.q + this.coordToPixel.f3 * this.coord.r) * hexRadius;
-    // Offset is needed to center the hexagon { q: 0, r: 0, s: 0 } in the grid
+    // Position is needed to center the hexagon { q: 0, r: 0, s: 0 } in the grid
     const xWithOffset = x + this.offset.x;
     const yWithOffset = y + this.offset.y;
     this.pixelCoord = {
