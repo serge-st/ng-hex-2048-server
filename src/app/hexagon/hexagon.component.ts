@@ -14,7 +14,7 @@ import { Position } from '../shared/interfaces/position';
 export class HexagonComponent extends GridUtilityComponent implements OnChanges {
   @Input({ required: true }) coord!: HexCoord;
   validateHexCoordinates() {
-    if (this.coord.q + this.coord.r + this.coord.s !== 0) {
+    if (Math.round(this.coord.q + this.coord.r + this.coord.s) !== 0) {
       const badCoord = JSON.stringify({ q: this.coord.q, r: this.coord.r, s: this.coord.s });
       throw new Error(`Invalid hex coordinates: ${badCoord}; q + r + s must equal 0`);
     }

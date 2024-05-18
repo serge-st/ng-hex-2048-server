@@ -8,20 +8,14 @@ describe('GridComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GridComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GridComponent);
     component = fixture.componentInstance;
     component.radius = 1;
     component.hexWidth = 100;
     component.hexHeight = 100;
-    component.styleVariables = {
-      width: '100px',
-      height: '100px',
-      xCoord: '100px',
-      yCoord: '100px',
-    }
+    component.styleVariables = { width: '100px', height: '100px', xCoord: '100px', yCoord: '100px' }
     component.offset = { x: 0, y: 0 };
     fixture.detectChanges();
   });
