@@ -5,8 +5,6 @@
     height: var(--height);
     left: var(--x-coord);
     top: var(--y-coord);
-    // !! TODO remove transofrm as it breaks the lineup on different radiuses
-    transform: translate(-50%, -25%);
     clip-path: polygon(
         25% 0%, /* Top left point */
         75% 0%, /* Top right point */

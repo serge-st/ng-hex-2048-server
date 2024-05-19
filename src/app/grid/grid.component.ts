@@ -33,8 +33,8 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
 
   setOffset(): void {
     this.offset = {
-      x: this.gridWidth / 2,
-      y: this.gridWidth * this.coordToPixel.f2 / 2
+      x: (this.gridWidth / 2) - (this.hexWidth / 2),
+      y: (this.gridHeight / 2) - (this.hexHeight / 2)
     };
   }
 
@@ -63,7 +63,6 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
     this.setOffset();
 
     this.setHexCoords();
-    console.log(this.hexCoords)
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
   }

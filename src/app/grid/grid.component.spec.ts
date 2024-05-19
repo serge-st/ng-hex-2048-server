@@ -83,10 +83,22 @@ describe('GridComponent', () => {
   });
 
   describe('setOffset', () => {
-    it('should calculate the correct offset', () => {
-      component.gridWidth = 100;
+    it('should calculate the correct offset on radius 1', () => {
+      component.radius = 1;
+      component.setGridWidth();
+      component.setGridHeight();
       component.setOffset();
-      expect(component.offset).toEqual({ x: 50, y: 43.30127018922193 });
+
+      expect(component.offset).toEqual({ x: 75, y: 100 });
+    });
+
+    it('should calculate the correct offset on radius 2', () => {
+      component.radius = 2;
+      component.setGridWidth();
+      component.setGridHeight();
+      component.setOffset();
+
+      expect(component.offset).toEqual({ x: 150, y: 200 });
     });
   });
 
