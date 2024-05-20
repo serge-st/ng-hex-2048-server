@@ -9,7 +9,7 @@ import { NgFor } from '@angular/common';
   standalone: true,
   imports: [HexagonComponent, NgFor],
   templateUrl: './grid.component.html',
-  styleUrl: './grid.component.scss'
+  styleUrl: './grid.component.scss',
 })
 export class GridComponent extends GridUtilityComponent implements OnChanges {
   @Input({ required: true }) radius!: number;
@@ -20,19 +20,19 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
   gridHeight!: number;
 
   setGridWidth(): void {
-    this.gridWidth = this.hexWidth + (this.hexWidth * 1.5 * this.radius)
+    this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius;
   }
 
   setGridHeight(): void {
-    this.gridHeight = this.hexHeight + (this.hexHeight * 2 * this.radius)
+    this.gridHeight = this.hexHeight + this.hexHeight * 2 * this.radius;
   }
 
   offset!: Position;
 
   setOffset(): void {
     this.offset = {
-      x: (this.gridWidth / 2) - (this.hexWidth / 2),
-      y: (this.gridHeight / 2) - (this.hexHeight / 2)
+      x: this.gridWidth / 2 - this.hexWidth / 2,
+      y: this.gridHeight / 2 - this.hexHeight / 2,
     };
   }
 

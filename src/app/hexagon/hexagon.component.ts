@@ -27,7 +27,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   pixelCoord!: Position;
 
   setPixelCoords(): void {
-    const hexRadius = this.hexWidth / 2
+    const hexRadius = this.hexWidth / 2;
     const x = (this.coordToPixel.f0 * this.coord.q + this.coordToPixel.f1 * this.coord.r) * (hexRadius + this.gap);
     const y = (this.coordToPixel.f2 * this.coord.q + this.coordToPixel.f3 * this.coord.r) * (hexRadius + this.gap);
     // Offset is needed to place the hexagon { q: 0, r: 0, s: 0 } in the center of the grid

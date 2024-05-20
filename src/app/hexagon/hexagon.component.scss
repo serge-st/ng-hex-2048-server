@@ -1,16 +1,16 @@
 .hexagon {
-    position: absolute;
-    background-color: rgb(110, 224, 110);
-    width: var(--width);
-    height: var(--height);
-    left: var(--x-coord);
-    top: var(--y-coord);
-    clip-path: polygon(
-        25% 0%, /* Top left point */
-        75% 0%, /* Top right point */
-        100% 50%, /* Right point */
-        75% 100%, /* Bottom right point */
-        25% 100%, /* Bottom left point */
-        0% 50% /* Left point */
-    );
+  position: absolute;
+  background-color: rgb(110, 224, 110);
+  width: var(--width);
+  height: var(--height);
+  left: var(--x-coord);
+  top: var(--y-coord);
+  clip-path: polygon(
+    /* Top left point */ 25% 0%,
+    /* Top right point */ 75% 0%,
+    /* Right point */ 100% 50%,
+    /* Bottom right point */ 75% 100%,
+    /* Bottom left point */ 25% 100%,
+    /* Left point */ 0% 50%
+  );
 }

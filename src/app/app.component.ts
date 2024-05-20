@@ -7,7 +7,7 @@ import { GamePageComponent } from '@app/pages';
   standalone: true,
   imports: [RouterOutlet, GamePageComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'ng-hex-2048';

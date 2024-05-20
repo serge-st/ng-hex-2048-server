@@ -8,6 +8,4 @@ import { GridComponent } from '../../grid/grid.component';
   templateUrl: './game-page.component.html',
   styleUrls: ['../pages-styles.scss', './game-page.component.scss'],
 })
-export class GamePageComponent {
-
-}
+export class GamePageComponent {}

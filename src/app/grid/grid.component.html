@@ -1,12 +1,8 @@
-<div
-    class="container"
-    [style.--width]="styleVariables.width"
-    [style.--height]="styleVariables.height"
->
-    <app-hexagon
-        *ngFor="let hexCoord of hexCoords"
-        [hexWidth]="hexWidth" 
-        [coord]="hexCoord" 
-        [offset]="offset"
-    ></app-hexagon>
+<div class="container" [style.--width]="styleVariables.width" [style.--height]="styleVariables.height">
+  <app-hexagon
+    *ngFor="let hexCoord of hexCoords"
+    [hexWidth]="hexWidth"
+    [coord]="hexCoord"
+    [offset]="offset"
+  ></app-hexagon>
 </div>

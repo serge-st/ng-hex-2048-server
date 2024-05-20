@@ -7,7 +7,7 @@ describe('GridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GridComponent]
+      imports: [GridComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GridComponent);
@@ -15,7 +15,7 @@ describe('GridComponent', () => {
     component.radius = 1;
     component.hexWidth = 100;
     component.hexHeight = 100;
-    component.styleVariables = { width: '100px', height: '100px', xCoord: '100px', yCoord: '100px' }
+    component.styleVariables = { width: '100px', height: '100px', xCoord: '100px', yCoord: '100px' };
     component.offset = { x: 0, y: 0 };
     fixture.detectChanges();
   });
@@ -59,25 +59,25 @@ describe('GridComponent', () => {
   describe('setGridHeight', () => {
     it('should calculate the correct grid height 0 radius', () => {
       component.radius = 0;
-      component.setGridHeight()
+      component.setGridHeight();
       expect(component.gridHeight).toBe(100);
     });
 
     it('should calculate the correct grid height 1 radius', () => {
       component.radius = 1;
-      component.setGridHeight()
+      component.setGridHeight();
       expect(component.gridHeight).toBe(300);
     });
 
     it('should calculate the correct grid height 2 radius', () => {
       component.radius = 2;
-      component.setGridHeight()
+      component.setGridHeight();
       expect(component.gridHeight).toBe(500);
     });
 
     it('should calculate the correct grid height 5 radius', () => {
       component.radius = 5;
-      component.setGridHeight()
+      component.setGridHeight();
       expect(component.gridHeight).toBe(1100);
     });
   });
@@ -113,7 +113,7 @@ describe('GridComponent', () => {
         { q: 0, r: 0, s: 0 },
         { q: 0, r: 1, s: -1 },
         { q: 1, r: -1, s: 0 },
-        { q: 1, r: 0, s: -1 }
+        { q: 1, r: 0, s: -1 },
       ]);
     });
 
