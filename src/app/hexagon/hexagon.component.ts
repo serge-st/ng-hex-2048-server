@@ -1,8 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { StyleVariables } from '../shared/interfaces/style-variables';
-import { HexCoord } from '../shared/interfaces/hex-coord';
-import { GridUtilityComponent } from '../shared/grid-utility-component/grid-utility-component';
-import { Position } from '../shared/interfaces/position';
+import { StyleVariables, HexCoord, Position } from '@app/shared/interfaces';
+import { GridUtilityComponent } from '@app/shared/components';
 
 @Component({
   selector: 'app-hexagon',

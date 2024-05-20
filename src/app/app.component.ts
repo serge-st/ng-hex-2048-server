@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HexagonComponent } from './hexagon/hexagon.component';
-import { GamePageComponent } from './pages/game-page/game-page.component';
+import { GamePageComponent } from '@app/pages';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HexagonComponent, GamePageComponent],
+  imports: [RouterOutlet, GamePageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

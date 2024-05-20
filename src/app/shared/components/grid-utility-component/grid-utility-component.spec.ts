@@ -1,4 +1,4 @@
-import { StyleVariables } from '../interfaces/style-variables';
+import { StyleVariables } from '@app/shared/interfaces';
 import { GridUtilityComponent } from './grid-utility-component';
 
 class TestGridUtilityComponent extends GridUtilityComponent {

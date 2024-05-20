@@ -1,9 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { HexagonComponent } from '../hexagon/hexagon.component';
-import { StyleVariables } from '../shared/interfaces/style-variables';
-import { GridUtilityComponent } from '../shared/grid-utility-component/grid-utility-component';
-import { Position } from '../shared/interfaces/position';
-import { HexCoord } from '../shared/interfaces/hex-coord';
+import { HexagonComponent } from '@app/hexagon';
+import { StyleVariables, Position, HexCoord } from '@app/shared/interfaces';
+import { GridUtilityComponent } from '@app/shared/components';
 import { NgFor } from '@angular/common';
 
 @Component({
