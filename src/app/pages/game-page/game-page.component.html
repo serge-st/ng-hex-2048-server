@@ -1,4 +1,4 @@
 <main>
-  <input type="text" class="form-control" placeholder="Username" aria-label="Username" />
-  <app-grid [radius]="1" [hexWidth]="100"></app-grid>
+  <app-game-setup-form></app-game-setup-form>
+  <app-grid [radius]="storeService.state.radius" [hexWidth]="100"></app-grid>
 </main>

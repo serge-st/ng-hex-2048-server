@@ -1,0 +1,12 @@
+<label for="radius" class="form-label">Radius</label>
+<!-- !! TODO change to min="1" later on -->
+<input
+  #radiusInput
+  id="radius"
+  min="0"
+  type="number"
+  class="form-control"
+  aria-label="Radius"
+  [(ngModel)]="radius"
+  (input)="setRadius(radiusInput.value)"
+/>
