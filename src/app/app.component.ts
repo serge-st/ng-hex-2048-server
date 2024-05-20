@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HexagonComponent } from './hexagon/hexagon.component';
-import { GridComponent } from './grid/grid.component';
+import { GamePageComponent } from './pages/game-page/game-page.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HexagonComponent, GridComponent],
+  imports: [RouterOutlet, HexagonComponent, GamePageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

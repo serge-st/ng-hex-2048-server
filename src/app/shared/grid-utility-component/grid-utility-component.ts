@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StyleVariables } from './interfaces/style-variables';
+import { StyleVariables } from '../interfaces/style-variables';
 
 @Component({
     selector: '',

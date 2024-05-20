@@ -1,5 +1,5 @@
+import { StyleVariables } from '../interfaces/style-variables';
 import { GridUtilityComponent } from './grid-utility-component';
-import { StyleVariables } from './interfaces/style-variables';
 
 class TestGridUtilityComponent extends GridUtilityComponent {
   hexWidth: number = 0;
