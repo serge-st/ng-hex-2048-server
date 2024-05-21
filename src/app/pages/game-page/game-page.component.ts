@@ -12,4 +12,9 @@ import { StoreService } from '@app/shared/services';
 })
 export class GamePageComponent {
   constructor(public storeService: StoreService) {}
+
+  // !! TODO Remove after testing
+  ngDoCheck(): void {
+    console.log('GamePage component rendered', Math.random());
+  }
 }

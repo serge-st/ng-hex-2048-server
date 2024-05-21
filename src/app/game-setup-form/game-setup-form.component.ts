@@ -28,4 +28,9 @@ export class GameSetupFormComponent implements OnInit {
       this.currentState = state;
     });
   }
+
+  // !! TODO Remove after testing
+  ngDoCheck(): void {
+    console.log('GameSetupForm component rendered', Math.random());
+  }
 }

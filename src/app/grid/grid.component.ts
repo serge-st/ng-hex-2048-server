@@ -80,4 +80,9 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
       this.updateProperies();
     });
   }
+
+  // !! TODO Remove after testing
+  ngDoCheck(): void {
+    console.log('Grid component rendered', Math.random());
+  }
 }
