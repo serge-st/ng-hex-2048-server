@@ -1,8 +1,9 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { HexagonComponent } from '@app/hexagon';
 import { StyleVariables, Position, HexCoord } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { NgFor } from '@angular/common';
+import { StoreService } from '@app/shared/services';
 
 @Component({
   selector: 'app-grid',
@@ -11,8 +12,13 @@ import { NgFor } from '@angular/common';
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss',
 })
-export class GridComponent extends GridUtilityComponent implements OnChanges {
-  @Input({ required: true }) radius!: number;
+export class GridComponent extends GridUtilityComponent implements OnInit {
+  constructor(private storeService: StoreService) {
+    super();
+  }
+
+  radius!: number;
+  gap!: number;
   @Input({ required: true }) hexWidth!: number;
   hexHeight: number = 0;
 
@@ -20,7 +26,9 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
   gridHeight!: number;
 
   setGridWidth(): void {
-    this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius;
+    this.gridWidth =
+      // this.hexWidth + this.hexWidth * 1.5 * this.radius + (this.gap * 6 * this.radius) / this.coordToPixel.f0;
+      this.hexWidth + this.hexWidth * 1.5 * this.radius;
   }
 
   setGridHeight(): void {
@@ -52,7 +60,7 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
 
   styleVariables!: StyleVariables;
 
-  ngOnChanges(): void {
+  updateProperies(): void {
     this.setHexHeight();
 
     this.setGridWidth();
@@ -63,5 +71,13 @@ export class GridComponent extends GridUtilityComponent implements OnChanges {
     this.setHexCoords();
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
+  }
+
+  ngOnInit(): void {
+    this.storeService.state$.subscribe((state) => {
+      this.radius = state.radius;
+      this.gap = state.gap;
+      this.updateProperies();
+    });
   }
 }

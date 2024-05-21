@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { StoreService } from '@app/shared/services';
+import { State } from '@app/shared/services/state';
 
 @Component({
   selector: 'app-game-setup-form',
@@ -9,13 +10,22 @@ import { StoreService } from '@app/shared/services';
   templateUrl: './game-setup-form.component.html',
   styleUrl: './game-setup-form.component.scss',
 })
-export class GameSetupFormComponent {
-  public radius: string;
-  constructor(public storeService: StoreService) {
-    this.radius = this.storeService.state.radius.toString();
+export class GameSetupFormComponent implements OnInit {
+  currentState!: State;
+
+  constructor(private storeService: StoreService) {}
+
+  setRadius(radius: string): void {
+    this.storeService.setRadius(Number(radius));
   }
 
-  setRadius(radius: string) {
-    this.storeService.state.radius = Number(radius);
+  setGap(gap: string): void {
+    this.storeService.setGap(Number(gap));
+  }
+
+  ngOnInit(): void {
+    this.storeService.state$.subscribe((state) => {
+      this.currentState = state;
+    });
   }
 }
