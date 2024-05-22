@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { GridComponent } from '@app/grid/grid.component';
 import { GameSetupFormComponent } from '@app/game-setup-form';
-import { StoreService } from '@app/shared/services';
 
 @Component({
   selector: 'app-game-page',
@@ -10,11 +9,4 @@ import { StoreService } from '@app/shared/services';
   templateUrl: './game-page.component.html',
   styleUrls: ['../pages-styles.scss', './game-page.component.scss'],
 })
-export class GamePageComponent {
-  constructor(public storeService: StoreService) {}
-
-  // !! TODO Remove after testing
-  ngDoCheck(): void {
-    console.log('GamePage component rendered', Math.random());
-  }
-}
+export class GamePageComponent {}

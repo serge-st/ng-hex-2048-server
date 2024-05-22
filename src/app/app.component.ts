@@ -11,9 +11,4 @@ import { GamePageComponent } from '@app/pages';
 })
 export class AppComponent {
   title = 'ng-hex-2048';
-
-  // !! TODO Remove after testing
-  ngDoCheck(): void {
-    console.log('App component rendered', Math.random());
-  }
 }

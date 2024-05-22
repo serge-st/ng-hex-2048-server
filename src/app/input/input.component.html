@@ -1,0 +1,11 @@
+<label for="{{ label }}" class="form-label">{{ label }}</label>
+<input
+  #input
+  id="{{ label }}"
+  [min]="minValue"
+  type="number"
+  class="form-control"
+  attr.aria-label="{{ label }}"
+  [value]="value"
+  (input)="onInputChange(input.value)"
+/>

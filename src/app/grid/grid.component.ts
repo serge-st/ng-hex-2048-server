@@ -4,6 +4,8 @@ import { StyleVariables, Position, HexCoord } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { NgFor } from '@angular/common';
 import { StoreService } from '@app/shared/services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-grid',
@@ -13,29 +15,37 @@ import { StoreService } from '@app/shared/services';
   styleUrl: './grid.component.scss',
 })
 export class GridComponent extends GridUtilityComponent implements OnInit {
-  constructor(private storeService: StoreService) {
-    super();
-  }
-
   radius!: number;
   gap!: number;
-  @Input({ required: true }) hexWidth!: number;
-  hexHeight: number = 0;
+  constructor(private storeService: StoreService) {
+    super();
+    this.storeService.state$
+      .pipe(takeUntilDestroyed())
+      .pipe(distinctUntilChanged())
+      .subscribe((state) => {
+        this.radius = state.radius;
+        this.gap = state.gap;
 
+        this.updateProperies();
+      });
+  }
+
+  @Input({ required: true }) hexWidth!: number;
+  hexHeight!: number;
   gridWidth!: number;
   gridHeight!: number;
+  offset!: Position;
+  hexCoords!: HexCoord[];
+  styleVariables!: StyleVariables;
 
   setGridWidth(): void {
-    this.gridWidth =
-      // this.hexWidth + this.hexWidth * 1.5 * this.radius + (this.gap * 6 * this.radius) / this.coordToPixel.f0;
-      this.hexWidth + this.hexWidth * 1.5 * this.radius;
+    // this.hexWidth + this.hexWidth * 1.5 * this.radius + (this.gap * 6 * this.radius) / this.coordToPixel.f0;
+    this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius;
   }
 
   setGridHeight(): void {
     this.gridHeight = this.hexHeight + this.hexHeight * 2 * this.radius;
   }
-
-  offset!: Position;
 
   setOffset(): void {
     this.offset = {
@@ -43,8 +53,6 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
       y: this.gridHeight / 2 - this.hexHeight / 2,
     };
   }
-
-  hexCoords!: HexCoord[];
 
   setHexCoords(): void {
     this.hexCoords = [];
@@ -58,9 +66,13 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
     }
   }
 
-  styleVariables!: StyleVariables;
+  trackByCoord(_index: number, hexCoord: HexCoord): string {
+    return `${hexCoord.q},${hexCoord.r},${hexCoord.s}`;
+  }
 
   updateProperies(): void {
+    if (!this.hexWidth) return;
+
     this.setHexHeight();
 
     this.setGridWidth();
@@ -74,15 +86,6 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.storeService.state$.subscribe((state) => {
-      this.radius = state.radius;
-      this.gap = state.gap;
-      this.updateProperies();
-    });
-  }
-
-  // !! TODO Remove after testing
-  ngDoCheck(): void {
-    console.log('Grid component rendered', Math.random());
+    this.updateProperies();
   }
 }

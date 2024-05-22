@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { InputComponent } from '@app/input/input.component';
 import { StoreService } from '@app/shared/services';
-import { State } from '@app/shared/services/state';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-game-setup-form',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, InputComponent, AsyncPipe],
   templateUrl: './game-setup-form.component.html',
   styleUrl: './game-setup-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameSetupFormComponent implements OnInit {
-  currentState!: State;
+export class GameSetupFormComponent {
+  radius$!: Observable<number>;
+  gap$!: Observable<number>;
 
-  constructor(private storeService: StoreService) {}
+  constructor(private storeService: StoreService) {
+    this.radius$ = this.storeService.state$.pipe(map((state) => state.radius));
+    this.gap$ = this.storeService.state$.pipe(map((state) => state.gap));
+  }
 
   setRadius(radius: string): void {
     this.storeService.setRadius(Number(radius));
@@ -21,16 +28,5 @@ export class GameSetupFormComponent implements OnInit {
 
   setGap(gap: string): void {
     this.storeService.setGap(Number(gap));
-  }
-
-  ngOnInit(): void {
-    this.storeService.state$.subscribe((state) => {
-      this.currentState = state;
-    });
-  }
-
-  // !! TODO Remove after testing
-  ngDoCheck(): void {
-    console.log('GameSetupForm component rendered', Math.random());
   }
 }
