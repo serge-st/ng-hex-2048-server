@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-input',
@@ -14,9 +14,5 @@ export class InputComponent {
 
   onInputChange(value: string) {
     this.valueChange.emit(value);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(`Value changed for ${this.label}:`, changes['value'].currentValue);
   }
 }
