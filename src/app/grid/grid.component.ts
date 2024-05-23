@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HexagonComponent } from '@app/hexagon';
 import { StyleVariables, Position, HexCoord } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
@@ -14,7 +14,7 @@ import { distinctUntilChanged } from 'rxjs';
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss',
 })
-export class GridComponent extends GridUtilityComponent implements OnInit {
+export class GridComponent extends GridUtilityComponent {
   radius!: number;
   gap!: number;
   hexWidth!: number;
@@ -39,18 +39,18 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
   hexCoords!: HexCoord[];
   styleVariables!: StyleVariables;
 
-  ngOnInit(): void {
-    this.updateProperies();
-  }
-
   setGridWidth(): void {
+    // this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius; /* original calculation */
     // this.hexWidth + this.hexWidth * 1.5 * this.radius + (this.gap * 6 * this.radius) / this.coordToPixel.f0;
-    this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius;
+    this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius + this.gap * 2;
+
     console.log(`hex width: ${this.hexWidth}; grid width: ${this.gridWidth}`);
   }
 
   setGridHeight(): void {
-    this.gridHeight = this.hexHeight + this.hexHeight * 2 * this.radius;
+    // this.gridHeight = this.hexHeight + this.hexHeight * 2 * this.radius;  /* original calculation */
+    this.gridHeight = this.hexHeight + this.hexHeight * 2 * this.radius + this.gap * 2;
+
     console.log(`hex height: ${this.hexHeight}; grid height: ${this.gridHeight}`);
   }
 
@@ -79,7 +79,6 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
 
   updateProperies(): void {
     if (!this.hexWidth) return;
-
     this.setHexHeight();
 
     this.setGridWidth();

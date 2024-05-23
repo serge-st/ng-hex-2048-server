@@ -39,18 +39,18 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     this.updateProperies();
   }
 
-  updateProperies(): void {
-    if (!this.coord) return;
-    this.setHexHeight();
-    this.setPixelCoords();
-    this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
-  }
-
   validateHexCoordinates() {
     if (Math.round(this.coord.q + this.coord.r + this.coord.s) !== 0) {
       const badCoord = JSON.stringify({ q: this.coord.q, r: this.coord.r, s: this.coord.s });
       throw new Error(`Invalid hex coordinates: ${badCoord}; q + r + s must equal 0`);
     }
+  }
+
+  updateProperies(): void {
+    if (!this.coord) return;
+    this.setHexHeight();
+    this.setPixelCoords();
+    this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
   }
 
   setPixelCoords(): void {
@@ -71,24 +71,4 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
       y: yWithOffset,
     };
   }
-
-  // ngOnChanges() {
-  //   this.validateHexCoordinates();
-  //   this.setHexHeight();
-  //   this.setPixelCoords();
-  //   this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
-  // !! TODO remove after testing
-  // this.route.queryParams.subscribe((params) => {
-  //   this.gap = Number(params['gap']);
-  //   this.setPixelCoords();
-  //   this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
-  //   if (this.coord.s === this.storeService.state.radius && this.coord.r === -this.storeService.state.radius) {
-  //     console.log('topmost hex:', this.styleVariables);
-  //   }
-  //   if (this.coord.s === this.storeService.state.radius && this.coord.q === -this.storeService.state.radius) {
-  //     console.log('GAP:', params['gap'], 'RADIUS:', this.storeService.state.radius);
-  //     console.log('leftmost hex:', this.styleVariables);
-  //   }
-  // });
-  // }
 }

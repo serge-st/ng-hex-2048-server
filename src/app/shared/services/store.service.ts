@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 const initialState: State = {
   radius: 1,
   gap: 0,
-  hexWidth: 100,
+  hexWidth: 200,
 };
 
 @Injectable({
