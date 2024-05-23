@@ -17,6 +17,7 @@ import { distinctUntilChanged } from 'rxjs';
 export class GridComponent extends GridUtilityComponent implements OnInit {
   radius!: number;
   gap!: number;
+  hexWidth!: number;
   constructor(private storeService: StoreService) {
     super();
     this.storeService.state$
@@ -25,12 +26,12 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
       .subscribe((state) => {
         this.radius = state.radius;
         this.gap = state.gap;
+        this.hexWidth = state.hexWidth;
 
         this.updateProperies();
       });
   }
 
-  @Input({ required: true }) hexWidth!: number;
   hexHeight!: number;
   gridWidth!: number;
   gridHeight!: number;
@@ -38,13 +39,19 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
   hexCoords!: HexCoord[];
   styleVariables!: StyleVariables;
 
+  ngOnInit(): void {
+    this.updateProperies();
+  }
+
   setGridWidth(): void {
     // this.hexWidth + this.hexWidth * 1.5 * this.radius + (this.gap * 6 * this.radius) / this.coordToPixel.f0;
     this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius;
+    console.log(`hex width: ${this.hexWidth}; grid width: ${this.gridWidth}`);
   }
 
   setGridHeight(): void {
     this.gridHeight = this.hexHeight + this.hexHeight * 2 * this.radius;
+    console.log(`hex height: ${this.hexHeight}; grid height: ${this.gridHeight}`);
   }
 
   setOffset(): void {
@@ -83,9 +90,5 @@ export class GridComponent extends GridUtilityComponent implements OnInit {
     this.setHexCoords();
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
-  }
-
-  ngOnInit(): void {
-    this.updateProperies();
   }
 }

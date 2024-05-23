@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 const initialState: State = {
   radius: 1,
   gap: 0,
+  hexWidth: 100,
 };
 
 @Injectable({
@@ -19,7 +20,7 @@ export class StoreService {
     return this.state.value;
   }
 
-  setState(newState: Partial<State>): void {
+  private setState(newState: Partial<State>): void {
     this.state.next({ ...this.getState(), ...newState });
     // !! TODO remove afer testing
     console.log('New state:', this.getState());
@@ -31,5 +32,9 @@ export class StoreService {
 
   setGap(gap: number): void {
     this.setState({ gap });
+  }
+
+  setHexWidth(hexWidth: number): void {
+    this.setState({ hexWidth });
   }
 }

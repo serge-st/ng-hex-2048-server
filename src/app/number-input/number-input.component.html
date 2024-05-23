@@ -6,6 +6,7 @@
   type="number"
   class="form-control"
   attr.aria-label="{{ label }}"
+  [step]="step"
   [value]="value"
   (input)="onInputChange(input.value)"
 />

@@ -1,14 +1,14 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { InputComponent } from '@app/input/input.component';
+import { NumberInputComponent } from '@app/number-input/number-input.component';
 import { StoreService } from '@app/shared/services';
 import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-game-setup-form',
   standalone: true,
-  imports: [FormsModule, InputComponent, AsyncPipe],
+  imports: [FormsModule, NumberInputComponent, AsyncPipe],
   templateUrl: './game-setup-form.component.html',
   styleUrl: './game-setup-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,17 +16,11 @@ import { Observable, map } from 'rxjs';
 export class GameSetupFormComponent {
   radius$!: Observable<number>;
   gap$!: Observable<number>;
+  hexWidth$!: Observable<number>;
 
-  constructor(private storeService: StoreService) {
+  constructor(readonly storeService: StoreService) {
     this.radius$ = this.storeService.state$.pipe(map((state) => state.radius));
     this.gap$ = this.storeService.state$.pipe(map((state) => state.gap));
-  }
-
-  setRadius(radius: string): void {
-    this.storeService.setRadius(Number(radius));
-  }
-
-  setGap(gap: string): void {
-    this.storeService.setGap(Number(gap));
+    this.hexWidth$ = this.storeService.state$.pipe(map((state) => state.hexWidth));
   }
 }

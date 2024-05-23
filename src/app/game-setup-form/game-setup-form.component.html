@@ -1,3 +1,13 @@
 <!-- !! TODO change to min="1" later on -->
-<app-input label="Radius" [value]="radius$ | async" (valueChange)="setRadius($event)"></app-input>
-<app-input label="Gap" [value]="gap$ | async" (valueChange)="setGap($event)"></app-input>
+<app-number-input
+  label="Radius"
+  [value]="radius$ | async"
+  (valueChange)="storeService.setRadius($event)"
+></app-number-input>
+<app-number-input label="Gap" [value]="gap$ | async" (valueChange)="storeService.setGap($event)"></app-number-input>
+<app-number-input
+  label="Hex Width"
+  [value]="hexWidth$ | async"
+  (valueChange)="storeService.setHexWidth($event)"
+  [step]="10"
+></app-number-input>
