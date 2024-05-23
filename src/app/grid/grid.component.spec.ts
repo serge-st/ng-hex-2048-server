@@ -58,24 +58,28 @@ describe('GridComponent', () => {
 
   describe('setGridHeight', () => {
     it('should calculate the correct grid height 0 radius', () => {
+      component.hexHeight = 100;
       component.radius = 0;
       component.setGridHeight();
       expect(component.gridHeight).toBe(100);
     });
 
     it('should calculate the correct grid height 1 radius', () => {
+      component.hexHeight = 100;
       component.radius = 1;
       component.setGridHeight();
       expect(component.gridHeight).toBe(300);
     });
 
     it('should calculate the correct grid height 2 radius', () => {
+      component.hexHeight = 100;
       component.radius = 2;
       component.setGridHeight();
       expect(component.gridHeight).toBe(500);
     });
 
     it('should calculate the correct grid height 5 radius', () => {
+      component.hexHeight = 100;
       component.radius = 5;
       component.setGridHeight();
       expect(component.gridHeight).toBe(1100);
@@ -84,6 +88,8 @@ describe('GridComponent', () => {
 
   describe('setOffset', () => {
     it('should calculate the correct offset on radius 1', () => {
+      component.hexHeight = 100;
+      component.hexWidth = 100;
       component.radius = 1;
       component.setGridWidth();
       component.setGridHeight();
@@ -93,6 +99,8 @@ describe('GridComponent', () => {
     });
 
     it('should calculate the correct offset on radius 2', () => {
+      component.hexHeight = 100;
+      component.hexWidth = 100;
       component.radius = 2;
       component.setGridWidth();
       component.setGridHeight();
