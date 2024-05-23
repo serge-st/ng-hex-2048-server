@@ -39,17 +39,22 @@ export class GridComponent extends GridUtilityComponent {
   hexCoords!: HexCoord[];
   styleVariables!: StyleVariables;
 
+  gapCompoensationX = 1.75;
+  gapCompoensationY = Math.sqrt(3) / 2;
+
   setGridWidth(): void {
     // this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius; /* original calculation */
     // this.hexWidth + this.hexWidth * 1.5 * this.radius + (this.gap * 6 * this.radius) / this.coordToPixel.f0;
-    this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius + this.gap * 2;
+    const xPaddings = this.gap * 2 * this.gapCompoensationX;
+    this.gridWidth = this.hexWidth + this.hexWidth * 1.5 * this.radius + xPaddings;
 
     console.log(`hex width: ${this.hexWidth}; grid width: ${this.gridWidth}`);
   }
 
   setGridHeight(): void {
     // this.gridHeight = this.hexHeight + this.hexHeight * 2 * this.radius;  /* original calculation */
-    this.gridHeight = this.hexHeight + this.hexHeight * 2 * this.radius + this.gap * 2;
+    this.gridHeight =
+      this.hexHeight + this.hexHeight * 2 * this.radius + this.gap * 2 * this.gapCompoensationY + this.gap * 2;
 
     console.log(`hex height: ${this.hexHeight}; grid height: ${this.gridHeight}`);
   }
