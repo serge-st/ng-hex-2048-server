@@ -18,7 +18,7 @@ export abstract class GridUtilityComponent {
   };
 
   getPixelString(value: number): string {
-    return value + 'px';
+    return value.toFixed(3) + 'px';
   }
 
   setHexHeight(): void {
