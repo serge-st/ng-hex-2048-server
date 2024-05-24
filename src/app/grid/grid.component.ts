@@ -48,8 +48,8 @@ export class GridComponent extends GridUtilityComponent {
 
   setGridHeight(): void {
     const hexesHeight = this.hexHeight * (2 * this.radius + 1);
-    const gapCompoensation = this.radius * Math.sqrt(3) * this.gap;
-    const padding = this.gap * 2 + gapCompoensation;
+    const gapCompensation = this.radius * Math.sqrt(3) * this.gap;
+    const padding = this.gap * 2 + gapCompensation;
     this.gridHeight = hexesHeight + padding;
   }
 
@@ -88,5 +88,10 @@ export class GridComponent extends GridUtilityComponent {
     this.setHexCoords();
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
+
+    console.log(
+      `radius: ${this.radius}, gap: ${this.gap}, gridWidth: ${this.gridWidth}, gridHeight: ${this.gridHeight}, hexHeight: ${this.hexHeight}`,
+      `xc: ${JSON.stringify(this.coordToPixel)}`,
+    );
   }
 }

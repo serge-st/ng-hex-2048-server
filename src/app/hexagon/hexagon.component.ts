@@ -23,8 +23,6 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
       .subscribe((state) => {
         this.gap = state.gap;
         this.hexWidth = state.hexWidth;
-
-        this.updateProperies();
       });
   }
 
@@ -55,12 +53,9 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
 
   setPixelCoords(): void {
     const hexRadius = this.hexWidth / 2;
-    // implementation of the coordinate calculation for every radius withoud gap
-    // const x = (this.coordToPixel.f0 * this.coord.q + this.coordToPixel.f1 * this.coord.r) * hexRadius;
-    // const y = (this.coordToPixel.f2 * this.coord.q + this.coordToPixel.f3 * this.coord.r) * hexRadius;
-    // !! (TESTING GAP) TODO remove after testing
-    const x = (this.coordToPixel.f0 * this.coord.q + this.coordToPixel.f1 * this.coord.r) * (hexRadius + this.gap / 2);
-    const y = (this.coordToPixel.f2 * this.coord.q + this.coordToPixel.f3 * this.coord.r) * (hexRadius + this.gap / 2);
+    const gapCoefficient = hexRadius + this.gap / 2;
+    const x = (this.coordToPixel.f0 * this.coord.q + this.coordToPixel.f1 * this.coord.r) * gapCoefficient;
+    const y = (this.coordToPixel.f2 * this.coord.q + this.coordToPixel.f3 * this.coord.r) * gapCoefficient;
 
     // Offset is needed to place the hexagon { q: 0, r: 0, s: 0 } in the center of the grid
     // and the following hexagons around it
