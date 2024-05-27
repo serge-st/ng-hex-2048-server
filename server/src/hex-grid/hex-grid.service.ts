@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { HexCoordDTO } from './common/dto/hex-coord/hex-coord.dto';
+import { GAME_DIFFICULTY_THRESHOLD, HEX_HIGH_VALUE_PROBABILITY, NEW_HEX_COUNT_INITIAL } from 'src/common/constants';
 
 @Injectable()
 export class HexGridService {
-  // TODO: rename the method
-  getResult(radius: number, userCoords: HexCoordDTO[]): HexCoordDTO[] {
+  calculateNextMoveCoords(radius: number, userCoords: HexCoordDTO[]): HexCoordDTO[] {
     const availableHexCoords = this.getAvailableHexCoords(radius, userCoords);
     if (availableHexCoords.length === 0) return [];
 
@@ -52,9 +52,9 @@ export class HexGridService {
   };
 
   getNewHexCount(availableCoordCount: number, userCoordCount: number): number {
-    if (userCoordCount === 0) return 3;
+    if (userCoordCount === 0) return NEW_HEX_COUNT_INITIAL;
 
-    return Math.min(availableCoordCount, this.getPercentage() > 80 ? 2 : 1);
+    return Math.min(availableCoordCount, this.getPercentage() > GAME_DIFFICULTY_THRESHOLD ? 2 : 1);
   }
 
   getPercentage(): number {
@@ -63,7 +63,7 @@ export class HexGridService {
 
   getHexValue(userCoordCount: number): number {
     if (userCoordCount === 0) return 2;
-    return this.getPercentage() > 50 ? 4 : 2;
+    return this.getPercentage() > HEX_HIGH_VALUE_PROBABILITY ? 4 : 2;
   }
 
   getRandomHexCoords(availableHexCoords: HexCoordDTO[], coordCount: number): HexCoordDTO[] {

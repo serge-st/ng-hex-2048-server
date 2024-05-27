@@ -10,15 +10,15 @@ export class HexGridController {
   getHexGrid() {
     // const userPoints = [{ q: 0, r: 0, s: 0 }];
     const userPoints: HexCoordDTO[] = [
-      { q: 0, r: 0, s: 0, value: 2 },
-      { q: -1, r: 0, s: 1, value: 2 },
-      { q: -1, r: 1, s: 0, value: 2 },
-      { q: 0, r: 1, s: -1, value: 2 },
-      { q: 1, r: 0, s: -1, value: 2 },
-      { q: 1, r: -1, s: 0, value: 2 },
-      { q: 0, r: -1, s: 1, value: 2 },
+      // { q: 0, r: 0, s: 0, value: 2 },
+      // { q: -1, r: 0, s: 1, value: 2 },
+      // { q: -1, r: 1, s: 0, value: 2 },
+      // { q: 0, r: 1, s: -1, value: 2 },
+      // { q: 1, r: 0, s: -1, value: 2 },
+      // { q: 1, r: -1, s: 0, value: 2 },
+      // { q: 0, r: -1, s: 1, value: 2 },
     ];
     // const userPoints = [];
-    return this.hexGridService.getResult(2, userPoints);
+    return this.hexGridService.calculateNextMoveCoords(2, userPoints);
   }
 }
