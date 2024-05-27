@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { HexGridService } from './hex-grid.service';
+import { HexCoordDTO } from './common/dto/hex-coord/hex-coord.dto';
 
 @Controller('hex-grid')
 export class HexGridController {
@@ -7,18 +8,17 @@ export class HexGridController {
 
   @Get()
   getHexGrid() {
-    const userPoints = [{ q: 0, r: 0, s: 0 }];
-    // const userPoints = [
-    //   { q: 0, r: 0, s: 0 },
-    //   { q: -1, r: 0, s: 1 },
-    // ];
+    // const userPoints = [{ q: 0, r: 0, s: 0 }];
+    const userPoints: HexCoordDTO[] = [
+      { q: 0, r: 0, s: 0, value: 2 },
+      { q: -1, r: 0, s: 1, value: 2 },
+      { q: -1, r: 1, s: 0, value: 2 },
+      { q: 0, r: 1, s: -1, value: 2 },
+      { q: 1, r: 0, s: -1, value: 2 },
+      { q: 1, r: -1, s: 0, value: 2 },
+      { q: 0, r: -1, s: 1, value: 2 },
+    ];
     // const userPoints = [];
-    return this.hexGridService.getResult(1, userPoints);
-  }
-
-  @Get('old')
-  getHexGridOld() {
-    const userPoints = [{ q: 0, r: 0, s: 0 }];
-    return this.hexGridService.getResultOld(1, userPoints);
+    return this.hexGridService.getResult(2, userPoints);
   }
 }
