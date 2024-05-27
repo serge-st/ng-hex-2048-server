@@ -10,19 +10,14 @@ export class HexGridService {
 
     const userCoordCount = userCoords.length;
 
-    const newHexCount = this.getNewHexCount(
-      availableHexCoords.length,
-      userCoordCount,
-    );
+    const newHexCount = this.getNewHexCount(availableHexCoords.length, userCoordCount);
 
     const hexValue = this.getHexValue(userCoordCount);
 
-    return this.getRandomHexCoords(availableHexCoords, newHexCount).map(
-      (hexCoord) => {
-        hexCoord.value = hexValue;
-        return hexCoord;
-      },
-    );
+    return this.getRandomHexCoords(availableHexCoords, newHexCount).map((hexCoord) => {
+      hexCoord.value = hexValue;
+      return hexCoord;
+    });
   }
 
   getAvailableHexCoords(radius: number, userCoords: HexCoordDTO[]) {
@@ -42,11 +37,7 @@ export class HexGridService {
     const result: HexCoordDTO[] = [];
 
     for (let q = -radius; q <= radius; q++) {
-      for (
-        let r = Math.max(-radius, -q - radius);
-        r <= Math.min(radius, -q + radius);
-        r++
-      ) {
+      for (let r = Math.max(-radius, -q - radius); r <= Math.min(radius, -q + radius); r++) {
         // added "|| 0" to prevent "-0" values
         const s = -q - r || 0;
         result.push({ q, r, s });
@@ -75,10 +66,7 @@ export class HexGridService {
     return this.getPercentage() > 50 ? 4 : 2;
   }
 
-  getRandomHexCoords(
-    availableHexCoords: HexCoordDTO[],
-    coordCount: number,
-  ): HexCoordDTO[] {
+  getRandomHexCoords(availableHexCoords: HexCoordDTO[], coordCount: number): HexCoordDTO[] {
     return availableHexCoords
       .map((hexCoord) => ({
         order: this.getPercentage(),

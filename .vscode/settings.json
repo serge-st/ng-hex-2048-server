@@ -5,8 +5,5 @@
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": "explicit"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
