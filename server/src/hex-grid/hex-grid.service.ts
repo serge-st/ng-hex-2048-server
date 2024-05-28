@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { HexCoordDTO } from './common/dto/hex-coord/hex-coord.dto';
-import { GAME_DIFFICULTY_THRESHOLD, HEX_HIGH_VALUE_PROBABILITY, NEW_HEX_COUNT_INITIAL } from 'src/common/constants';
+import { HexCoordDTO } from './common/dto';
+import {
+  GAME_DIFFICULTY_THRESHOLD,
+  HEX_HIGH_VALUE_PROBABILITY,
+  NEW_HEX_COUNT_INITIAL,
+} from './common/constants/constants';
 
 @Injectable()
 export class HexGridService {

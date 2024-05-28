@@ -1,8 +1,7 @@
 import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { HexGridService } from './hex-grid/hex-grid.service';
-import { HexGridModule } from './hex-grid/hex-grid.module';
+import { HexGridModule, HexGridService } from '@src/hex-grid';
 
 @Module({
   imports: [HexGridModule],
