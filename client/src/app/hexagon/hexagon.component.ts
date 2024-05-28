@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges } from '@angular/core';
 import { StyleVariables, HexCoord, Position } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { StoreService } from '@app/shared/services';
@@ -15,7 +15,10 @@ import { distinctUntilChanged } from 'rxjs';
 export class HexagonComponent extends GridUtilityComponent implements OnChanges {
   gap!: number;
   hexWidth!: number;
-  constructor(private storeService: StoreService) {
+  constructor(
+    private elRef: ElementRef,
+    private storeService: StoreService,
+  ) {
     super();
     this.storeService.state$
       .pipe(takeUntilDestroyed())
@@ -28,6 +31,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
 
   @Input({ required: true }) coord!: HexCoord;
   @Input({ required: true }) offset!: Position;
+  @Input() value: number = 0;
   hexHeight!: number;
   pixelCoord!: Position;
   styleVariables!: StyleVariables;
@@ -44,13 +48,6 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     }
   }
 
-  updateProperies(): void {
-    if (!this.coord) return;
-    this.setHexHeight();
-    this.setPixelCoords();
-    this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
-  }
-
   setPixelCoords(): void {
     const hexRadius = this.hexWidth / 2;
     const gapCoefficient = hexRadius + this.gap / 2;
@@ -65,5 +62,24 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
       x: xWithOffset,
       y: yWithOffset,
     };
+  }
+
+  bindPropertiesToHost(): void {
+    this.elRef.nativeElement.style.setProperty('--width', this.styleVariables.width);
+    this.elRef.nativeElement.style.setProperty('--height', this.styleVariables.height);
+    this.elRef.nativeElement.style.setProperty('--x-coord', this.styleVariables.xCoord);
+    this.elRef.nativeElement.style.setProperty('--y-coord', this.styleVariables.yCoord);
+    this.elRef.nativeElement.setAttribute('data-q', this.coord.q.toString());
+    this.elRef.nativeElement.setAttribute('data-s', this.coord.s.toString());
+    this.elRef.nativeElement.setAttribute('data-r', this.coord.r.toString());
+    this.elRef.nativeElement.setAttribute('data-value', this.value.toString());
+  }
+
+  updateProperies(): void {
+    if (!this.coord) return;
+    this.setHexHeight();
+    this.setPixelCoords();
+    this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
+    this.bindPropertiesToHost();
   }
 }
