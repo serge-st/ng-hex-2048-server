@@ -1,4 +1,10 @@
 <main>
-  <app-game-setup></app-game-setup>
+  <ng-container *ngIf="isGameInProgress$ | async; then gameControl; else gameSetup"> </ng-container>
+  <ng-template #gameControl>
+    <app-game-control></app-game-control>
+  </ng-template>
+  <ng-template #gameSetup>
+    <app-game-setup></app-game-setup>
+  </ng-template>
   <app-grid></app-grid>
 </main>

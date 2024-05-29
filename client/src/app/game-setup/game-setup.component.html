@@ -1,6 +1,4 @@
-<h1 *ngIf="isGameInProgress$ | async">Let's play! 🎮</h1>
-
-<fieldset *ngIf="!(isGameInProgress$ | async)">
+<fieldset>
   <legend>Game Setup</legend>
 
   <div class="input-wrapper">
@@ -18,6 +16,7 @@
       [step]="4"
     ></app-number-input>
     <app-number-input
+      [minValue]="10"
       label="Hex Width"
       [value]="hexWidth$ | async"
       (valueChange)="storeService.setHexWidth($event)"

@@ -21,25 +21,26 @@ export class StoreService {
     return this.state.value;
   }
 
-  private setState(newState: Partial<State>): void {
+  // TODO: remove whereFrom after testing
+  private setState(newState: Partial<State>, whereFrom?: string): void {
     this.state.next({ ...this.getState(), ...newState });
-    // !! TODO remove afer testing
-    console.log('New state:', this.getState());
+    // TODO remove afer testing
+    console.log(`New state: ${whereFrom}`, this.getState());
   }
 
-  setRadius(radius: number): void {
-    this.setState({ radius });
+  setRadius(radius: number, whereFrom?: string): void {
+    this.setState({ radius }, whereFrom);
   }
 
-  setGap(gap: number): void {
-    this.setState({ gap });
+  setGap(gap: number, whereFrom?: string): void {
+    this.setState({ gap }, whereFrom);
   }
 
-  setHexWidth(hexWidth: number): void {
-    this.setState({ hexWidth });
+  setHexWidth(hexWidth: number, whereFrom?: string): void {
+    this.setState({ hexWidth }, whereFrom);
   }
 
-  setIsGameInProgress(isGameInProgress: boolean): void {
-    this.setState({ isGameInProgress });
+  setIsGameInProgress(isGameInProgress: boolean, whereFrom?: string): void {
+    this.setState({ isGameInProgress }, whereFrom);
   }
 }
