@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HexagonComponent } from '@app/hexagon';
-import { StyleVariables, Position, HexCoord } from '@app/shared/interfaces';
+import { StyleVariables, Position, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { NgFor } from '@angular/common';
 import { StoreService } from '@app/shared/services';
@@ -36,7 +36,7 @@ export class GridComponent extends GridUtilityComponent {
   gridWidth!: number;
   gridHeight!: number;
   offset!: Position;
-  hexCoords!: HexCoord[];
+  hexCoords!: HexData[];
   styleVariables!: StyleVariables;
 
   setGridWidth(): void {
@@ -72,7 +72,7 @@ export class GridComponent extends GridUtilityComponent {
     }
   }
 
-  trackByCoord(_index: number, hexCoord: HexCoord): string {
+  trackByCoord(_index: number, hexCoord: HexData): string {
     return `${hexCoord.q},${hexCoord.r},${hexCoord.s}`;
   }
 

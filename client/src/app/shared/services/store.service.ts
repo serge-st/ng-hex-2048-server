@@ -6,6 +6,7 @@ const initialState: State = {
   radius: 1,
   gap: 0,
   hexWidth: 200,
+  isGameInProgress: false,
 };
 
 @Injectable({
@@ -36,5 +37,9 @@ export class StoreService {
 
   setHexWidth(hexWidth: number): void {
     this.setState({ hexWidth });
+  }
+
+  setIsGameInProgress(isGameInProgress: boolean): void {
+    this.setState({ isGameInProgress });
   }
 }

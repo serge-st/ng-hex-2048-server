@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input, OnChanges } from '@angular/core';
-import { StyleVariables, HexCoord, Position } from '@app/shared/interfaces';
+import { StyleVariables, HexData, Position } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { StoreService } from '@app/shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -27,7 +27,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
       });
   }
 
-  @Input({ required: true }) coord!: HexCoord;
+  @Input({ required: true }) coord!: HexData;
   @Input({ required: true }) offset!: Position;
   @Input() value: number = 0;
   @HostBinding('class') get hostClass() {

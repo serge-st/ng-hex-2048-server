@@ -1,18 +1,28 @@
-<!-- !! TODO change to min="1" later on -->
-<app-number-input
-  label="Radius"
-  [value]="radius$ | async"
-  (valueChange)="storeService.setRadius($event)"
-></app-number-input>
-<app-number-input
-  label="Gap"
-  [value]="gap$ | async"
-  (valueChange)="storeService.setGap($event)"
-  [step]="4"
-></app-number-input>
-<app-number-input
-  label="Hex Width"
-  [value]="hexWidth$ | async"
-  (valueChange)="storeService.setHexWidth($event)"
-  [step]="10"
-></app-number-input>
+<h1 *ngIf="isGameInProgress$ | async">Let's play! 🎮</h1>
+
+<fieldset *ngIf="!(isGameInProgress$ | async)">
+  <legend>Game Setup</legend>
+
+  <div class="input-wrapper">
+    <app-number-input
+      [minValue]="1"
+      label="Radius"
+      [value]="radius$ | async"
+      (valueChange)="storeService.setRadius($event)"
+    ></app-number-input>
+    <app-number-input
+      label="Gap"
+      [value]="gap$ | async"
+      (valueChange)="storeService.setGap($event)"
+      [step]="4"
+    ></app-number-input>
+    <app-number-input
+      label="Hex Width"
+      [value]="hexWidth$ | async"
+      (valueChange)="storeService.setHexWidth($event)"
+      [step]="10"
+    ></app-number-input>
+  </div>
+
+  <button type="button" class="btn btn-primary" (click)="startGame()">Start Game</button>
+</fieldset>

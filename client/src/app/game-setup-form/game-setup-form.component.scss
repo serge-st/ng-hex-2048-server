@@ -1,4 +1,17 @@
-:host {
+fieldset {
   display: flex;
-  gap: 15px;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+h1,
+legend {
+  margin: 0;
+  text-align: center;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 16px;
 }
