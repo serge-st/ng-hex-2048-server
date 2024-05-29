@@ -88,6 +88,21 @@ export class GridComponent extends GridUtilityComponent {
     return !hasMismatch;
   }
 
+  getNextTurnHexData(): void {
+    const activeHexes = this.hexData.filter((hex) => Boolean(hex.value));
+
+    this.hexManagementService
+      .getNewHexCoords(this.radius, activeHexes)
+      .pipe(distinctUntilChanged<HexData[]>())
+      .subscribe((newHexCoords) => {
+        this.hexData.map((hex) => {
+          const indexWithValue = newHexCoords.findIndex((newHex) => this.isHexAEqualHexB(hex, newHex));
+          if (indexWithValue !== -1) hex.value = newHexCoords[indexWithValue].value;
+          return hex;
+        });
+      });
+  }
+
   updateProperies(): void {
     if (!this.hexWidth) return;
     this.setHexHeight();
@@ -102,15 +117,6 @@ export class GridComponent extends GridUtilityComponent {
     this.setStyleVariables(this.gridWidth, this.gridHeight);
 
     if (!this.isGameInProgress) return;
-
-    const activeHexes = this.hexData.filter((hex) => Boolean(hex.value));
-
-    this.hexManagementService.getNewHexCoords(this.radius, activeHexes).subscribe((newHexCoords) => {
-      this.hexData.map((hex) => {
-        const indexWithValue = newHexCoords.findIndex((newHex) => this.isHexAEqualHexB(hex, newHex));
-        if (indexWithValue !== -1) hex.value = newHexCoords[indexWithValue].value;
-        return hex;
-      });
-    });
+    this.getNextTurnHexData();
   }
 }
