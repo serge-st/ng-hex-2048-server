@@ -6,14 +6,14 @@ import { StoreService } from '@app/shared/services';
 import { Observable, map } from 'rxjs';
 
 @Component({
-  selector: 'app-game-setup-form',
+  selector: 'app-game-setup',
   standalone: true,
   imports: [FormsModule, NumberInputComponent, NgIf, AsyncPipe],
-  templateUrl: './game-setup-form.component.html',
-  styleUrl: './game-setup-form.component.scss',
+  templateUrl: './game-setup.component.html',
+  styleUrl: './game-setup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameSetupFormComponent {
+export class GameSetupComponent {
   radius$!: Observable<number>;
   gap$!: Observable<number>;
   hexWidth$!: Observable<number>;
