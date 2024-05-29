@@ -11,6 +11,7 @@
       (valueChange)="storeService.setRadius($event)"
     ></app-number-input>
     <app-number-input
+      [minValue]="4"
       label="Gap"
       [value]="gap$ | async"
       (valueChange)="storeService.setGap($event)"

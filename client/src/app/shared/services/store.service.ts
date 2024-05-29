@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 const initialState: State = {
   radius: 1,
-  gap: 0,
+  gap: 4,
   hexWidth: 200,
   isGameInProgress: false,
 };
