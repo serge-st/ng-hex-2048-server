@@ -51,7 +51,8 @@ export class HexGridService {
   }
 
   isHexAEqualHexB = (hexA: HexCoordDTO, hexB: HexCoordDTO) => {
-    const hasMismatch = ['q', 's', 'r'].some((key) => hexA[key] !== hexB[key]);
+    const keysToCompare = ['q', 's', 'r'];
+    const hasMismatch = keysToCompare.some((key) => hexA[key as keyof HexCoordDTO] !== hexB[key as keyof HexCoordDTO]);
     return !hasMismatch;
   };
 
