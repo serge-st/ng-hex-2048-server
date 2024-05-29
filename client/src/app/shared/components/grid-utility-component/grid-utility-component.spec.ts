@@ -20,7 +20,7 @@ describe('GridUtilityComponent', () => {
 
   it('should return correct pixel string', () => {
     const result = component.getPixelString(10);
-    expect(result).toBe('10px');
+    expect(result).toBe('10.000px');
   });
 
   it('should set correct hex height', () => {
@@ -32,16 +32,16 @@ describe('GridUtilityComponent', () => {
   describe('setStyleVariables', () => {
     it('should set correct style variables', () => {
       component.setStyleVariables(100, 100);
-      expect(component.styleVariables.width).toBe('100px');
-      expect(component.styleVariables.height).toBe('100px');
+      expect(component.styleVariables.width).toBe('100.000px');
+      expect(component.styleVariables.height).toBe('100.000px');
     });
 
     it('should set style variables using own properties', () => {
       component.hexWidth = 200;
       component.hexHeight = 200;
       component.setStyleVariables(component.hexWidth, component.hexHeight);
-      expect(component.styleVariables.width).toBe('200px');
-      expect(component.styleVariables.height).toBe('200px');
+      expect(component.styleVariables.width).toBe('200.000px');
+      expect(component.styleVariables.height).toBe('200.000px');
     });
 
     it('should leave xCoord and yCoord empty if not provided', () => {
@@ -52,8 +52,8 @@ describe('GridUtilityComponent', () => {
 
     it('should set xCoord and yCoord if provided', () => {
       component.setStyleVariables(100, 100, 50, 50);
-      expect(component.styleVariables.xCoord).toBe('50px');
-      expect(component.styleVariables.yCoord).toBe('50px');
+      expect(component.styleVariables.xCoord).toBe('50.000px');
+      expect(component.styleVariables.yCoord).toBe('50.000px');
     });
   });
 });
