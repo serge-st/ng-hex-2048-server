@@ -2,6 +2,9 @@
   position: absolute;
   top: var(--y-coord);
   left: var(--x-coord);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: var(--width);
   height: var(--height);
   clip-path: polygon(
@@ -13,4 +16,8 @@
     /* Left point */ 0% 50%
   );
   background-color: rgb(110 224 110);
+}
+
+:host.has-value {
+  background-color: tomato;
 }

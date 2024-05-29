@@ -1,24 +1,22 @@
-import { Component, ElementRef, Input, OnChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges } from '@angular/core';
 import { StyleVariables, HexCoord, Position } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { StoreService } from '@app/shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-hexagon',
   standalone: true,
-  imports: [],
+  imports: [NgIf],
   templateUrl: './hexagon.component.html',
   styleUrl: './hexagon.component.scss',
 })
 export class HexagonComponent extends GridUtilityComponent implements OnChanges {
   gap!: number;
   hexWidth!: number;
-  constructor(
-    private elRef: ElementRef,
-    private storeService: StoreService,
-  ) {
+  constructor(private storeService: StoreService) {
     super();
     this.storeService.state$
       .pipe(takeUntilDestroyed())
@@ -32,6 +30,24 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   @Input({ required: true }) coord!: HexCoord;
   @Input({ required: true }) offset!: Position;
   @Input() value: number = 0;
+  @HostBinding('class') get hostClass() {
+    return this.value !== 0 ? 'has-value' : '';
+  }
+  @HostBinding('style') get cssVariables() {
+    return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height}; --x-coord: ${this.styleVariables.xCoord}; --y-coord: ${this.styleVariables.yCoord}`;
+  }
+  @HostBinding('attr.data-q') get q() {
+    return this.coord.q;
+  }
+  @HostBinding('attr.data-r') get r() {
+    return this.coord.r;
+  }
+  @HostBinding('attr.data-s') get s() {
+    return this.coord.s;
+  }
+  @HostBinding('attr.data-value') get dataValue() {
+    return this.value;
+  }
   hexHeight!: number;
   pixelCoord!: Position;
   styleVariables!: StyleVariables;
@@ -64,22 +80,10 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     };
   }
 
-  bindPropertiesToHost(): void {
-    this.elRef.nativeElement.style.setProperty('--width', this.styleVariables.width);
-    this.elRef.nativeElement.style.setProperty('--height', this.styleVariables.height);
-    this.elRef.nativeElement.style.setProperty('--x-coord', this.styleVariables.xCoord);
-    this.elRef.nativeElement.style.setProperty('--y-coord', this.styleVariables.yCoord);
-    this.elRef.nativeElement.setAttribute('data-q', this.coord.q.toString());
-    this.elRef.nativeElement.setAttribute('data-s', this.coord.s.toString());
-    this.elRef.nativeElement.setAttribute('data-r', this.coord.r.toString());
-    this.elRef.nativeElement.setAttribute('data-value', this.value.toString());
-  }
-
   updateProperies(): void {
     if (!this.coord) return;
     this.setHexHeight();
     this.setPixelCoords();
     this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
-    this.bindPropertiesToHost();
   }
 }
