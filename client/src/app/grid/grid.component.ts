@@ -106,11 +106,9 @@ export class GridComponent extends GridUtilityComponent {
     const activeHexes = this.hexData.filter((hex) => Boolean(hex.value));
 
     this.hexManagementService.getNewHexCoords(this.radius, activeHexes).subscribe((newHexCoords) => {
-      console.log('calling api');
-      console.log(JSON.stringify(newHexCoords));
       this.hexData.map((hex) => {
-        const shouldAssignValue = newHexCoords.some((newHex) => this.isHexAEqualHexB(hex, newHex));
-        if (shouldAssignValue) hex.value = 2;
+        const indexWithValue = newHexCoords.findIndex((newHex) => this.isHexAEqualHexB(hex, newHex));
+        if (indexWithValue !== -1) hex.value = newHexCoords[indexWithValue].value;
         return hex;
       });
     });
