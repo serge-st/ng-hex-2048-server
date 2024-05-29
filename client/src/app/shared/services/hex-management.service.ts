@@ -10,7 +10,7 @@ export class HexManagementService {
   private baseURL = 'http://localhost:3000';
   private serviceURL = `${this.baseURL}/hex-grid-management`;
 
-  httpOptions = {
+  private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 

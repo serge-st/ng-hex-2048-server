@@ -27,9 +27,11 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
       });
   }
 
-  @Input({ required: true }) coord!: HexData;
+  @Input({ required: true }) hexData!: HexData;
   @Input({ required: true }) offset!: Position;
-  @Input() value: number = 0;
+  @Input() get value(): number {
+    return this.hexData.value || 0;
+  }
   @HostBinding('class') get hostClass() {
     return this.value !== 0 ? 'has-value' : '';
   }
@@ -37,13 +39,13 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height}; --x-coord: ${this.styleVariables.xCoord}; --y-coord: ${this.styleVariables.yCoord}`;
   }
   @HostBinding('attr.data-q') get q() {
-    return this.coord.q;
+    return this.hexData.q;
   }
   @HostBinding('attr.data-r') get r() {
-    return this.coord.r;
+    return this.hexData.r;
   }
   @HostBinding('attr.data-s') get s() {
-    return this.coord.s;
+    return this.hexData.s;
   }
   @HostBinding('attr.data-value') get dataValue() {
     return this.value;
@@ -58,8 +60,8 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   }
 
   validateHexCoordinates() {
-    if (Math.round(this.coord.q + this.coord.r + this.coord.s) !== 0) {
-      const badCoord = JSON.stringify({ q: this.coord.q, r: this.coord.r, s: this.coord.s });
+    if (Math.round(this.hexData.q + this.hexData.r + this.hexData.s) !== 0) {
+      const badCoord = JSON.stringify({ q: this.hexData.q, r: this.hexData.r, s: this.hexData.s });
       throw new Error(`Invalid hex coordinates: ${badCoord}; q + r + s must equal 0`);
     }
   }
@@ -67,8 +69,8 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   setPixelCoords(): void {
     const hexRadius = this.hexWidth / 2;
     const gapCoefficient = hexRadius + this.gap / 2;
-    const x = (this.coordToPixel.f0 * this.coord.q + this.coordToPixel.f1 * this.coord.r) * gapCoefficient;
-    const y = (this.coordToPixel.f2 * this.coord.q + this.coordToPixel.f3 * this.coord.r) * gapCoefficient;
+    const x = (this.coordToPixel.f0 * this.hexData.q + this.coordToPixel.f1 * this.hexData.r) * gapCoefficient;
+    const y = (this.coordToPixel.f2 * this.hexData.q + this.coordToPixel.f3 * this.hexData.r) * gapCoefficient;
 
     // Offset is needed to place the hexagon { q: 0, r: 0, s: 0 } in the center of the grid
     // and the following hexagons around it
@@ -81,7 +83,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   }
 
   updateProperies(): void {
-    if (!this.coord) return;
+    if (!this.hexData) return;
     this.setHexHeight();
     this.setPixelCoords();
     this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);

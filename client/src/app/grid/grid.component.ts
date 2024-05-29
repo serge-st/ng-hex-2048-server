@@ -3,7 +3,7 @@ import { HexagonComponent } from '@app/hexagon';
 import { StyleVariables, Position, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { NgFor } from '@angular/common';
-import { StoreService } from '@app/shared/services';
+import { HexManagementService, StoreService } from '@app/shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
 
@@ -18,7 +18,12 @@ export class GridComponent extends GridUtilityComponent {
   radius!: number;
   gap!: number;
   hexWidth!: number;
-  constructor(private storeService: StoreService) {
+  isGameInProgress!: boolean;
+
+  constructor(
+    private storeService: StoreService,
+    private hexManagementService: HexManagementService,
+  ) {
     super();
     this.storeService.state$
       .pipe(takeUntilDestroyed())
@@ -27,6 +32,7 @@ export class GridComponent extends GridUtilityComponent {
         this.radius = state.radius;
         this.gap = state.gap;
         this.hexWidth = state.hexWidth;
+        this.isGameInProgress = state.isGameInProgress;
 
         this.updateProperies();
       });
@@ -36,7 +42,7 @@ export class GridComponent extends GridUtilityComponent {
   gridWidth!: number;
   gridHeight!: number;
   offset!: Position;
-  hexCoords!: HexData[];
+  hexData!: HexData[];
   styleVariables!: StyleVariables;
 
   setGridWidth(): void {
@@ -61,19 +67,25 @@ export class GridComponent extends GridUtilityComponent {
   }
 
   setHexCoords(): void {
-    this.hexCoords = [];
+    this.hexData = [];
 
     for (let q = -this.radius; q <= this.radius; q++) {
       for (let r = Math.max(-this.radius, -q - this.radius); r <= Math.min(this.radius, -q + this.radius); r++) {
         // added "|| 0" to prevent "-0" values
         const s = -q - r || 0;
-        this.hexCoords.push({ q, r, s });
+        this.hexData.push({ q, r, s });
       }
     }
   }
 
   trackByCoord(_index: number, hexCoord: HexData): string {
     return `${hexCoord.q},${hexCoord.r},${hexCoord.s}`;
+  }
+
+  isHexAEqualHexB(hexA: HexData, hexB: HexData) {
+    const keysToCompare = ['q', 's', 'r'];
+    const hasMismatch = keysToCompare.some((key) => hexA[key as keyof HexData] !== hexB[key as keyof HexData]);
+    return !hasMismatch;
   }
 
   updateProperies(): void {
@@ -89,9 +101,18 @@ export class GridComponent extends GridUtilityComponent {
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
 
-    console.log(
-      `radius: ${this.radius}, gap: ${this.gap}, gridWidth: ${this.gridWidth}, gridHeight: ${this.gridHeight}, hexHeight: ${this.hexHeight}`,
-      `xc: ${JSON.stringify(this.coordToPixel)}`,
-    );
+    if (!this.isGameInProgress) return;
+
+    const activeHexes = this.hexData.filter((hex) => Boolean(hex.value));
+
+    this.hexManagementService.getNewHexCoords(this.radius, activeHexes).subscribe((newHexCoords) => {
+      console.log('calling api');
+      console.log(JSON.stringify(newHexCoords));
+      this.hexData.map((hex) => {
+        const shouldAssignValue = newHexCoords.some((newHex) => this.isHexAEqualHexB(hex, newHex));
+        if (shouldAssignValue) hex.value = 2;
+        return hex;
+      });
+    });
   }
 }
