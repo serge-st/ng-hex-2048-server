@@ -1,4 +1,4 @@
-export interface State {
+export interface GameSetupState {
   radius: number;
   gap: number;
   hexWidth: number;

@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NumberInputComponent } from '@app/number-input/number-input.component';
-import { StoreService } from '@app/shared/services';
+import { GameSetupService } from '@app/shared/services/game-setup';
 import { Observable, map } from 'rxjs';
 
 @Component({
@@ -18,13 +18,13 @@ export class GameSetupComponent {
   gap$!: Observable<number>;
   hexWidth$!: Observable<number>;
 
-  constructor(readonly storeService: StoreService) {
-    this.radius$ = this.storeService.state$.pipe(map((state) => state.radius));
-    this.gap$ = this.storeService.state$.pipe(map((state) => state.gap));
-    this.hexWidth$ = this.storeService.state$.pipe(map((state) => state.hexWidth));
+  constructor(readonly gameSetupService: GameSetupService) {
+    this.radius$ = this.gameSetupService.state$.pipe(map((state) => state.radius));
+    this.gap$ = this.gameSetupService.state$.pipe(map((state) => state.gap));
+    this.hexWidth$ = this.gameSetupService.state$.pipe(map((state) => state.hexWidth));
   }
 
   startGame() {
-    this.storeService.setIsGameInProgress(true, 'GameSetupComponent.startGame');
+    this.gameSetupService.setIsGameInProgress(true, `GameSetupComponent.startGame: setIsGameInProgress`);
   }
 }

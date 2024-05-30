@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { State } from './state';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { GameSetupState } from './interfaces/game-setup-state';
 
-const initialState: State = {
+const initialState: GameSetupState = {
   radius: 1,
   gap: 4,
   hexWidth: 200,
@@ -12,17 +12,17 @@ const initialState: State = {
 @Injectable({
   providedIn: 'root',
 })
-export class StoreService {
-  private state = new BehaviorSubject<State>(initialState);
+export class GameSetupService {
+  private state = new BehaviorSubject<GameSetupState>(initialState);
 
-  state$: Observable<State> = this.state.asObservable();
+  state$: Observable<GameSetupState> = this.state.asObservable();
 
-  getState(): State {
+  private getState(): GameSetupState {
     return this.state.value;
   }
 
   // TODO: remove whereFrom after testing
-  private setState(newState: Partial<State>, whereFrom?: string): void {
+  private setState(newState: Partial<GameSetupState>, whereFrom?: string): void {
     this.state.next({ ...this.getState(), ...newState });
     // TODO remove afer testing
     console.log(`New state: ${whereFrom}`, this.getState());

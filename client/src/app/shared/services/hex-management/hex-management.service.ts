@@ -1,7 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of, tap } from 'rxjs';
-import { HexData } from '../interfaces';
+import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
+import { HexData } from '@app/shared/interfaces';
+import { HexManagementState } from './interfaces/hex-management-state';
+
+const initialState: HexManagementState = {
+  hexData: [],
+};
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +19,26 @@ export class HexManagementService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
+  private state = new BehaviorSubject<HexManagementState>(initialState);
+
+  state$: Observable<HexManagementState> = this.state.asObservable();
+
   constructor(private http: HttpClient) {}
+
+  private getState(): HexManagementState {
+    return this.state.value;
+  }
+
+  // TODO: remove whereFrom after testing
+  private setState(newState: Partial<HexManagementState>, whereFrom?: string): void {
+    this.state.next({ ...this.getState(), ...newState });
+    // TODO remove afer testing
+    console.log(`New state: ${whereFrom}`, this.getState());
+  }
+
+  setHexData(hexData: HexData[], whereFrom?: string): void {
+    this.setState({ hexData }, whereFrom);
+  }
 
   // TODO: implement error handling
   /**

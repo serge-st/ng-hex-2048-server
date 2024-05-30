@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { GridComponent } from '@app/grid/grid.component';
+import { GridComponent } from '@app/grid';
 import { GameSetupComponent } from '@app/game-setup';
 import { GameControlComponent } from '@app/game-control';
-import { StoreService } from '@app/shared/services';
 import { Observable, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
+import { GameSetupService } from '@app/shared/services/game-setup';
 
 @Component({
   selector: 'app-game-page',
@@ -16,7 +16,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
 export class GamePageComponent {
   isGameInProgress$!: Observable<boolean>;
 
-  constructor(readonly storeService: StoreService) {
-    this.isGameInProgress$ = this.storeService.state$.pipe(map((state) => state.isGameInProgress));
+  constructor(readonly gameSetupService: GameSetupService) {
+    this.isGameInProgress$ = this.gameSetupService.state$.pipe(map((state) => state.isGameInProgress));
   }
 }

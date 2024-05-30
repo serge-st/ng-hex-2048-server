@@ -3,9 +3,9 @@ import { HexagonComponent } from '@app/hexagon';
 import { StyleVariables, Position, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { NgFor } from '@angular/common';
-import { HexManagementService, StoreService } from '@app/shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
+import { GameSetupService } from '@app/shared/services/game-setup';
 
 @Component({
   selector: 'app-grid',
@@ -19,30 +19,45 @@ export class GridComponent extends GridUtilityComponent {
   gap!: number;
   hexWidth!: number;
   isGameInProgress!: boolean;
+  hexData!: HexData[];
 
-  constructor(
-    private storeService: StoreService,
-    private hexManagementService: HexManagementService,
-  ) {
+  constructor(private gameSetupService: GameSetupService) {
     super();
-    this.storeService.state$
-      .pipe(takeUntilDestroyed())
-      .pipe(distinctUntilChanged())
-      .subscribe((state) => {
-        this.radius = state.radius;
-        this.gap = state.gap;
-        this.hexWidth = state.hexWidth;
-        this.isGameInProgress = state.isGameInProgress;
+    this.gameSetupService.state$.pipe(takeUntilDestroyed()).subscribe((state) => {
+      console.log('>> state change, setting primitive properties');
+      this.radius = state.radius;
+      this.gap = state.gap;
+      this.hexWidth = state.hexWidth;
+      this.isGameInProgress = state.isGameInProgress;
 
-        this.updateProperies();
-      });
+      this.updateProperies();
+    });
+
+    // this.storeService.state$
+    //   .pipe(takeUntilDestroyed())
+    //   .pipe(
+    //     distinctUntilChanged((prev, curr) => {
+    //       console.log(
+    //         `\n\nprev hexData: ${JSON.stringify(prev.hexData)} \n\ncurr hexData: ${JSON.stringify(curr.hexData)}`,
+    //       );
+
+    //       const hasMismatch = prev.hexData.some((hex, index) => !this.isHexAEqualHexB(hex, curr.hexData[index], true));
+
+    //       return !hasMismatch;
+    //     }),
+    //   )
+    //   .subscribe((state) => {
+    //     this.hexData = state.hexData;
+
+    //     console.log('>> updating properties');
+    //     this.updateProperies();
+    //   });
   }
 
   hexHeight!: number;
   gridWidth!: number;
   gridHeight!: number;
   offset!: Position;
-  hexData!: HexData[];
   styleVariables!: StyleVariables;
 
   setGridWidth(): void {
@@ -82,25 +97,11 @@ export class GridComponent extends GridUtilityComponent {
     return `${hexCoord.q},${hexCoord.r},${hexCoord.s}`;
   }
 
-  isHexAEqualHexB(hexA: HexData, hexB: HexData) {
+  isHexAEqualHexB(hexA: HexData, hexB: HexData, checkValue = false) {
     const keysToCompare = ['q', 's', 'r'];
+    if (checkValue) keysToCompare.push('value');
     const hasMismatch = keysToCompare.some((key) => hexA[key as keyof HexData] !== hexB[key as keyof HexData]);
     return !hasMismatch;
-  }
-
-  getNextTurnHexData(): void {
-    const activeHexes = this.hexData.filter((hex) => Boolean(hex.value));
-
-    this.hexManagementService
-      .getNewHexCoords(this.radius, activeHexes)
-      .pipe(distinctUntilChanged<HexData[]>())
-      .subscribe((newHexCoords) => {
-        this.hexData.map((hex) => {
-          const indexWithValue = newHexCoords.findIndex((newHex) => this.isHexAEqualHexB(hex, newHex));
-          if (indexWithValue !== -1) hex.value = newHexCoords[indexWithValue].value;
-          return hex;
-        });
-      });
   }
 
   updateProperies(): void {
@@ -115,8 +116,20 @@ export class GridComponent extends GridUtilityComponent {
     this.setHexCoords();
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
-
-    if (!this.isGameInProgress) return;
-    this.getNextTurnHexData();
   }
+
+  // getNextTurnHexData(): void {
+  //   const activeHexes = this.hexData.filter((hex) => Boolean(hex.value));
+
+  //   this.hexManagementService
+  //     .getNewHexCoords(this.radius, activeHexes)
+  //     .pipe(distinctUntilChanged<HexData[]>())
+  //     .subscribe((newHexCoords) => {
+  //       this.hexData.map((hex) => {
+  //         const indexWithValue = newHexCoords.findIndex((newHex) => this.isHexAEqualHexB(hex, newHex));
+  //         if (indexWithValue !== -1) hex.value = newHexCoords[indexWithValue].value;
+  //         return hex;
+  //       });
+  //     });
+  // }
 }

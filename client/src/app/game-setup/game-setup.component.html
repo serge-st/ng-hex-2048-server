@@ -6,20 +6,20 @@
       [minValue]="1"
       label="Radius"
       [value]="radius$ | async"
-      (valueChange)="storeService.setRadius($event)"
+      (valueChange)="gameSetupService.setRadius($event, 'GameSetupComponent radius input')"
     ></app-number-input>
     <app-number-input
       [minValue]="4"
       label="Gap"
       [value]="gap$ | async"
-      (valueChange)="storeService.setGap($event)"
+      (valueChange)="gameSetupService.setGap($event, 'GameSetupComponent gap input')"
       [step]="4"
     ></app-number-input>
     <app-number-input
       [minValue]="10"
       label="Hex Width"
       [value]="hexWidth$ | async"
-      (valueChange)="storeService.setHexWidth($event)"
+      (valueChange)="gameSetupService.setHexWidth($event, 'GameSetupComponent hexWidth input')"
       [step]="10"
     ></app-number-input>
   </div>

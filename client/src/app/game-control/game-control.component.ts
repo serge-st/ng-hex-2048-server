@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HexData } from '@app/shared/interfaces';
-import { HexManagementService, StoreService } from '@app/shared/services';
+import { GameSetupService } from '@app/shared/services/game-setup';
 import { distinctUntilChanged } from 'rxjs';
 
 @Component({
@@ -15,11 +15,8 @@ export class GameControlComponent implements OnInit {
   radius!: number;
   hexData!: HexData[];
 
-  constructor(
-    private hexManagementService: HexManagementService,
-    private storeService: StoreService,
-  ) {
-    this.storeService.state$
+  constructor(private gameSetupService: GameSetupService) {
+    this.gameSetupService.state$
       .pipe(takeUntilDestroyed())
       .pipe(distinctUntilChanged())
       .subscribe((state) => {
@@ -59,7 +56,7 @@ export class GameControlComponent implements OnInit {
   //         })
   //         .filter((hex) => Boolean(hex.value));
 
-  //       this.storeService.setHexData(nextMoveHexData, 'game-control');
+  //       this.gameSetupService.setHexData(nextMoveHexData, 'game-control');
   //     });
   // }
 }

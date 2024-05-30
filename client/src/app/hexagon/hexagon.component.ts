@@ -1,9 +1,6 @@
 import { Component, HostBinding, Input, OnChanges } from '@angular/core';
 import { StyleVariables, HexData, Position } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
-import { StoreService } from '@app/shared/services';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { distinctUntilChanged } from 'rxjs';
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -14,21 +11,10 @@ import { NgIf } from '@angular/common';
   styleUrl: './hexagon.component.scss',
 })
 export class HexagonComponent extends GridUtilityComponent implements OnChanges {
-  gap!: number;
-  hexWidth!: number;
-  constructor(private storeService: StoreService) {
-    super();
-    this.storeService.state$
-      .pipe(takeUntilDestroyed())
-      .pipe(distinctUntilChanged())
-      .subscribe((state) => {
-        this.gap = state.gap;
-        this.hexWidth = state.hexWidth;
-      });
-  }
-
   @Input({ required: true }) hexData!: HexData;
   @Input({ required: true }) offset!: Position;
+  @Input({ required: true }) gap!: number;
+  @Input({ required: true }) hexWidth!: number;
   @Input() get value(): number {
     return this.hexData.value || 0;
   }
