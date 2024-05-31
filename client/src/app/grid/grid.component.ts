@@ -6,6 +6,8 @@ import { NgFor } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
+import { HexManagementService } from '@app/shared/services/hex-management';
+import { GameState } from '@app/shared/types';
 
 @Component({
   selector: 'app-grid',
@@ -15,43 +17,51 @@ import { GameSetupService } from '@app/shared/services/game-setup';
   styleUrl: './grid.component.scss',
 })
 export class GridComponent extends GridUtilityComponent {
+  trackByCoord(_index: number, hexCoord: HexData): string {
+    return `${hexCoord.q},${hexCoord.r},${hexCoord.s}`;
+  }
+
   radius!: number;
   gap!: number;
   hexWidth!: number;
-  isGameInProgress!: boolean;
-  hexData!: HexData[];
+  gameState!: GameState;
+  hexData: HexData[] = [];
 
-  constructor(private gameSetupService: GameSetupService) {
+  constructor(
+    private gameSetupService: GameSetupService,
+    private hexManagementService: HexManagementService,
+  ) {
     super();
     this.gameSetupService.state$.pipe(takeUntilDestroyed()).subscribe((state) => {
-      console.log('>> state change, setting primitive properties');
       this.radius = state.radius;
       this.gap = state.gap;
       this.hexWidth = state.hexWidth;
-      this.isGameInProgress = state.isGameInProgress;
+      this.gameState = state.gameState;
 
       this.updateProperies();
     });
 
-    // this.storeService.state$
-    //   .pipe(takeUntilDestroyed())
-    //   .pipe(
-    //     distinctUntilChanged((prev, curr) => {
-    //       console.log(
-    //         `\n\nprev hexData: ${JSON.stringify(prev.hexData)} \n\ncurr hexData: ${JSON.stringify(curr.hexData)}`,
-    //       );
+    this.hexManagementService.state$
+      .pipe(takeUntilDestroyed())
+      .pipe(
+        distinctUntilChanged((prev, curr) => {
+          // TODO: remove console.log
+          console.log(
+            `\n\nprev hexData: ${JSON.stringify(prev.hexData)} \n\ncurr hexData: ${JSON.stringify(curr.hexData)}`,
+          );
 
-    //       const hasMismatch = prev.hexData.some((hex, index) => !this.isHexAEqualHexB(hex, curr.hexData[index], true));
-
-    //       return !hasMismatch;
-    //     }),
-    //   )
-    //   .subscribe((state) => {
-    //     this.hexData = state.hexData;
-
-    //     console.log('>> updating properties');
-    //     this.updateProperies();
-    //   });
+          const hasMismatch = curr.hexData.some((currentHex, index) => {
+            return !this.isHexAEqualHexB(currentHex, prev.hexData[index], true);
+          });
+          console.log(`hasMismatch: ${hasMismatch}`);
+          if (!hasMismatch) console.log('>> no mismatch found, skipping setHexCoords()');
+          return !hasMismatch;
+        }),
+      )
+      .subscribe((state) => {
+        this.hexData = state.hexData;
+        // this.setHexCoords();
+      });
   }
 
   hexHeight!: number;
@@ -81,31 +91,10 @@ export class GridComponent extends GridUtilityComponent {
     };
   }
 
-  setHexCoords(): void {
-    this.hexData = [];
-
-    for (let q = -this.radius; q <= this.radius; q++) {
-      for (let r = Math.max(-this.radius, -q - this.radius); r <= Math.min(this.radius, -q + this.radius); r++) {
-        // added "|| 0" to prevent "-0" values
-        const s = -q - r || 0;
-        this.hexData.push({ q, r, s });
-      }
-    }
-  }
-
-  trackByCoord(_index: number, hexCoord: HexData): string {
-    return `${hexCoord.q},${hexCoord.r},${hexCoord.s}`;
-  }
-
-  isHexAEqualHexB(hexA: HexData, hexB: HexData, checkValue = false) {
-    const keysToCompare = ['q', 's', 'r'];
-    if (checkValue) keysToCompare.push('value');
-    const hasMismatch = keysToCompare.some((key) => hexA[key as keyof HexData] !== hexB[key as keyof HexData]);
-    return !hasMismatch;
-  }
-
   updateProperies(): void {
     if (!this.hexWidth) return;
+    console.log('>>> setting primitive properties');
+
     this.setHexHeight();
 
     this.setGridWidth();
@@ -113,9 +102,32 @@ export class GridComponent extends GridUtilityComponent {
 
     this.setOffset();
 
-    this.setHexCoords();
-
     this.setStyleVariables(this.gridWidth, this.gridHeight);
+
+    if (this.gameState === 'setup') this.setHexCoords();
+  }
+
+  setHexCoords(): void {
+    console.log('>>> settings coordinates');
+    const localHexData = [];
+
+    for (let q = -this.radius; q <= this.radius; q++) {
+      for (let r = Math.max(-this.radius, -q - this.radius); r <= Math.min(this.radius, -q + this.radius); r++) {
+        // added "|| 0" to prevent "-0" values
+        const s = -q - r || 0;
+        localHexData.push({ q, r, s });
+      }
+    }
+
+    this.hexManagementService.setHexData(localHexData, 'GridComponent.setHexCoords');
+  }
+
+  isHexAEqualHexB(hexA: HexData, hexB: HexData, checkValue = false) {
+    if (!hexA || !hexB) return false;
+    const keysToCompare = ['q', 's', 'r'];
+    if (checkValue) keysToCompare.push('value');
+    const hasMismatch = keysToCompare.some((key) => hexA[key as keyof HexData] !== hexB[key as keyof HexData]);
+    return !hasMismatch;
   }
 
   // getNextTurnHexData(): void {

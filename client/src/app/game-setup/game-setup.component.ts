@@ -25,6 +25,6 @@ export class GameSetupComponent {
   }
 
   startGame() {
-    this.gameSetupService.setIsGameInProgress(true, `GameSetupComponent.startGame: setIsGameInProgress`);
+    this.gameSetupService.setGameState('in-progress', `GameSetupComponent.startGame: setIsGameInProgress`);
   }
 }

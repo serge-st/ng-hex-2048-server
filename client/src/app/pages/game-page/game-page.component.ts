@@ -5,6 +5,7 @@ import { GameControlComponent } from '@app/game-control';
 import { Observable, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { GameSetupService } from '@app/shared/services/game-setup';
+import { GameState } from '@app/shared/types';
 
 @Component({
   selector: 'app-game-page',
@@ -14,9 +15,9 @@ import { GameSetupService } from '@app/shared/services/game-setup';
   styleUrls: ['../pages-styles.scss', './game-page.component.scss'],
 })
 export class GamePageComponent {
-  isGameInProgress$!: Observable<boolean>;
+  gameState$!: Observable<GameState>;
 
   constructor(readonly gameSetupService: GameSetupService) {
-    this.isGameInProgress$ = this.gameSetupService.state$.pipe(map((state) => state.isGameInProgress));
+    this.gameState$ = this.gameSetupService.state$.pipe(map((state) => state.gameState));
   }
 }

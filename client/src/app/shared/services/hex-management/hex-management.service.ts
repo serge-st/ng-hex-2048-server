@@ -40,6 +40,10 @@ export class HexManagementService {
     this.setState({ hexData }, whereFrom);
   }
 
+  getHexData(): HexData[] {
+    return this.getState().hexData;
+  }
+
   // TODO: implement error handling
   /**
    * Handle Http operation that failed.

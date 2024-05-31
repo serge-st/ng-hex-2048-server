@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HexData } from '@app/shared/interfaces';
 import { GameSetupService } from '@app/shared/services/game-setup';
+import { HexManagementService } from '@app/shared/services/hex-management';
 import { distinctUntilChanged } from 'rxjs';
 
 @Component({
@@ -13,26 +14,27 @@ import { distinctUntilChanged } from 'rxjs';
 })
 export class GameControlComponent implements OnInit {
   radius!: number;
-  hexData!: HexData[];
 
-  constructor(private gameSetupService: GameSetupService) {
+  constructor(
+    private gameSetupService: GameSetupService,
+    private hexManagementService: HexManagementService,
+  ) {
     this.gameSetupService.state$
       .pipe(takeUntilDestroyed())
       .pipe(distinctUntilChanged())
       .subscribe((state) => {
         this.radius = state.radius;
-        // this.hexData = state.hexData;
       });
   }
 
   ngOnInit(): void {
-    // this.setNextTurnHexData();
+    this.setNextTurnHexData();
   }
 
   // TODO: remove after testing, temporaty method
   nextMove() {
     console.log('nextMove clicked');
-    // this.setNextTurnHexData();
+    this.setNextTurnHexData();
   }
 
   isHexAEqualHexB(hexA: HexData, hexB: HexData) {
@@ -41,22 +43,29 @@ export class GameControlComponent implements OnInit {
     return !hasMismatch;
   }
 
-  // setNextTurnHexData(): void {
-  //   const activeHexes = this.hexData.filter((hex) => Boolean(hex.value));
+  setNextTurnHexData() {
+    const localHexData = this.hexManagementService.getHexData().filter((hex) => Boolean(hex.value));
 
-  //   this.hexManagementService
-  //     .getNewHexCoords(this.radius, activeHexes)
-  //     .pipe(distinctUntilChanged<HexData[]>())
-  //     .subscribe((newHexCoords) => {
-  //       const nextMoveHexData = this.hexData
-  //         .map((hex) => {
-  //           const indexWithValue = newHexCoords.findIndex((newHex) => this.isHexAEqualHexB(hex, newHex));
-  //           if (indexWithValue !== -1) hex.value = newHexCoords[indexWithValue].value;
-  //           return hex;
-  //         })
-  //         .filter((hex) => Boolean(hex.value));
+    this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
+      this.hexManagementService.setHexData(
+        localHexData.concat(newHexCoords),
+        'GameControlComponent.setNextTurnHexData()',
+      );
 
-  //       this.gameSetupService.setHexData(nextMoveHexData, 'game-control');
-  //     });
-  // }
+      if (newHexCoords.length === 0)
+        this.gameSetupService.setGameState('game-over', 'GameControlComponent.setNextTurnHexData()');
+    });
+
+    // this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
+    //   localHexData
+    //     .map((hex) => {
+    //       const indexWithValue = newHexCoords.findIndex((newHex) => this.isHexAEqualHexB(hex, newHex));
+    //       if (indexWithValue !== -1) hex.value = newHexCoords[indexWithValue].value;
+    //       return hex;
+    //     })
+    //     .filter((hex) => Boolean(hex.value));
+
+    //   this.hexManagementService.setHexData(localHexData, 'game-control');
+    // });
+  }
 }

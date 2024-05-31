@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GameSetupState } from './interfaces/game-setup-state';
+import { GameState } from '@app/shared/types';
 
 const initialState: GameSetupState = {
   radius: 1,
   gap: 4,
   hexWidth: 200,
-  isGameInProgress: false,
+  gameState: 'setup',
 };
 
 @Injectable({
@@ -40,7 +41,7 @@ export class GameSetupService {
     this.setState({ hexWidth }, whereFrom);
   }
 
-  setIsGameInProgress(isGameInProgress: boolean, whereFrom?: string): void {
-    this.setState({ isGameInProgress }, whereFrom);
+  setGameState(gameState: GameState, whereFrom?: string): void {
+    this.setState({ gameState }, whereFrom);
   }
 }
