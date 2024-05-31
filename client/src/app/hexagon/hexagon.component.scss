@@ -18,6 +18,10 @@
   background-color: rgb(110 224 110);
 }
 
+:host.background-hex {
+  background-color: rgb(255 255 255);
+}
+
 :host.has-value {
   background-color: tomato;
 }

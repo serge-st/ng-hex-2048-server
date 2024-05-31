@@ -1,5 +1,13 @@
 <section class="grid-wrapper" [style.--width]="styleVariables.width" [style.--height]="styleVariables.height">
   <app-hexagon
+    *ngFor="let hex of backgroundHexData; trackBy: trackByCoord"
+    [hexWidth]="hexWidth"
+    [gap]="gap"
+    [hexData]="hex"
+    [offset]="offset"
+    [isBackgroundHex]="true"
+  ></app-hexagon>
+  <app-hexagon
     *ngFor="let hex of hexData; trackBy: trackByCoord"
     [hexWidth]="hexWidth"
     [gap]="gap"

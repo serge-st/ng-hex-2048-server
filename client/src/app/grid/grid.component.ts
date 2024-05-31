@@ -26,6 +26,7 @@ export class GridComponent extends GridUtilityComponent {
   hexWidth!: number;
   gameState!: GameState;
   hexData: HexData[] = [];
+  backgroundHexData: HexData[] = [];
 
   constructor(
     private gameSetupService: GameSetupService,
@@ -119,6 +120,10 @@ export class GridComponent extends GridUtilityComponent {
       }
     }
 
+    if (this.gameState === 'setup') this.backgroundHexData = localHexData;
+
+    // TODO: maybe there is no need to set hexData if backgroundHexData is implemented
+    // backgroundHexes can change color during setup phase
     this.hexManagementService.setHexData(localHexData, 'GridComponent.setHexCoords');
   }
 

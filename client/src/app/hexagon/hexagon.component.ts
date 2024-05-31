@@ -15,11 +15,13 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   @Input({ required: true }) offset!: Position;
   @Input({ required: true }) gap!: number;
   @Input({ required: true }) hexWidth!: number;
-  @Input() get value(): number {
-    return this.hexData.value || 0;
+  @Input() isBackgroundHex = false;
+
+  @HostBinding('class.has-value') get hasValueClass() {
+    return this.value !== 0;
   }
-  @HostBinding('class') get hostClass() {
-    return this.value !== 0 ? 'has-value' : '';
+  @HostBinding('class.background-hex') get backgroundHexClass() {
+    return this.isBackgroundHex;
   }
   @HostBinding('style') get cssVariables() {
     return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height}; --x-coord: ${this.styleVariables.xCoord}; --y-coord: ${this.styleVariables.yCoord}`;
@@ -36,9 +38,13 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   @HostBinding('attr.data-value') get dataValue() {
     return this.value;
   }
+
   hexHeight!: number;
   pixelCoord!: Position;
   styleVariables!: StyleVariables;
+  get value(): number {
+    return this.hexData.value || 0;
+  }
 
   ngOnChanges(): void {
     this.validateHexCoordinates();
