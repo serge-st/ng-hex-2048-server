@@ -53,14 +53,12 @@ export class GridComponent extends GridUtilityComponent {
           const hasMismatch = curr.hexData.some((currentHex, index) => {
             return !this.isHexAEqualHexB(currentHex, prev.hexData[index], true);
           });
-          console.log(`hasMismatch: ${hasMismatch}`);
-          if (!hasMismatch) console.log('>> no mismatch found, skipping setHexCoords()');
+          if (!hasMismatch) console.log('>> no mismatch found, skipping hexData update');
           return !hasMismatch;
         }),
       )
       .subscribe((state) => {
         this.hexData = state.hexData;
-        // this.setHexCoords();
       });
   }
 
@@ -70,16 +68,18 @@ export class GridComponent extends GridUtilityComponent {
   offset!: Position;
   styleVariables!: StyleVariables;
 
+  HEX_HORIZONTAL_SPAN_RATIO = 0.75 as const;
+
   setGridWidth(): void {
-    const hexesWidth = this.hexWidth + this.hexWidth * this.radius * 0.75 * 2;
-    const gapCompensation = this.radius * 0.75 * 2 * this.gap;
+    const hexesWidth = this.hexWidth + this.hexWidth * this.radius * this.HEX_HORIZONTAL_SPAN_RATIO * 2;
+    const gapCompensation = this.radius * this.HEX_HORIZONTAL_SPAN_RATIO * 2 * this.gap;
     const padding = this.gap * 2 + gapCompensation;
     this.gridWidth = hexesWidth + padding;
   }
 
   setGridHeight(): void {
     const hexesHeight = this.hexHeight * (2 * this.radius + 1);
-    const gapCompensation = this.radius * Math.sqrt(3) * this.gap;
+    const gapCompensation = this.radius * this.coordToPixel.f3 * this.gap;
     const padding = this.gap * 2 + gapCompensation;
     this.gridHeight = hexesHeight + padding;
   }
