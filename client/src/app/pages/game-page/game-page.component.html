@@ -1,11 +1,14 @@
 <main>
-  <h1 *ngIf="(gameState$ | async) === 'game-over'">Game Over</h1>
+  <h1 *ngIf="(gameState$ | async) === 'in-progress'">Let's play! 🎮</h1>
+  <h1 *ngIf="(gameState$ | async) === 'game-over'">Game Over 💀</h1>
+  <h1 *ngIf="(gameState$ | async) === 'win'">Congratulations, you won! 👑</h1>
+
   <ng-container *ngIf="(gameState$ | async) === 'setup'; then gameSetup; else gameControl"> </ng-container>
   <ng-template #gameSetup>
     <app-game-setup></app-game-setup>
   </ng-template>
+  <app-grid></app-grid>
   <ng-template #gameControl>
     <app-game-control></app-game-control>
   </ng-template>
-  <app-grid></app-grid>
 </main>

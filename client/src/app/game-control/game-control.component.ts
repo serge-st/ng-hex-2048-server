@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HexData } from '@app/shared/interfaces';
 import { GameSetupService } from '@app/shared/services/game-setup';
@@ -18,6 +18,7 @@ export class GameControlComponent implements OnInit {
   constructor(
     private gameSetupService: GameSetupService,
     private hexManagementService: HexManagementService,
+    private renderer: Renderer2,
   ) {
     this.gameSetupService.state$
       .pipe(takeUntilDestroyed())
@@ -29,6 +30,40 @@ export class GameControlComponent implements OnInit {
 
   ngOnInit(): void {
     this.setNextTurnHexData();
+    this.renderer.listen('document', 'keydown', (event) => {
+      switch (event.key.toLowerCase()) {
+        case 'q': {
+          console.log('q clicked');
+          this.setNextTurnHexData();
+          break;
+        }
+        case 'w': {
+          console.log('w clicked');
+          this.setNextTurnHexData();
+          break;
+        }
+        case 'e': {
+          console.log('e clicked');
+          this.setNextTurnHexData();
+          break;
+        }
+        case 'a': {
+          console.log('a clicked');
+          this.setNextTurnHexData();
+          break;
+        }
+        case 's': {
+          console.log('s clicked');
+          this.setNextTurnHexData();
+          break;
+        }
+        case 'd': {
+          console.log('d clicked');
+          this.setNextTurnHexData();
+          break;
+        }
+      }
+    });
   }
 
   // TODO: remove after testing, temporaty method
