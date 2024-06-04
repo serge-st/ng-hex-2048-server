@@ -6,6 +6,7 @@ import { HexManagementState } from './interfaces/hex-management-state';
 
 const initialState: HexManagementState = {
   hexData: [],
+  backgroundHexData: [],
 };
 
 @Injectable({
@@ -34,6 +35,10 @@ export class HexManagementService {
     this.state.next({ ...this.getState(), ...newState });
     // TODO remove afer testing
     console.log(`New state: ${whereFrom}`, this.getState());
+  }
+
+  setBackGroundHexData(hexData: HexData[], whereFrom?: string): void {
+    this.setState({ backgroundHexData: hexData }, whereFrom);
   }
 
   setHexData(hexData: HexData[], whereFrom?: string): void {

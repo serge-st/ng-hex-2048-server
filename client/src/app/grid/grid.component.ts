@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { HexagonComponent } from '@app/hexagon';
 import { StyleVariables, Position, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
@@ -8,7 +8,9 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { GameState } from '@app/shared/types';
+import { compareHexData } from './helpers/compare-hex-data';
 
+// TODO: remove console.log
 @Component({
   selector: 'app-grid',
   standalone: true,
@@ -44,23 +46,21 @@ export class GridComponent extends GridUtilityComponent {
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(
-        distinctUntilChanged((prev, curr) => {
-          // TODO: remove console.log
-          console.log(
-            `\n\nprev hexData: ${JSON.stringify(prev.hexData)} \n\ncurr hexData: ${JSON.stringify(curr.hexData)}`,
-          );
-
-          const hasMismatch = curr.hexData.some((currentHex, index) => {
-            return !this.isHexAEqualHexB(currentHex, prev.hexData[index], true);
-          });
-          if (!hasMismatch) console.log('>> no mismatch found, skipping hexData update');
-          return !hasMismatch;
-        }),
-      )
+      .pipe(distinctUntilChanged((prev, curr) => compareHexData(prev, curr, 'hexData')))
       .subscribe((state) => {
         this.hexData = state.hexData;
       });
+
+    this.hexManagementService.state$
+      .pipe(takeUntilDestroyed())
+      .pipe(distinctUntilChanged((prev, curr) => compareHexData(prev, curr, 'backgroundHexData')))
+      .subscribe((state) => {
+        this.backgroundHexData = state.backgroundHexData;
+      });
+  }
+
+  @HostBinding('style') get cssVariables() {
+    return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height};`;
   }
 
   hexHeight!: number;
@@ -69,7 +69,7 @@ export class GridComponent extends GridUtilityComponent {
   offset!: Position;
   styleVariables!: StyleVariables;
 
-  HEX_HORIZONTAL_SPAN_RATIO = 0.75 as const;
+  readonly HEX_HORIZONTAL_SPAN_RATIO = 0.75;
 
   setGridWidth(): void {
     const hexesWidth = this.hexWidth + this.hexWidth * this.radius * this.HEX_HORIZONTAL_SPAN_RATIO * 2;
@@ -120,33 +120,11 @@ export class GridComponent extends GridUtilityComponent {
       }
     }
 
-    if (this.gameState === 'setup') this.backgroundHexData = localHexData;
+    if (this.gameState === 'setup')
+      this.hexManagementService.setBackGroundHexData(localHexData, 'GridComponent.setHexCoords backgroundHexData');
 
     // TODO: maybe there is no need to set hexData if backgroundHexData is implemented
     // backgroundHexes can change color during setup phase
     this.hexManagementService.setHexData(localHexData, 'GridComponent.setHexCoords');
   }
-
-  isHexAEqualHexB(hexA: HexData, hexB: HexData, checkValue = false) {
-    if (!hexA || !hexB) return false;
-    const keysToCompare = ['q', 's', 'r'];
-    if (checkValue) keysToCompare.push('value');
-    const hasMismatch = keysToCompare.some((key) => hexA[key as keyof HexData] !== hexB[key as keyof HexData]);
-    return !hasMismatch;
-  }
-
-  // getNextTurnHexData(): void {
-  //   const activeHexes = this.hexData.filter((hex) => Boolean(hex.value));
-
-  //   this.hexManagementService
-  //     .getNewHexCoords(this.radius, activeHexes)
-  //     .pipe(distinctUntilChanged<HexData[]>())
-  //     .subscribe((newHexCoords) => {
-  //       this.hexData.map((hex) => {
-  //         const indexWithValue = newHexCoords.findIndex((newHex) => this.isHexAEqualHexB(hex, newHex));
-  //         if (indexWithValue !== -1) hex.value = newHexCoords[indexWithValue].value;
-  //         return hex;
-  //       });
-  //     });
-  // }
 }

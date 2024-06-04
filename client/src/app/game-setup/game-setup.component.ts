@@ -1,6 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { NumberInputComponent } from '@app/number-input/number-input.component';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { Observable, map } from 'rxjs';
@@ -8,7 +9,7 @@ import { Observable, map } from 'rxjs';
 @Component({
   selector: 'app-game-setup',
   standalone: true,
-  imports: [FormsModule, NumberInputComponent, AsyncPipe],
+  imports: [FormsModule, NumberInputComponent, AsyncPipe, RouterLink],
   templateUrl: './game-setup.component.html',
   styleUrl: './game-setup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
