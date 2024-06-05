@@ -20,4 +20,16 @@ export class GamePageComponent {
   constructor(readonly gameSetupService: GameSetupService) {
     this.gameState$ = this.gameSetupService.state$.pipe(map((state) => state.gameState));
   }
+
+  get isInProgress$(): Observable<boolean> {
+    return this.gameState$.pipe(map((state) => state === 'in-progress'));
+  }
+
+  get isGameOver$(): Observable<boolean> {
+    return this.gameState$.pipe(map((state) => state === 'game-over'));
+  }
+
+  get isWin$(): Observable<boolean> {
+    return this.gameState$.pipe(map((state) => state === 'win'));
+  }
 }

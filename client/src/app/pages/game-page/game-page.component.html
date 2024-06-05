@@ -1,7 +1,7 @@
 <main>
-  <h1 *ngIf="(gameState$ | async) === 'in-progress'">Let's play! 🎮</h1>
-  <h1 *ngIf="(gameState$ | async) === 'game-over'">Game Over 💀</h1>
-  <h1 *ngIf="(gameState$ | async) === 'win'">Congratulations, you won! 👑</h1>
+  <h1 *ngIf="isInProgress$ | async">Let's play! 🎮</h1>
+  <h1 *ngIf="isGameOver$ | async">Game Over 💀</h1>
+  <h1 *ngIf="isWin$ | async">Congratulations, you won! 👑</h1>
 
   <app-grid></app-grid>
   <app-game-control></app-game-control>
