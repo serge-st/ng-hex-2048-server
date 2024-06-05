@@ -16,12 +16,13 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   @Input({ required: true }) gap!: number;
   @Input({ required: true }) hexWidth!: number;
   @Input() isBackgroundHex = false;
+  @Input() isSetup = false;
 
-  @HostBinding('class.has-value') get hasValueClass() {
-    return this.value !== 0;
-  }
   @HostBinding('class.background-hex') get backgroundHexClass() {
     return this.isBackgroundHex;
+  }
+  @HostBinding('class.setup') get setupClass() {
+    return this.isSetup;
   }
   @HostBinding('style') get cssVariables() {
     return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height}; --x-coord: ${this.styleVariables.xCoord}; --y-coord: ${this.styleVariables.yCoord}`;

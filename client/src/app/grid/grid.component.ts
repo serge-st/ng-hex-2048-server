@@ -2,9 +2,9 @@ import { Component, HostBinding } from '@angular/core';
 import { HexagonComponent } from '@app/hexagon';
 import { StyleVariables, Position, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
-import { NgFor } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { distinctUntilChanged } from 'rxjs';
+import { Observable, distinctUntilChanged, map } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { GameState } from '@app/shared/types';
@@ -14,7 +14,7 @@ import { compareHexData } from './helpers/compare-hex-data';
 @Component({
   selector: 'app-grid',
   standalone: true,
-  imports: [HexagonComponent, NgFor],
+  imports: [HexagonComponent, NgFor, NgIf, AsyncPipe],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss',
 })
@@ -61,6 +61,10 @@ export class GridComponent extends GridUtilityComponent {
 
   @HostBinding('style') get cssVariables() {
     return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height};`;
+  }
+
+  get isSetup$(): Observable<boolean> {
+    return this.gameSetupService.state$.pipe(map((state) => state.gameState === 'setup'));
   }
 
   hexHeight!: number;
@@ -122,9 +126,5 @@ export class GridComponent extends GridUtilityComponent {
 
     if (this.gameState === 'setup')
       this.hexManagementService.setBackGroundHexData(localHexData, 'GridComponent.setHexCoords backgroundHexData');
-
-    // TODO: maybe there is no need to set hexData if backgroundHexData is implemented
-    // backgroundHexes can change color during setup phase
-    this.hexManagementService.setHexData(localHexData, 'GridComponent.setHexCoords');
   }
 }

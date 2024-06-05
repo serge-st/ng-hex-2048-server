@@ -15,13 +15,13 @@
     /* Bottom left point */ 25% 100%,
     /* Left point */ 0% 50%
   );
-  background-color: rgb(110 224 110);
+  background-color: tomato;
 }
 
 :host.background-hex {
   background-color: rgb(255 255 255);
 }
 
-:host.has-value {
-  background-color: tomato;
+:host.background-hex.setup {
+  background-color: rgb(110 224 110);
 }
