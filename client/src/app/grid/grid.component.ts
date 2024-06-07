@@ -8,7 +8,7 @@ import { Observable, distinctUntilChanged, map } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { GameState } from '@app/shared/types';
-import { compareHexData } from './helpers/compare-hex-data';
+import { compareHexData } from '@app/shared/helpers';
 
 // TODO: remove console.log
 @Component({
