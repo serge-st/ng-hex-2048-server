@@ -1,10 +1,10 @@
 <div class="control-row">
-  <button #qButton type="button" class="btn btn-light" (click)="nextMove()">Q</button>
-  <button #wButton type="button" class="btn btn-light" (click)="nextMove()">W</button>
-  <button #eButton type="button" class="btn btn-light" (click)="nextMove()">E</button>
+  <button #qButton type="button" class="btn btn-light" (click)="movePlusS()">Q</button>
+  <button #wButton type="button" class="btn btn-light" (click)="moveMinusR()">W</button>
+  <button #eButton type="button" class="btn btn-light" (click)="movePlusQ()">E</button>
 </div>
 <div class="control-row">
-  <button #aButton type="button" class="btn btn-light" (click)="nextMove()">A</button>
-  <button #sButton type="button" class="btn btn-light" (click)="nextMove()">S</button>
-  <button #dButton type="button" class="btn btn-light" (click)="nextMove()">D</button>
+  <button #aButton type="button" class="btn btn-light" (click)="moveMinusQ()">A</button>
+  <button #sButton type="button" class="btn btn-light" (click)="movePlusR()">S</button>
+  <button #dButton type="button" class="btn btn-light" (click)="moveMinusS()">D</button>
 </div>
