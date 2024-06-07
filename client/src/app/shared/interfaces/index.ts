@@ -1,4 +1,4 @@
-export { CoordToPixel } from './coord-to-pixel';
-export { HexData } from './hex-data';
-export { Position } from './position';
-export { StyleVariables } from './style-variables';
+export type { CoordToPixel } from './coord-to-pixel';
+export type { HexData } from './hex-data';
+export type { Position } from './position';
+export type { StyleVariables } from './style-variables';

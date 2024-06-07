@@ -13,6 +13,7 @@ const initialState: HexManagementState = {
   providedIn: 'root',
 })
 export class HexManagementService {
+  // TODO: change to env variables
   private baseURL = 'http://localhost:3000';
   private serviceURL = `${this.baseURL}/hex-grid-management`;
 
@@ -49,6 +50,14 @@ export class HexManagementService {
     return this.getState().hexData;
   }
 
+  getNewHexCoords(radius: number, userCoords: HexData[]): Observable<HexData[]> {
+    const url = `${this.serviceURL}/${radius}`;
+    return this.http.post<HexData[]>(url, JSON.stringify(userCoords), this.httpOptions).pipe(
+      tap((_) => console.log('fetched hex coords')),
+      catchError((err) => this.handleError(err, [])),
+    );
+  }
+
   // TODO: implement error handling
   /**
    * Handle Http operation that failed.
@@ -68,13 +77,5 @@ export class HexManagementService {
     console.error('Error');
     console.error(error);
     return of(result as T);
-  }
-
-  getNewHexCoords(radius: number, userCoords: HexData[]): Observable<HexData[]> {
-    const url = `${this.serviceURL}/${radius}`;
-    return this.http.post<HexData[]>(url, JSON.stringify(userCoords), this.httpOptions).pipe(
-      tap((_) => console.log('fetched hex coords')),
-      catchError((err) => this.handleError(err, [])),
-    );
   }
 }

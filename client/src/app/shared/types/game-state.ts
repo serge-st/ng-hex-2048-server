@@ -5,4 +5,4 @@ const GAME_STATE = {
   WIN: 'win',
 } as const;
 
-export type GameState = (typeof GAME_STATE)[keyof typeof GAME_STATE];
+export type GameState = ObjectValues<typeof GAME_STATE>;
