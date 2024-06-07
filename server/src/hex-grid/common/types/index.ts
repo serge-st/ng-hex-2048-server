@@ -1,1 +1,1 @@
-export { RequiredHexCoordKey } from './required-hex-coord-key';
+export type { RequiredHexCoordKey } from './required-hex-coord-key';
