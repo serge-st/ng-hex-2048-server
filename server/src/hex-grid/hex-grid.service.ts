@@ -5,6 +5,7 @@ import {
   HEX_HIGH_VALUE_PROBABILITY,
   NEW_HEX_COUNT_INITIAL,
 } from './common/constants/constants';
+import { RequiredHexCoordKey } from './common/types';
 
 @Injectable()
 export class HexGridService {
@@ -51,8 +52,9 @@ export class HexGridService {
   }
 
   isHexAEqualHexB = (hexA: HexCoordDTO, hexB: HexCoordDTO) => {
-    const keysToCompare = ['q', 's', 'r'];
-    const hasMismatch = keysToCompare.some((key) => hexA[key as keyof HexCoordDTO] !== hexB[key as keyof HexCoordDTO]);
+    const hexCoordKeys: RequiredHexCoordKey[] = ['q', 's', 'r'];
+
+    const hasMismatch = hexCoordKeys.some((key) => hexA[key] !== hexB[key]);
     return !hasMismatch;
   };
 
