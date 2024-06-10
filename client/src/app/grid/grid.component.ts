@@ -31,8 +31,8 @@ export class GridComponent extends GridUtilityComponent {
   backgroundHexData: HexData[] = [];
 
   constructor(
-    private gameSetupService: GameSetupService,
-    private hexManagementService: HexManagementService,
+    private readonly gameSetupService: GameSetupService,
+    private readonly hexManagementService: HexManagementService,
   ) {
     super();
     this.gameSetupService.state$.pipe(takeUntilDestroyed()).subscribe((state) => {

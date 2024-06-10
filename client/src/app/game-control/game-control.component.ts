@@ -20,9 +20,9 @@ export class GameControlComponent implements OnInit {
   hexData!: HexData[];
 
   constructor(
-    private gameSetupService: GameSetupService,
-    private hexManagementService: HexManagementService,
-    private renderer: Renderer2,
+    private readonly gameSetupService: GameSetupService,
+    private readonly hexManagementService: HexManagementService,
+    private readonly renderer: Renderer2,
   ) {
     this.gameSetupService.state$
       .pipe(takeUntilDestroyed())

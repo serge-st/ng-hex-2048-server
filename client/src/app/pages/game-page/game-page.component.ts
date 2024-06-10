@@ -17,7 +17,7 @@ import { GameState } from '@app/shared/types';
 export class GamePageComponent {
   gameState$!: Observable<GameState>;
 
-  constructor(readonly gameSetupService: GameSetupService) {
+  constructor(private readonly gameSetupService: GameSetupService) {
     this.gameState$ = this.gameSetupService.state$.pipe(map((state) => state.gameState));
   }
 

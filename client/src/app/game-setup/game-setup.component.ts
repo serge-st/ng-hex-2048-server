@@ -19,7 +19,7 @@ export class GameSetupComponent {
   gap$!: Observable<number>;
   hexWidth$!: Observable<number>;
 
-  constructor(readonly gameSetupService: GameSetupService) {
+  constructor(private readonly gameSetupService: GameSetupService) {
     this.radius$ = this.gameSetupService.state$.pipe(map((state) => state.radius));
     this.gap$ = this.gameSetupService.state$.pipe(map((state) => state.gap));
     this.hexWidth$ = this.gameSetupService.state$.pipe(map((state) => state.hexWidth));
