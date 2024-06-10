@@ -1,5 +1,5 @@
 import { Component, HostBinding } from '@angular/core';
-import { HexagonComponent } from '@app/hexagon';
+import { HexagonComponent } from '@app/shared/components/UI';
 import { StyleVariables, Position, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';

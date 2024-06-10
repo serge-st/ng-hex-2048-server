@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { NumberInputComponent } from '@app/number-input/number-input.component';
+import { NumberInputComponent } from '@app/shared/components/UI';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { Observable, map } from 'rxjs';
 
@@ -19,7 +19,7 @@ export class GameSetupComponent {
   gap$!: Observable<number>;
   hexWidth$!: Observable<number>;
 
-  constructor(private readonly gameSetupService: GameSetupService) {
+  constructor(readonly gameSetupService: GameSetupService) {
     this.radius$ = this.gameSetupService.state$.pipe(map((state) => state.radius));
     this.gap$ = this.gameSetupService.state$.pipe(map((state) => state.gap));
     this.hexWidth$ = this.gameSetupService.state$.pipe(map((state) => state.hexWidth));
