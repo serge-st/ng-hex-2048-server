@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
@@ -15,14 +15,15 @@ import { Direction, RequiredHexDataKey } from '@app/shared/types';
   templateUrl: './game-control.component.html',
   styleUrl: './game-control.component.scss',
 })
-export class GameControlComponent implements OnInit {
+export class GameControlComponent implements OnInit, OnDestroy {
+  private unlisten: null | (() => void) = null;
   radius!: number;
   hexData!: HexData[];
 
   constructor(
+    private readonly renderer: Renderer2,
     private readonly gameSetupService: GameSetupService,
     private readonly hexManagementService: HexManagementService,
-    private readonly renderer: Renderer2,
   ) {
     this.gameSetupService.state$
       .pipe(takeUntilDestroyed())
@@ -72,7 +73,7 @@ export class GameControlComponent implements OnInit {
   ngOnInit(): void {
     this.setTextNextTurnHexData();
     // this.setNextTurnHexData();
-    this.renderer.listen('document', 'keydown', (event) => {
+    this.unlisten = this.renderer.listen('document', 'keydown', (event) => {
       switch (event.code) {
         case 'KeyQ': {
           this.movePlusS();
@@ -100,6 +101,12 @@ export class GameControlComponent implements OnInit {
         }
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.unlisten) {
+      this.unlisten();
+    }
   }
 
   processMove(direction: Direction, hexDataArray: HexData[], shouldMerge = false): HexData[] {
