@@ -1,19 +1,4 @@
-import { IsNumber, IsNotEmpty, IsOptional } from 'class-validator';
+import { OmitType } from '@nestjs/mapped-types';
+import { HexDataDTO } from './hex-data.dto';
 
-export class HexCoordDTO {
-  @IsNumber({}, { message: '"q" must be a number' })
-  @IsNotEmpty()
-  q: number;
-
-  @IsNumber({}, { message: '"r" must be a number' })
-  @IsNotEmpty()
-  r: number;
-
-  @IsNumber({}, { message: '"s" must be a number' })
-  @IsNotEmpty()
-  s: number;
-
-  @IsNumber({}, { message: '"value" must be a number' })
-  @IsOptional()
-  value?: number;
-}
+export class HexCoordDTO extends OmitType(HexDataDTO, ['value'] as const) {}

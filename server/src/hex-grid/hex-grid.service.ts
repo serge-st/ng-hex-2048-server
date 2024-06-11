@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HexCoordDTO } from './common/dto';
+import { HexDataDTO, HexCoordDTO } from './common/dto';
 import {
   GAME_DIFFICULTY_THRESHOLD,
   HEX_HIGH_VALUE_PROBABILITY,
@@ -9,27 +9,25 @@ import { RequiredHexCoordKey } from './common/types';
 
 @Injectable()
 export class HexGridService {
-  calculateNextMoveCoords(radius: number, userCoords: HexCoordDTO[]): HexCoordDTO[] {
-    const availableHexCoords = this.getAvailableHexCoords(radius, userCoords);
+  calculateNextMoveCoords(radius: number, userHexData: HexDataDTO[]): HexDataDTO[] {
+    const availableHexCoords = this.getAvailableHexCoords(radius, userHexData);
     if (availableHexCoords.length === 0) return [];
 
-    const userCoordCount = userCoords.length;
+    const userCoordCount = userHexData.length;
 
     const newHexCount = this.getNewHexCount(availableHexCoords.length, userCoordCount);
 
     const hexValue = this.getHexValue(userCoordCount);
 
-    return this.getRandomHexCoords(availableHexCoords, newHexCount).map((hexCoord) => {
-      hexCoord.value = hexValue;
-      return hexCoord;
+    return this.getRandomHexCoords(availableHexCoords, newHexCount).map((hexCoord): HexDataDTO => {
+      return { ...hexCoord, value: hexValue };
     });
   }
 
-  getAvailableHexCoords(radius: number, userCoords: HexCoordDTO[]) {
+  getAvailableHexCoords(radius: number, userCoords: HexCoordDTO[]): HexCoordDTO[] {
     if (userCoords.length === 0) return this.getHexGrid(radius);
 
     return this.getHexGrid(radius).filter((hexCoord) => {
-      // Array.prototype.some() stops as soon as it finds a match
       const isCoordTaken = userCoords.some((userCoord) => {
         return this.isHexAEqualHexB(hexCoord, userCoord);
       });
@@ -51,7 +49,7 @@ export class HexGridService {
     return result;
   }
 
-  isHexAEqualHexB = (hexA: HexCoordDTO, hexB: HexCoordDTO) => {
+  isHexAEqualHexB = (hexA: HexCoordDTO, hexB: HexCoordDTO): boolean => {
     const hexCoordKeys: RequiredHexCoordKey[] = ['q', 's', 'r'];
 
     const hasMismatch = hexCoordKeys.some((key) => hexA[key] !== hexB[key]);
