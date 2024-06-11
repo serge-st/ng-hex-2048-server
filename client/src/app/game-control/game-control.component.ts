@@ -110,55 +110,51 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   processMove(direction: Direction, hexDataArray: HexData[], shouldMerge = false): HexData[] {
-    return hexDataArray.reduce<HexData[]>((acc, hex, i, initialArray) => {
-      console.log(`>>>>> INITIATING MOVE FOR HEX: ${hex.value}`);
-
+    return hexDataArray.reduce<HexData[]>((acc, currenthHex, i, initialArray) => {
       const comparisonArray = acc.concat(initialArray.slice(i));
 
-      let move = true;
-
-      while (move) {
-        const neighbor = this.getNeighborHex(hex, comparisonArray, direction);
-        const potentialNewHexValue = this.neighbor(hex, direction);
+      while (true) {
+        const potentialNewHexValue = this.getNeighborCoords(currenthHex, direction);
+        const neighbor = this.getNeighborHex(currenthHex, comparisonArray, direction);
 
         const isInRange = this.isHexInRange(potentialNewHexValue);
 
-        console.log(`!!!>>> isInRange: ${isInRange}`);
+        if (!isInRange) break;
 
-        if (!isInRange) {
-          move = false;
-          console.log(`>>>>> is not in range NOT MOVING!`);
-          break;
-        }
-
-        console.log(`!!!>>> isEmptyTest: ${!neighbor}`);
-
-        // isNotEmpty
         if (neighbor !== undefined) {
-          const isSameValue = hex.value === neighbor.value;
+          const isSameValue = currenthHex.value === neighbor.value;
 
-          console.log(`!!!>>> isSameValue: ${isSameValue}`);
-
-          if (!isSameValue || !shouldMerge) {
-            move = false;
-            console.log(`>>>>> is not empty NOT MOVING!`);
-            break;
-          }
+          if (!isSameValue || !shouldMerge) break;
 
           potentialNewHexValue.value! *= 2;
-          console.log(`!!!>>> merging!`);
-          console.log(`!!!>>> neighbor: ${JSON.stringify(neighbor)}`);
-          console.log(`!!!>>> acc: ${JSON.stringify(acc)}`);
           acc = acc.filter((hexData) => !isHexAEqualHexB(hexData, neighbor));
         }
-        console.log(`!!!>>> moving!`);
-        hex = potentialNewHexValue;
+        currenthHex = potentialNewHexValue;
       }
 
-      console.log(`!!!>>> pushing hex: ${JSON.stringify(hex)}`);
-      acc.push(hex);
+      acc.push(currenthHex);
       return acc;
     }, []);
+  }
+
+  getNeighborCoords(hexA: HexData, direction: Direction): HexData {
+    return this.addHex(hexA, DIRECTIONS[direction]);
+  }
+
+  addHex(hexA: HexData, hexB: HexData): HexData {
+    return {
+      q: hexA.q + hexB.q,
+      r: hexA.r + hexB.r,
+      s: hexA.s + hexB.s,
+      value: hexA.value,
+    };
+  }
+
+  getNeighborHex(hex: HexData, comparisonArray: HexData[], direction: Direction): HexData | undefined {
+    const neighborCoords = this.getNeighborCoords(hex, direction);
+    return comparisonArray.find((hexData) => {
+      return isHexAEqualHexB(hexData, neighborCoords);
+    });
   }
 
   isHexInRange(hex: HexData): boolean {
@@ -168,52 +164,24 @@ export class GameControlComponent implements OnInit, OnDestroy {
     return !hasViolatedRange;
   }
 
-  getNeighborHex(hex: HexData, comparisonArray: HexData[], direction: Direction): HexData | undefined {
-    const neighborCoords = this.neighbor(hex, direction);
-    return comparisonArray.find((hexData) => {
-      // console.log(`BBB comparing hex from array: ${JSON.stringify(hexData)}`);
-      // console.log(`BBB with neighborCoords: ${JSON.stringify(neighborCoords)}`);
-      // console.log(`BBB isHexAEqualHexB: ${isHexAEqualHexB(hexData, neighborCoords)}`);
-      return isHexAEqualHexB(hexData, neighborCoords);
-    });
-  }
-
   canMove(hexDataArray: HexData[], direction: Direction): boolean {
     return hexDataArray.some((hex) => {
-      console.log(`CCC IMPORTANT >>> potentialNextHex: ${JSON.stringify(hex)}`);
-      console.log(`AAA >>> isHexInRange: ${this.isHexInRange(hex)}`);
-      console.log(`AAA >>> comparisonArray: ${JSON.stringify(hexDataArray)}`);
-      console.log(`AAA >>> neighbor hex: ${JSON.stringify(this.getNeighborHex(hex, hexDataArray, direction))}`);
-      console.log(`AAA >>> neighbor hex is empty: ${!this.getNeighborHex(hex, hexDataArray, direction)}`);
-      console.log(
-        `AAA >>> canItMove: ${this.isHexInRange(this.neighbor(hex, direction)) && !this.getNeighborHex(hex, hexDataArray, direction)}`,
+      return (
+        this.isHexInRange(this.getNeighborCoords(hex, direction)) && !this.getNeighborHex(hex, hexDataArray, direction)
       );
-
-      return this.isHexInRange(this.neighbor(hex, direction)) && !this.getNeighborHex(hex, hexDataArray, direction);
     });
   }
 
   movePlusS() {
-    console.log('Q clicked -> move +s,\n\nr stays the same');
-    console.log(`hexData: ${JSON.stringify(this.hexData)},\n\nradius: ${this.radius}`);
-
     let localHexData = this.hexData;
 
     let canMove = this.canMove(localHexData, DIRECTION.PLUS_S);
     let firstLoop = true;
 
-    console.log(`canMove: ${canMove}`);
-
-    let itter = 0;
-
     while (canMove) {
       localHexData = this.processMove(DIRECTION.PLUS_S, localHexData, firstLoop);
-      console.log(`AAA localHexData: ${JSON.stringify(localHexData)}`);
       firstLoop = false;
       canMove = this.canMove(localHexData, DIRECTION.PLUS_S);
-      console.log(`canMove: ${canMove}`);
-      if (itter > 2) canMove = false;
-      // itter++;
     }
 
     this.hexManagementService.setHexData(localHexData, 'GameControlComponent.processMove()');
@@ -253,15 +221,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
     // this.processMove(DIRECTION.MINUS_S);
   }
 
-  addHex(hexA: HexData, hexB: HexData): HexData {
-    return {
-      q: hexA.q + hexB.q,
-      r: hexA.r + hexB.r,
-      s: hexA.s + hexB.s,
-      value: hexA.value,
-    };
-  }
-
   subtractHex(hexA: HexData, hexB: HexData): HexData {
     return {
       q: hexA.q - hexB.q,
@@ -269,10 +228,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
       s: hexA.s - hexB.s,
       value: hexA.value,
     };
-  }
-
-  neighbor(hexA: HexData, direction: Direction): HexData {
-    return this.addHex(hexA, DIRECTIONS[direction]);
   }
 
   len(hex: HexData): number {
