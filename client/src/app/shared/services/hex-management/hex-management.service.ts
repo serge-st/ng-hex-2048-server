@@ -1,12 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
-import { HexData } from '@app/shared/interfaces';
+import { HexCoord, HexData } from '@app/shared/interfaces';
 import { HexManagementState } from './interfaces/hex-management-state';
 
 const initialState: HexManagementState = {
   hexData: [],
-  backgroundHexData: [],
+  backgroundHexCoords: [],
 };
 
 @Injectable({
@@ -21,11 +21,11 @@ export class HexManagementService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  private state = new BehaviorSubject<HexManagementState>(initialState);
+  private readonly state = new BehaviorSubject<HexManagementState>(initialState);
 
-  state$: Observable<HexManagementState> = this.state.asObservable();
+  readonly state$: Observable<HexManagementState> = this.state.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   private getState(): HexManagementState {
     return this.state.value;
@@ -38,8 +38,8 @@ export class HexManagementService {
     console.log(`New state: ${whereFrom}`, this.getState());
   }
 
-  setBackGroundHexData(hexData: HexData[], whereFrom?: string): void {
-    this.setState({ backgroundHexData: hexData }, whereFrom);
+  setBackgroundHexCoords(hexCoords: HexCoord[], whereFrom?: string): void {
+    this.setState({ backgroundHexCoords: hexCoords }, whereFrom);
   }
 
   setHexData(hexData: HexData[], whereFrom?: string): void {

@@ -1,8 +1,8 @@
-import { HexData } from '@app/shared/interfaces';
+import { HexCoord, HexData } from '@app/shared/interfaces';
 
 export interface HexManagementState {
   hexData: HexData[];
-  backgroundHexData: HexData[];
+  backgroundHexCoords: HexCoord[];
 }
 
 export type HexManagementStateKey = keyof HexManagementState;

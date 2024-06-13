@@ -8,7 +8,7 @@ import { Observable, distinctUntilChanged, map } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { GameState } from '@app/shared/types';
-import { compareHexData } from '@app/shared/helpers';
+import { compareHexManagementStateKey } from '@app/shared/helpers';
 
 // TODO: remove console.log
 @Component({
@@ -28,7 +28,7 @@ export class GridComponent extends GridUtilityComponent {
   hexWidth!: number;
   gameState!: GameState;
   hexData: HexData[] = [];
-  backgroundHexData: HexData[] = [];
+  backgroundHexCoords: HexCoord[] = [];
 
   constructor(
     private readonly gameSetupService: GameSetupService,
@@ -46,16 +46,16 @@ export class GridComponent extends GridUtilityComponent {
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(distinctUntilChanged((prev, curr) => compareHexData(prev, curr, 'hexData')))
+      .pipe(distinctUntilChanged((prev, curr) => compareHexManagementStateKey(prev, curr, 'hexData')))
       .subscribe((state) => {
         this.hexData = state.hexData;
       });
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(distinctUntilChanged((prev, curr) => compareHexData(prev, curr, 'backgroundHexData')))
+      .pipe(distinctUntilChanged((prev, curr) => compareHexManagementStateKey(prev, curr, 'backgroundHexCoords')))
       .subscribe((state) => {
-        this.backgroundHexData = state.backgroundHexData;
+        this.backgroundHexCoords = state.backgroundHexCoords;
       });
   }
 
@@ -109,22 +109,24 @@ export class GridComponent extends GridUtilityComponent {
 
     this.setStyleVariables(this.gridWidth, this.gridHeight);
 
-    if (this.gameState === 'setup') this.setHexCoords();
+    if (this.gameState === 'setup') this.setBackgroundHexCoords();
   }
 
-  setHexCoords(): void {
-    console.log('>>> settings coordinates');
-    const localHexData = [];
+  setBackgroundHexCoords(): void {
+    const localHexCoords: HexCoord[] = [];
 
     for (let q = -this.radius; q <= this.radius; q++) {
       for (let r = Math.max(-this.radius, -q - this.radius); r <= Math.min(this.radius, -q + this.radius); r++) {
         // added "|| 0" to prevent "-0" values
         const s = -q - r || 0;
-        localHexData.push({ q, r, s });
+        localHexCoords.push({ q, r, s });
       }
     }
 
     if (this.gameState === 'setup')
-      this.hexManagementService.setBackGroundHexData(localHexData, 'GridComponent.setHexCoords backgroundHexData');
+      this.hexManagementService.setBackgroundHexCoords(
+        localHexCoords,
+        'GridComponent.setHexCoords setBackgroundHexCoords',
+      );
   }
 }

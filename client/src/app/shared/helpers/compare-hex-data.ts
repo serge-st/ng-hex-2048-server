@@ -1,7 +1,7 @@
 import { HexManagementState, HexManagementStateKey } from '@app/shared/services/hex-management';
 import { isHexAEqualHexB } from './is-hex-a-equal-hex-b';
 
-export const compareHexData = (
+export const compareHexManagementStateKey = (
   prev: HexManagementState,
   curr: HexManagementState,
   key: HexManagementStateKey,

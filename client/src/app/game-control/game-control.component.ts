@@ -4,7 +4,7 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
-import { compareHexData, isHexAEqualHexB } from '@app/shared/helpers/';
+import { compareHexManagementStateKey, isHexAEqualHexB } from '@app/shared/helpers';
 import { HexData } from '@app/shared/interfaces';
 import { Direction, HexCoordKey } from '@app/shared/types';
 
@@ -34,7 +34,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(distinctUntilChanged((prev, curr) => compareHexData(prev, curr, 'hexData')))
+      .pipe(distinctUntilChanged((prev, curr) => compareHexManagementStateKey(prev, curr, 'hexData')))
       .subscribe((state) => {
         this.hexData = state.hexData;
       });
