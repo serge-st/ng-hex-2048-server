@@ -6,7 +6,7 @@ import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
 import { compareHexData, isHexAEqualHexB } from '@app/shared/helpers/';
 import { HexData } from '@app/shared/interfaces';
-import { Direction, RequiredHexDataKey } from '@app/shared/types';
+import { Direction, HexCoordKey } from '@app/shared/types';
 
 @Component({
   selector: 'app-game-control',
@@ -158,7 +158,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   isHexInRange(hex: HexData): boolean {
-    const requiredHexDataKeys: RequiredHexDataKey[] = ['q', 's', 'r'];
+    const requiredHexDataKeys: HexCoordKey[] = ['q', 's', 'r'];
     const hasViolatedRange = requiredHexDataKeys.some((key) => Math.abs(hex[key]) > this.radius);
 
     return !hasViolatedRange;
