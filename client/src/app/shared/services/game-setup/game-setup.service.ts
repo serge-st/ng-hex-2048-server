@@ -14,9 +14,9 @@ const initialState: GameSetupState = {
   providedIn: 'root',
 })
 export class GameSetupService {
-  private state = new BehaviorSubject<GameSetupState>(initialState);
+  private readonly state = new BehaviorSubject<GameSetupState>(initialState);
 
-  state$: Observable<GameSetupState> = this.state.asObservable();
+  readonly state$: Observable<GameSetupState> = this.state.asObservable();
 
   private getState(): GameSetupState {
     return this.state.value;
