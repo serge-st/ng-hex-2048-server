@@ -1,4 +1,4 @@
-import { HexCoord, HexData, HexDataNew } from '@app/shared/interfaces';
+import { HexCoord, HexData } from '@app/shared/interfaces';
 import { HexCoordKey, HexDataKey } from '../types';
 import { isHexData } from './is-hex-data';
 

@@ -1,5 +1,5 @@
-import { HexCoord, HexDataNew } from '../interfaces';
+import { HexCoord, HexData } from '../interfaces';
 
-export const isHexData = (hex: HexCoord | HexDataNew): hex is HexDataNew => {
+export const isHexData = (hex: HexCoord | HexData): hex is HexData => {
   return 'value' in hex;
 };
