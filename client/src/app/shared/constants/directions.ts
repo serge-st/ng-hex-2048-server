@@ -1,4 +1,4 @@
-import { HexData } from '../interfaces';
+import { HexCoord } from '../interfaces';
 
 export const DIRECTION = {
   PLUS_S: 0,
@@ -9,7 +9,7 @@ export const DIRECTION = {
   MINUS_S: 5,
 } as const;
 
-export const DIRECTIONS: HexData[] = [
+export const DIRECTIONS: HexCoord[] = [
   // PLUS_S
   // Q clicked -> move +s, r stays the same
   { q: -1, r: 0, s: 1 },

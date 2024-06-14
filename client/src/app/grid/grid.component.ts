@@ -46,7 +46,12 @@ export class GridComponent extends GridUtilityComponent {
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(distinctUntilChanged((prev, curr) => compareHexManagementStateKey(prev, curr, 'hexData')))
+      .pipe(
+        distinctUntilChanged((prev, curr) => {
+          console.log('GridComponent hexData distinctUntilChanged');
+          return compareHexManagementStateKey(prev, curr, 'hexData');
+        }),
+      )
       .subscribe((state) => {
         this.hexData = state.hexData;
       });
