@@ -65,6 +65,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
           { q: -1, r: -1, s: 2, value: 3 },
           { q: 1, r: -1, s: 0, value: 3 },
           { q: 0, r: 1, s: -1, value: 1 },
+          { q: 2, r: -1, s: -1, value: 3 },
           // test
           // { q: -2, r: -1, s: 3, value: 6 },
           // { q: -3, r: 1, s: 2, value: 5 },
@@ -119,7 +120,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
       const comparisonArray = acc.concat(initialArray.slice(i));
 
       while (true) {
-        const neighborCoord = this.getNeighborCoordNew(currenthHex, direction);
+        const neighborCoord = this.getNeighborCoord(currenthHex, direction);
         const isInRange = this.isHexInRange(neighborCoord);
 
         if (!isInRange) break;
@@ -132,7 +133,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
           if (!isSameValue || !shouldMerge) break;
 
-          potentialNewHexValue.value! *= 2;
+          potentialNewHexValue.value *= 2;
           acc = acc.filter((hexData) => !isHexAEqualHexBNew(hexData, neighbor));
         }
 
@@ -144,7 +145,42 @@ export class GameControlComponent implements OnInit, OnDestroy {
     }, []);
   }
 
-  getNeighborCoordNew(hexA: HexCoord | HexData, direction: Direction): HexCoord {
+  getNeighborHex(hex: HexData, comparisonArray: HexData[], direction: Direction): HexData | undefined {
+    const neighborCoords = this.getNeighborCoord(hex, direction);
+    return comparisonArray.find((hexData) => {
+      return isHexAEqualHexBNew(hexData, neighborCoords);
+    });
+  }
+
+  canMove(hexDataArray: HexData[], direction: Direction): boolean {
+    return hexDataArray.some((hex) => {
+      const neighborCoord = this.getNeighborCoord(hex, direction);
+      return this.isHexInRange(neighborCoord) && !this.getHex(neighborCoord, hexDataArray);
+    });
+  }
+
+  processMoveNew(direction: Direction, hexDataArray: HexData[]): HexData[] {
+    return hexDataArray.map((hex, i) => {
+      let newHex: HexData = { ...hex };
+
+      while (true) {
+        const neighborCoord = this.getNeighborCoord(newHex, direction);
+        const isInRange = this.isHexInRange(neighborCoord);
+
+        if (!isInRange) break;
+
+        const neighbor = this.getHex(neighborCoord, hexDataArray);
+
+        if (neighbor) break;
+
+        newHex = { ...newHex, ...neighborCoord };
+      }
+
+      return newHex;
+    });
+  }
+
+  getNeighborCoord(hexA: HexCoord | HexData, direction: Direction): HexCoord {
     return this.addHexCoord(hexA, DIRECTIONS[direction]);
   }
 
@@ -156,19 +192,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
     };
   }
 
-  getNeighborHex(hex: HexData, comparisonArray: HexData[], direction: Direction): HexData | undefined {
-    const neighborCoords = this.getNeighborCoordNew(hex, direction);
-    return comparisonArray.find((hexData) => {
-      return isHexAEqualHexBNew(hexData, neighborCoords);
-    });
-  }
-
-  getHex(hexCoord: HexCoord | HexData, hexDataArray: HexData[]): HexData | undefined {
-    return hexDataArray.find((hexData) => {
-      return isHexAEqualHexBNew(hexData, hexCoord);
-    });
-  }
-
   isHexInRange(hex: HexCoord | HexData): boolean {
     const hexCoordKeys: HexCoordKey[] = ['q', 's', 'r'];
     const hasViolatedRange = hexCoordKeys.some((key) => Math.abs(hex[key]) > this.radius);
@@ -176,10 +199,9 @@ export class GameControlComponent implements OnInit, OnDestroy {
     return !hasViolatedRange;
   }
 
-  canMove(hexDataArray: HexData[], direction: Direction): boolean {
-    return hexDataArray.some((hex) => {
-      const neighborCoord = this.getNeighborCoordNew(hex, direction);
-      return this.isHexInRange(neighborCoord) && !this.getHex(neighborCoord, hexDataArray);
+  getHex(hexCoord: HexCoord | HexData, hexDataArray: HexData[]): HexData | undefined {
+    return hexDataArray.find((hexData) => {
+      return isHexAEqualHexBNew(hexData, hexCoord);
     });
   }
 
@@ -190,7 +212,8 @@ export class GameControlComponent implements OnInit, OnDestroy {
     let firstLoop = true;
 
     while (canMove) {
-      localHexData = this.processMove(DIRECTION.PLUS_S, localHexData, firstLoop);
+      // localHexData = this.processMove(DIRECTION.PLUS_S, localHexData, firstLoop);
+      localHexData = this.processMoveNew(DIRECTION.PLUS_S, localHexData);
       firstLoop = false;
       canMove = this.canMove(localHexData, DIRECTION.PLUS_S);
     }
@@ -230,23 +253,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
   moveMinusS() {
     console.log('D clicked -> move -s,\n\nr stays the same');
     // this.processMove(DIRECTION.MINUS_S);
-  }
-
-  subtractHex(hexA: HexData, hexB: HexData): HexData {
-    return {
-      q: hexA.q - hexB.q,
-      r: hexA.r - hexB.r,
-      s: hexA.s - hexB.s,
-      value: hexA.value,
-    };
-  }
-
-  len(hex: HexData): number {
-    return (Math.abs(hex.q) + Math.abs(hex.r) + Math.abs(hex.s)) / 2;
-  }
-
-  distance(hexA: HexData, hexB: HexData): number {
-    return this.len(this.subtractHex(hexA, hexB));
   }
 
   // TODO: move state change to service
