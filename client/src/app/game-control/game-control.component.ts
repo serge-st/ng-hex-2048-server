@@ -4,7 +4,7 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
-import { compareHexManagementStateKey, isHexAEqualHexB, isHexAEqualHexBNew, isHexData } from '@app/shared/helpers';
+import { compareHexManagementStateKey, isHexAEqualHexBNew } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { Direction, HexCoordKey } from '@app/shared/types';
 
@@ -56,23 +56,22 @@ export class GameControlComponent implements OnInit, OnDestroy {
         'GameControlComponent.setTextNextTurnHexData()',
       );
     } else {
-      this.hexManagementService.setHexData(
-        [
-          // { q: -2, r: 1, s: 1, value: 1 },
-          // { q: 2, r: 0, s: -2, value: 2 },
-          // { q: 0, r: -1, s: 1, value: 3 },
-          { q: 1, r: 1, s: -2, value: 4 },
-          { q: -1, r: -1, s: 2, value: 3 },
-          { q: 1, r: -1, s: 0, value: 3 },
-          { q: 0, r: 1, s: -1, value: 1 },
-          { q: 2, r: -1, s: -1, value: 3 },
-          // test
-          // { q: -2, r: -1, s: 3, value: 6 },
-          // { q: -3, r: 1, s: 2, value: 5 },
-          // { q: -2, r: 1, s: 1, value: 4 },
-        ],
-        'GameControlComponent.setTextNextTurnHexData()',
-      );
+      const testHexData = [
+        // { q: -2, r: 1, s: 1, value: 1 },
+        // { q: 2, r: 0, s: -2, value: 2 },
+        // { q: 0, r: -1, s: 1, value: 3 },
+        { q: 1, r: 1, s: -2, value: 4 },
+        { q: -1, r: -1, s: 2, value: 3 },
+        { q: 1, r: -1, s: 0, value: 3 },
+        { q: 0, r: 1, s: -1, value: 1 },
+        { q: 2, r: -1, s: -1, value: 3 },
+        // { q: 3, r: -1, s: -2, value: 3 },
+        // test
+        // { q: -2, r: -1, s: 3, value: 6 },
+        // { q: -3, r: 1, s: 2, value: 5 },
+        // { q: -2, r: 1, s: 1, value: 4 },
+      ].sort(() => Math.random() - 0.5);
+      this.hexManagementService.setHexData(testHexData, 'GameControlComponent.setTextNextTurnHexData()');
     }
   }
 
@@ -152,7 +151,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
     });
   }
 
-  canMove(hexDataArray: HexData[], direction: Direction): boolean {
+  canMove(direction: Direction, hexDataArray: HexData[]): boolean {
     return hexDataArray.some((hex) => {
       const neighborCoord = this.getNeighborCoord(hex, direction);
       return this.isHexInRange(neighborCoord) && !this.getHex(neighborCoord, hexDataArray);
@@ -160,7 +159,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   processMoveNew(direction: Direction, hexDataArray: HexData[]): HexData[] {
-    return hexDataArray.map((hex, i) => {
+    return hexDataArray.map((hex) => {
       let newHex: HexData = { ...hex };
 
       while (true) {
@@ -206,16 +205,13 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   movePlusS() {
-    let localHexData = this.hexData;
+    let localHexData = [...this.hexData];
 
-    let canMove = this.canMove(localHexData, DIRECTION.PLUS_S);
-    let firstLoop = true;
+    let canMove = this.canMove(DIRECTION.PLUS_S, localHexData);
 
     while (canMove) {
-      // localHexData = this.processMove(DIRECTION.PLUS_S, localHexData, firstLoop);
       localHexData = this.processMoveNew(DIRECTION.PLUS_S, localHexData);
-      firstLoop = false;
-      canMove = this.canMove(localHexData, DIRECTION.PLUS_S);
+      canMove = this.canMove(DIRECTION.PLUS_S, localHexData);
     }
 
     this.hexManagementService.setHexData(localHexData, 'GameControlComponent.processMove()');
