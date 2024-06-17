@@ -4,7 +4,7 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
-import { compareHexManagementStateKey, isHexAEqualHexBNew } from '@app/shared/helpers';
+import { compareHexManagementStateKey, isHexAEqualHexBNew, sortByClosestToBorder } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { Direction, HexCoordKey } from '@app/shared/types';
 
@@ -56,18 +56,18 @@ export class GameControlComponent implements OnInit, OnDestroy {
         'GameControlComponent.setTextNextTurnHexData()',
       );
     } else {
-      // const testHexData = [
-      //   { q: 1, r: 1, s: -2, value: 4 },
-      //   { q: -1, r: -1, s: 2, value: 3 },
-      //   { q: 1, r: -1, s: 0, value: 3 },
-      //   { q: 0, r: 1, s: -1, value: 1 },
-      //   { q: 2, r: -1, s: -1, value: 3 },
-      //   { q: 3, r: -1, s: -2, value: 3 },
-      // ].sort(() => Math.random() - 0.5);
-      const testHexData: HexData[] = [
-        { q: 0, r: 1, s: -1, value: 1 },
+      const testHexData = [
         { q: 1, r: 1, s: -2, value: 4 },
-      ];
+        { q: -1, r: -1, s: 2, value: 3 },
+        { q: 1, r: -1, s: 0, value: 3 },
+        { q: 0, r: 1, s: -1, value: 1 },
+        { q: 2, r: -1, s: -1, value: 3 },
+        { q: 3, r: -1, s: -2, value: 3 },
+      ].sort(() => Math.random() - 0.5);
+      // const testHexData: HexData[] = [
+      //   { q: 0, r: 1, s: -1, value: 1 },
+      //   { q: 1, r: 1, s: -2, value: 4 },
+      // ];
 
       this.hexManagementService.setHexData(testHexData, 'GameControlComponent.setTextNextTurnHexData()');
     }
@@ -79,27 +79,27 @@ export class GameControlComponent implements OnInit, OnDestroy {
     this.unlisten = this.renderer.listen('document', 'keydown', (event) => {
       switch (event.code) {
         case 'KeyQ': {
-          this.movePlusS();
+          this.moveQ();
           break;
         }
         case 'KeyW': {
-          this.moveMinusR();
+          this.moveW();
           break;
         }
         case 'KeyE': {
-          this.movePlusQ();
+          this.moveE();
           break;
         }
         case 'KeyA': {
-          this.moveMinusQ();
+          this.moveA();
           break;
         }
         case 'KeyS': {
-          this.movePlusR();
+          this.moveS();
           break;
         }
         case 'KeyD': {
-          this.moveMinusS();
+          this.moveD();
           break;
         }
       }
@@ -152,9 +152,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   processMove(direction: Direction, hexDataArray: HexData[]): HexData[] {
-    let canMove = this.canMove(direction, hexDataArray);
-
-    if (!canMove) return hexDataArray;
+    if (!this.canMove(direction, hexDataArray)) return hexDataArray;
 
     const processedHexes: HexData[] = [];
 
@@ -188,73 +186,64 @@ export class GameControlComponent implements OnInit, OnDestroy {
     const mergedHexes: HexData[] = [];
     const result: HexData[] = [];
 
-    hexDataArray
-      .sort((el1, el2) => el2.s - el1.s)
-      .forEach((hex, i, initialArray) => {
-        const comparisonArray = result.concat(initialArray.slice(i));
+    hexDataArray.sort(sortByClosestToBorder[direction]).forEach((hex, i, initialArray) => {
+      const comparisonArray = result.concat(initialArray.slice(i));
 
-        let newHex: HexData = { ...hex };
+      let newHex: HexData = { ...hex };
 
-        const neighborCoord = this.getNeighborCoord(newHex, direction);
-        const neighbor = this.getHex(neighborCoord, comparisonArray);
+      const neighborCoord = this.getNeighborCoord(newHex, direction);
+      const neighbor = this.getHex(neighborCoord, comparisonArray);
 
-        if (!neighbor) return result.push(newHex);
+      if (!neighbor) return result.push(newHex);
 
-        const isSameValue = newHex.value === neighbor.value;
+      const isSameValue = newHex.value === neighbor.value;
 
-        if (!isSameValue) return result.push(newHex);
+      if (!isSameValue) return result.push(newHex);
 
-        newHex = { ...newHex, value: newHex.value * 2 };
-        mergedHexes.push(neighbor);
+      newHex = { ...newHex, value: newHex.value * 2 };
+      mergedHexes.push(neighbor);
 
-        return result.push(newHex);
-      });
+      return result.push(newHex);
+    });
 
     return result.filter((hex) => !mergedHexes.includes(hex));
   }
 
-  movePlusS() {
+  performMove(direction: Direction): void {
     let localHexData = [...this.hexData];
 
-    localHexData = this.processMove(DIRECTION.PLUS_S, localHexData);
-    // localHexData = this.processMerge(DIRECTION.PLUS_S, localHexData);
-    // localHexData = this.processMove(DIRECTION.PLUS_S, localHexData);
+    localHexData = this.processMove(direction, localHexData);
+    localHexData = this.processMerge(direction, localHexData);
+    localHexData = this.processMove(direction, localHexData);
 
-    this.hexManagementService.setHexData(localHexData, 'GameControlComponent.processMove()');
+    this.hexManagementService.setHexData(localHexData, 'GameControlComponent.performMove()');
 
-    // TODO: implement fetching hexData after move animation complete
-
-    // newHexData = this.processMove(DIRECTION.PLUS_S, this.hexData, false);
-    // this.hexManagementService.setHexData(newHexData, 'GameControlComponent.processMove()');
+    // TODO: MAYBE implement fetching hexData after move animation complete
+    // TODO: OR DO IT ELSEWHERE
   }
 
-  moveMinusR() {
-    console.log('W clicked -> move -r,\n\nq stays the same');
-
-    // this.processMove(DIRECTION.MINUS_R);
+  moveQ() {
+    this.performMove(DIRECTION.PLUS_S);
   }
 
-  movePlusQ() {
-    console.log('E clicked -> move +q,\n\ns stays the same');
-
-    // this.processMove(DIRECTION.PLUS_Q);
+  moveW() {
+    this.performMove(DIRECTION.MINUS_R);
   }
 
-  moveMinusQ() {
-    console.log('A clicked -> move -q,\n\ns stays the same');
-
-    // this.processMove(DIRECTION.MINUS_Q);
+  moveE() {
+    this.performMove(DIRECTION.PLUS_Q);
   }
 
-  movePlusR() {
-    console.log('S clicked -> move +r,\n\nq stays the same');
-
-    // this.processMove(DIRECTION.PLUS_R);
+  moveA() {
+    this.performMove(DIRECTION.MINUS_Q);
   }
 
-  moveMinusS() {
-    console.log('D clicked -> move -s,\n\nr stays the same');
-    // this.processMove(DIRECTION.MINUS_S);
+  moveS() {
+    this.performMove(DIRECTION.PLUS_R);
+  }
+
+  moveD() {
+    this.performMove(DIRECTION.MINUS_S);
   }
 
   // TODO: move state change to service
