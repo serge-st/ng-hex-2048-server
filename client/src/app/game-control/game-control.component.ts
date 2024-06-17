@@ -4,7 +4,7 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
-import { compareHexManagementStateKey, isHexAEqualHexBNew, sortByClosestToBorder } from '@app/shared/helpers';
+import { compareHexManagementStateKey, isHexAEqualHexBNew, CLOSEST_TO_BORDER } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { Direction, HexCoordKey } from '@app/shared/types';
 
@@ -186,7 +186,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
     const mergedHexes: HexData[] = [];
     const result: HexData[] = [];
 
-    hexDataArray.sort(sortByClosestToBorder[direction]).forEach((hex, i, initialArray) => {
+    hexDataArray.sort(CLOSEST_TO_BORDER[direction]).forEach((hex, i, initialArray) => {
       const comparisonArray = result.concat(initialArray.slice(i));
 
       let newHex: HexData = { ...hex };
@@ -223,27 +223,27 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   moveQ() {
-    this.performMove(DIRECTION.PLUS_S);
+    this.performMove(DIRECTION.Q);
   }
 
   moveW() {
-    this.performMove(DIRECTION.MINUS_R);
+    this.performMove(DIRECTION.W);
   }
 
   moveE() {
-    this.performMove(DIRECTION.PLUS_Q);
+    this.performMove(DIRECTION.E);
   }
 
   moveA() {
-    this.performMove(DIRECTION.MINUS_Q);
+    this.performMove(DIRECTION.A);
   }
 
   moveS() {
-    this.performMove(DIRECTION.PLUS_R);
+    this.performMove(DIRECTION.S);
   }
 
   moveD() {
-    this.performMove(DIRECTION.MINUS_S);
+    this.performMove(DIRECTION.D);
   }
 
   // TODO: move state change to service

@@ -1,31 +1,26 @@
 import { HexCoord } from '../interfaces';
+import { Direction } from '../types';
 
 export const DIRECTION = {
-  PLUS_S: 0,
-  MINUS_R: 1,
-  PLUS_Q: 2,
-  MINUS_Q: 3,
-  PLUS_R: 4,
-  MINUS_S: 5,
+  Q: 'PLUS_S_COORD',
+  W: 'MINUS_R_COORD',
+  E: 'PLUS_Q_COORD',
+  A: 'MINUS_Q_COORD',
+  S: 'PLUS_R_COORD',
+  D: 'MINUS_S_COORD',
 } as const;
 
-export const DIRECTIONS: HexCoord[] = [
-  // PLUS_S
+export const DIRECTIONS: Record<Direction, HexCoord> = {
   // Q clicked -> move +s, r stays the same
-  { q: -1, r: 0, s: 1 },
-  // MINUS_R
+  PLUS_S_COORD: { q: -1, r: 0, s: 1 },
   // W clicked -> move -r, q stays the same
-  { q: 0, r: -1, s: 1 },
-  // PLUS_Q
+  MINUS_R_COORD: { q: 0, r: -1, s: 1 },
   // E clicked -> move +q, s stays the same
-  { q: 1, r: -1, s: 0 },
-  // MINUS_Q
+  PLUS_Q_COORD: { q: 1, r: -1, s: 0 },
   // A clicked -> move -q, s stays the same
-  { q: -1, r: 1, s: 0 },
-  // PLUS_R
+  MINUS_Q_COORD: { q: -1, r: 1, s: 0 },
   // S clicked -> move +r, q stays the same
-  { q: 0, r: 1, s: -1 },
-  // MINUS_S
+  PLUS_R_COORD: { q: 0, r: 1, s: -1 },
   // D clicked -> move -s, r stays the same
-  { q: 1, r: 0, s: -1 },
-] as const;
+  MINUS_S_COORD: { q: 1, r: 0, s: -1 },
+};
