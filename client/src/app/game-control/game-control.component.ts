@@ -159,9 +159,9 @@ export class GameControlComponent implements OnInit, OnDestroy {
     return this.processMove(
       direction,
       hexDataArray.map((hex, i, initialArray) => {
-        let newHex: HexData = { ...hex };
-
         const comparisonArray = processedHexes.concat(initialArray.slice(i));
+
+        let newHex: HexData = { ...hex };
 
         while (true) {
           const neighborCoord = this.getNeighborCoord(newHex, direction);

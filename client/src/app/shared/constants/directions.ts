@@ -23,4 +23,4 @@ export const DIRECTIONS: Record<Direction, HexCoord> = {
   PLUS_R_COORD: { q: 0, r: 1, s: -1 },
   // D clicked -> move -s, r stays the same
   MINUS_S_COORD: { q: 1, r: 0, s: -1 },
-};
+} as const;
