@@ -74,8 +74,8 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.setTESTNextTurnHexData();
-    // this.setNextTurnHexData();
+    // this.setTESTNextTurnHexData();
+    this.hexManagementService.setHexData([], 'GameControlComponent.ngOnInit()');
     this.unlisten = this.renderer.listen('document', 'keydown', (event) => {
       switch (event.code) {
         case 'KeyQ': {
@@ -246,18 +246,35 @@ export class GameControlComponent implements OnInit, OnDestroy {
     this.performMove(DIRECTION.D);
   }
 
-  // TODO: move state change to service
   setNextTurnHexData() {
-    const localHexData = this.hexManagementService.getHexData().filter((hex) => Boolean(hex.value));
-
-    this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
-      this.hexManagementService.setHexData(
-        localHexData.concat(newHexCoords),
-        'GameControlComponent.setNextTurnHexData()',
-      );
-
-      if (newHexCoords.length === 0)
-        this.gameSetupService.setGameState('game-over', 'GameControlComponent.setNextTurnHexData()');
-    });
+    // TODO:
+    // 1. receive an array of updated data
+    // 2. SORT the updated data
+    // 3. check if the new array is the same as the previous
+    // 4. if the same -> do nothing
+    // 5. animation of moving merging?
+    // 6. update state?
+    // 7. fetch new hex data
+    // 8. SORT new data
+    // 9. arrival animation
+    // 10. update state again?
+    /* --------- */
+    // TODO: SORT:
+    // elements.sort((a, b) => {
+    //   if (a.q !== b.q) return a.q - b.q;
+    //   if (a.r !== b.r) return a.r - b.r;
+    //   if (a.s !== b.s) return a.s - b.s;
+    //   return a.value - b.value;
+    // });
+    /* --------- */
+    // const localHexData = this.hexManagementService.getHexData().filter((hex) => Boolean(hex.value));
+    // this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
+    //   this.hexManagementService.setHexData(
+    //     localHexData.concat(newHexCoords),
+    //     'GameControlComponent.setNextTurnHexData()',
+    //   );
+    //   if (newHexCoords.length === 0)
+    //     this.gameSetupService.setGameState('game-over', 'GameControlComponent.setNextTurnHexData()');
+    // });
   }
 }
