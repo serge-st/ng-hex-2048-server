@@ -4,7 +4,13 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
-import { compareHexManagementStateKey, isHexAEqualHexBNew, CLOSEST_TO_BORDER } from '@app/shared/helpers';
+import {
+  compareHexManagementStateKey,
+  isHexAEqualHexBNew,
+  CLOSEST_TO_BORDER,
+  areHexArraysEqual,
+  sortHexDataArray,
+} from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { Direction, HexCoordKey } from '@app/shared/types';
 
@@ -74,8 +80,8 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.setTESTNextTurnHexData();
-    this.hexManagementService.setHexData([], 'GameControlComponent.ngOnInit()');
+    this.setTESTNextTurnHexData();
+    // this.hexManagementService.setHexData([], 'GameControlComponent.ngOnInit()');
     this.unlisten = this.renderer.listen('document', 'keydown', (event) => {
       switch (event.code) {
         case 'KeyQ': {
@@ -215,8 +221,15 @@ export class GameControlComponent implements OnInit, OnDestroy {
     localHexData = this.processMove(direction, localHexData);
     localHexData = this.processMerge(direction, localHexData);
     localHexData = this.processMove(direction, localHexData);
+    localHexData = sortHexDataArray(localHexData);
+
+    // TODO: troubleshoot this to have a proper game-over state
+    const isSameHexData = areHexArraysEqual(localHexData, this.hexData);
+
+    if (isSameHexData) return;
 
     this.hexManagementService.setHexData(localHexData, 'GameControlComponent.performMove()');
+    this.setNextTurnHexData();
 
     // TODO: MAYBE implement fetching hexData after move animation complete
     // TODO: OR DO IT ELSEWHERE
@@ -248,33 +261,26 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
   setNextTurnHexData() {
     // TODO:
-    // 1. receive an array of updated data
-    // 2. SORT the updated data
-    // 3. check if the new array is the same as the previous
-    // 4. if the same -> do nothing
+    // 1. receive an array of updated data ✅ -> done in this.performMove
+    // 2. SORT the updated data ✅ -> done in this.performMove
+    // 3. check if the new array is the same as the previous ✅ -> done in this.performMove
+    // 4. if the same -> do nothing ✅ -> done in this.performMove
     // 5. animation of moving merging?
     // 6. update state?
     // 7. fetch new hex data
-    // 8. SORT new data
+    // 8. SORT new data (✅ this is done in service when updating the state)
     // 9. arrival animation
     // 10. update state again?
+
     /* --------- */
-    // TODO: SORT:
-    // elements.sort((a, b) => {
-    //   if (a.q !== b.q) return a.q - b.q;
-    //   if (a.r !== b.r) return a.r - b.r;
-    //   if (a.s !== b.s) return a.s - b.s;
-    //   return a.value - b.value;
-    // });
-    /* --------- */
-    // const localHexData = this.hexManagementService.getHexData().filter((hex) => Boolean(hex.value));
-    // this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
-    //   this.hexManagementService.setHexData(
-    //     localHexData.concat(newHexCoords),
-    //     'GameControlComponent.setNextTurnHexData()',
-    //   );
-    //   if (newHexCoords.length === 0)
-    //     this.gameSetupService.setGameState('game-over', 'GameControlComponent.setNextTurnHexData()');
-    // });
+    const localHexData = this.hexManagementService.getHexData().filter((hex) => Boolean(hex.value));
+    this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
+      this.hexManagementService.setHexData(
+        localHexData.concat(newHexCoords),
+        'GameControlComponent.setNextTurnHexData()',
+      );
+      if (newHexCoords.length === 0)
+        this.gameSetupService.setGameState('game-over', 'GameControlComponent.setNextTurnHexData()');
+    });
   }
 }

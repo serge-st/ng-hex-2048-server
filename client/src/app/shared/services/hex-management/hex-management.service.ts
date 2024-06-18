@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { HexManagementState } from './interfaces/hex-management-state';
+import { sortHexDataArray } from '@app/shared/helpers';
 
 const initialState: HexManagementState = {
   hexData: [],
@@ -43,7 +44,7 @@ export class HexManagementService {
   }
 
   setHexData(hexData: HexData[], whereFrom?: string): void {
-    this.setState({ hexData }, whereFrom);
+    this.setState({ hexData: sortHexDataArray(hexData) }, whereFrom);
   }
 
   getHexData(): HexData[] {
