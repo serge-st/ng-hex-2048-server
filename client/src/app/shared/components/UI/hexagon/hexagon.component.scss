@@ -25,3 +25,25 @@
 :host.background-hex.setup {
   background-color: rgb(110 224 110);
 }
+
+:host.zoom-in {
+  animation: zoom-in 0.3s;
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(0);
+  }
+
+  60% {
+    transform: scale(1);
+  }
+
+  70% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

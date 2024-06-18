@@ -276,7 +276,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
     const localHexData = this.hexManagementService.getHexData().filter((hex) => Boolean(hex.value));
     this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
       this.hexManagementService.setHexData(
-        localHexData.concat(newHexCoords),
+        localHexData.concat(newHexCoords.map((hex) => ({ ...hex, animation: 'zoom-in' }))),
         'GameControlComponent.setNextTurnHexData()',
       );
       if (newHexCoords.length === 0)

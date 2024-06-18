@@ -1,5 +1,6 @@
 export const ANIMATIONS = {
-  FADE_IN: 'fade-in',
+  ZOOM_IN: 'zoom-in',
   MOVE: 'move',
   MERGE: 'merge',
+  NONE: 'none',
 } as const;
