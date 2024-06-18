@@ -1,5 +1,5 @@
 import { HexManagementState, HexManagementStateKey } from '@app/shared/services/hex-management';
-import { isHexAEqualHexBNew } from './is-hex-a-equal-hex-b';
+import { isHexAEqualHexB } from './is-hex-a-equal-hex-b';
 
 export const compareHexManagementStateKey = (
   prev: HexManagementState,
@@ -16,7 +16,7 @@ export const compareHexManagementStateKey = (
   }
 
   const hasMismatch = curr[key].some((currentHex, index) => {
-    return !isHexAEqualHexBNew(currentHex, prev[key][index]);
+    return !isHexAEqualHexB(currentHex, prev[key][index]);
   });
   // TODO: remove console.log
   if (isHexData) {

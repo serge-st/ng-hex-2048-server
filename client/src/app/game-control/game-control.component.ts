@@ -6,7 +6,7 @@ import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
 import {
   compareHexManagementStateKey,
-  isHexAEqualHexBNew,
+  isHexAEqualHexB,
   CLOSEST_TO_BORDER,
   areHexArraysEqual,
   sortHexDataArray,
@@ -121,7 +121,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
   getNeighborHex(hex: HexData, comparisonArray: HexData[], direction: Direction): HexData | undefined {
     const neighborCoords = this.getNeighborCoord(hex, direction);
     return comparisonArray.find((hexData) => {
-      return isHexAEqualHexBNew(hexData, neighborCoords);
+      return isHexAEqualHexB(hexData, neighborCoords);
     });
   }
 
@@ -153,7 +153,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
   getHex(hexCoord: HexCoord | HexData, hexDataArray: HexData[]): HexData | undefined {
     return hexDataArray.find((hexData) => {
-      return isHexAEqualHexBNew(hexData, hexCoord);
+      return isHexAEqualHexB(hexData, hexCoord);
     });
   }
 
