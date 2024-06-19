@@ -55,6 +55,7 @@ export class HexManagementService {
     const url = `${this.serviceURL}/${radius}`;
     return this.http.post<HexData[]>(url, JSON.stringify(userCoords), this.httpOptions).pipe(
       tap((_) => console.log('fetched hex coords')),
+      // TODO: set some UI error message if server doesn't provide a response
       catchError((err) => this.handleError(err, [])),
     );
   }
