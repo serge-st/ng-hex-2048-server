@@ -6,11 +6,12 @@ import { Observable, map } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { GameState } from '@app/shared/types';
+import { GameOverControlComponent } from '@app/game-over-control/game-over-control.component';
 
 @Component({
   selector: 'app-game-page',
   standalone: true,
-  imports: [GridComponent, GameSetupComponent, GameControlComponent, AsyncPipe, NgIf],
+  imports: [GridComponent, GameSetupComponent, GameControlComponent, GameOverControlComponent, AsyncPipe, NgIf],
   templateUrl: './game-page.component.html',
   styleUrls: ['../pages-styles.scss', './game-page.component.scss'],
 })

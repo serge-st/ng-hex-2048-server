@@ -3,6 +3,10 @@
   <h1 *ngIf="isGameOver$ | async">Game Over 💀</h1>
   <h1 *ngIf="isWin$ | async">Congratulations, you won! 👑</h1>
 
+  <ng-container *ngIf="(isGameOver$ | async) || (isWin$ | async)">
+    <app-game-over-control></app-game-over-control>
+  </ng-container>
+
   <app-grid></app-grid>
   <app-game-control></app-game-control>
 </main>

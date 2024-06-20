@@ -44,4 +44,8 @@ export class GameSetupService {
   setGameState(gameState: GameState, whereFrom?: string): void {
     this.setState({ gameState }, whereFrom);
   }
+
+  getGameState(): GameState {
+    return this.getState().gameState;
+  }
 }

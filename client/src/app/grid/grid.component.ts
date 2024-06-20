@@ -103,7 +103,6 @@ export class GridComponent extends GridUtilityComponent {
 
   updateProperies(): void {
     if (!this.hexWidth) return;
-    console.log('>>> setting primitive properties');
 
     this.setHexHeight();
 

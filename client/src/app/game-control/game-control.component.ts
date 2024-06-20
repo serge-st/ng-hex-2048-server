@@ -42,7 +42,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed())
       .pipe(
         distinctUntilChanged((prev, curr) => {
-          console.log('GameControlComponent hexData distinctUntilChanged');
           return compareHexManagementStateKey(prev, curr, 'hexData');
         }),
       )
@@ -51,37 +50,11 @@ export class GameControlComponent implements OnInit, OnDestroy {
       });
   }
 
-  setTESTNextTurnHexData() {
-    if (this.radius === 1) {
-      this.hexManagementService.setHexData(
-        [
-          { q: 0, r: 1, s: -1, value: 1 },
-          { q: 1, r: 0, s: -1, value: 2 },
-          { q: -1, r: 0, s: 1, value: 3 },
-        ],
-        'GameControlComponent.setTextNextTurnHexData()',
-      );
-    } else {
-      const testHexData = [
-        { q: 1, r: 1, s: -2, value: 4 },
-        { q: -1, r: -1, s: 2, value: 3 },
-        { q: 1, r: -1, s: 0, value: 3 },
-        { q: 0, r: 1, s: -1, value: 1 },
-        { q: 2, r: -1, s: -1, value: 3 },
-        { q: 3, r: -1, s: -2, value: 3 },
-      ].sort(() => Math.random() - 0.5);
-      // const testHexData: HexData[] = [
-      //   { q: 0, r: 1, s: -1, value: 1 },
-      //   { q: 1, r: 1, s: -2, value: 4 },
-      // ];
-
-      this.hexManagementService.setHexData(testHexData, 'GameControlComponent.setTextNextTurnHexData()');
-    }
+  get maxHexCount(): number {
+    return 1 + 3 * this.radius * (this.radius + 1);
   }
 
   ngOnInit(): void {
-    this.setTESTNextTurnHexData();
-    // this.hexManagementService.setHexData([], 'GameControlComponent.ngOnInit()');
     this.unlisten = this.renderer.listen('document', 'keydown', (event) => {
       switch (event.code) {
         case 'KeyQ': {
@@ -110,19 +83,14 @@ export class GameControlComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.setNextTurnHexData();
   }
 
   ngOnDestroy(): void {
     if (this.unlisten) {
       this.unlisten();
     }
-  }
-
-  getNeighborHex(hex: HexData, comparisonArray: HexData[], direction: Direction): HexData | undefined {
-    const neighborCoords = this.getNeighborCoord(hex, direction);
-    return comparisonArray.find((hexData) => {
-      return isHexAEqualHexB(hexData, neighborCoords);
-    });
   }
 
   canMove(direction: Direction, hexDataArray: HexData[]): boolean {
@@ -223,16 +191,18 @@ export class GameControlComponent implements OnInit, OnDestroy {
     localHexData = this.processMove(direction, localHexData);
     localHexData = sortHexDataArray(localHexData);
 
-    // TODO: troubleshoot this to have a proper game-over state
     const isSameHexData = areHexArraysEqual(localHexData, this.hexData);
+
+    // TODO: implement something that checks if it is possible to merge when all cells are occupied
+    if (localHexData.length === this.maxHexCount) {
+      alert('max hex count');
+      // !Object.values(DIRECTION).some((d) => this.canMove(d, localHexData))
+    }
 
     if (isSameHexData) return;
 
     this.hexManagementService.setHexData(localHexData, 'GameControlComponent.performMove()');
     this.setNextTurnHexData();
-
-    // TODO: MAYBE implement fetching hexData after move animation complete
-    // TODO: OR DO IT ELSEWHERE
   }
 
   moveQ() {
@@ -273,14 +243,15 @@ export class GameControlComponent implements OnInit, OnDestroy {
     // 10. update state again?
 
     /* --------- */
-    const localHexData = this.hexManagementService.getHexData().filter((hex) => Boolean(hex.value));
+    const localHexData = this.hexManagementService.getHexData();
     this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
       this.hexManagementService.setHexData(
         localHexData.concat(newHexCoords.map((hex) => ({ ...hex, animation: 'zoom-in' }))),
         'GameControlComponent.setNextTurnHexData()',
       );
-      if (newHexCoords.length === 0)
-        this.gameSetupService.setGameState('game-over', 'GameControlComponent.setNextTurnHexData()');
+
+      // TODO: Implement proper error handling for case when server did not reply
+      if (newHexCoords.length === 0) return this.gameSetupService.setGameState('game-over');
     });
   }
 }
