@@ -12,7 +12,7 @@ import {
   sortHexDataArray,
 } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
-import { Direction, HexCoordKey, ValueQuantityPair } from '@app/shared/types';
+import { Direction, HexCoordKey, ValueQuantityMap } from '@app/shared/types';
 
 @Component({
   selector: 'app-game-control',
@@ -225,17 +225,16 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
   isGameOver(): void {
     if (this.hexData.length === this.maxHexCount) {
-      const duplicateHexValues = this.hexData
-        .reduce<ValueQuantityPair[]>((acc, currHex) => {
-          const foundIndex = acc.findIndex((val) => val[0] === currHex.value);
-          if (foundIndex >= 0) {
-            acc[foundIndex] = [currHex.value, acc[foundIndex][1] + 1];
+      const duplicateHexValues = Array.from(
+        this.hexData.reduce<ValueQuantityMap>((acc, currHex) => {
+          if (acc.has(currHex.value)) {
+            acc.set(currHex.value, acc.get(currHex.value)! + 1);
           } else {
-            acc.push([currHex.value, 1]);
+            acc.set(currHex.value, 1);
           }
           return acc;
-        }, [])
-        .flatMap((vqPair) => (vqPair[1] > 1 ? vqPair[0] : []));
+        }, new Map<number, number>()),
+      ).flatMap((vqPair) => (vqPair[1] > 1 ? vqPair[0] : []));
 
       if (!duplicateHexValues.length) return this.gameSetupService.setGameState('game-over');
 
