@@ -5,7 +5,7 @@ import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
 import {
-  compareHexManagementStateKey,
+  isSameHexArray,
   isHexAEqualHexB,
   CLOSEST_TO_BORDER,
   areHexArraysEqual,
@@ -42,11 +42,13 @@ export class GameControlComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed())
       .pipe(
         distinctUntilChanged((prev, curr) => {
-          return compareHexManagementStateKey(prev, curr, 'hexData');
+          return isSameHexArray(prev, curr, 'hexData');
         }),
       )
       .subscribe((state) => {
         this.hexData = state.hexData;
+
+        if (state.hexData.length === 0) this.setNextTurnHexData();
       });
   }
 
@@ -83,8 +85,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
         }
       }
     });
-
-    this.setNextTurnHexData();
   }
 
   ngOnDestroy(): void {
@@ -272,7 +272,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
     /* --------- */
     const localHexData = this.hexManagementService.getHexData();
     this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
-      // TODO: Implement proper error handling for case when server did not reply
       if (newHexCoords.length === 0) return this.gameSetupService.setGameState('game-over');
 
       this.hexManagementService.setHexData(

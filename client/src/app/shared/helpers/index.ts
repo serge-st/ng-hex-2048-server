@@ -1,4 +1,4 @@
-export { compareHexManagementStateKey } from './compare-hex-management-state-key';
+export { isSameHexArray } from './is-same-hex-array';
 export { isHexAEqualHexB } from './is-hex-a-equal-hex-b';
 export { isHexData } from './is-hex-data';
 export { CLOSEST_TO_BORDER } from './closest-to-border';

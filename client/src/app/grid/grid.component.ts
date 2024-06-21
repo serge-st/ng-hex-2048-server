@@ -8,7 +8,7 @@ import { Observable, distinctUntilChanged, map } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { GameState } from '@app/shared/types';
-import { compareHexManagementStateKey } from '@app/shared/helpers';
+import { isSameHexArray } from '@app/shared/helpers';
 
 // TODO: remove console.log
 @Component({
@@ -49,7 +49,7 @@ export class GridComponent extends GridUtilityComponent {
       .pipe(
         distinctUntilChanged((prev, curr) => {
           console.log('GridComponent hexData distinctUntilChanged');
-          return compareHexManagementStateKey(prev, curr, 'hexData');
+          return isSameHexArray(prev, curr, 'hexData');
         }),
       )
       .subscribe((state) => {
@@ -58,7 +58,7 @@ export class GridComponent extends GridUtilityComponent {
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(distinctUntilChanged((prev, curr) => compareHexManagementStateKey(prev, curr, 'backgroundHexCoords')))
+      .pipe(distinctUntilChanged((prev, curr) => isSameHexArray(prev, curr, 'backgroundHexCoords')))
       .subscribe((state) => {
         this.backgroundHexCoords = state.backgroundHexCoords;
       });
