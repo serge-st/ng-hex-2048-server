@@ -51,7 +51,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   }
 
   @HostListener('animationend')
-  onAnimationend() {
+  onAnimationend(): void {
     if (isHexData(this.hexDetails)) {
       this.hexDetails.animation = 'none';
     }
@@ -66,7 +66,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     this.updateProperies();
   }
 
-  validateHexCoordinates() {
+  validateHexCoordinates(): void {
     if (Math.round(this.hexDetails.q + this.hexDetails.r + this.hexDetails.s) !== 0) {
       const badCoord = JSON.stringify({ q: this.hexDetails.q, r: this.hexDetails.r, s: this.hexDetails.s });
       throw new Error(`Invalid hex coordinates: ${badCoord}; q + r + s must equal 0`);

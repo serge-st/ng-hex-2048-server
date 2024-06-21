@@ -4,7 +4,7 @@ import { StyleVariables, Position, HexData, HexCoord } from '@app/shared/interfa
 import { GridUtilityComponent } from '@app/shared/components';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Observable, distinctUntilChanged, map } from 'rxjs';
+import { Observable, distinctUntilChanged, map, pairwise } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { GameState } from '@app/shared/types';
@@ -27,6 +27,7 @@ export class GridComponent extends GridUtilityComponent {
   gap!: number;
   hexWidth!: number;
   gameState!: GameState;
+  previousHexData: HexData[] = [];
   hexData: HexData[] = [];
   backgroundHexCoords: HexCoord[] = [];
 
@@ -46,20 +47,21 @@ export class GridComponent extends GridUtilityComponent {
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(
-        distinctUntilChanged((prev, curr) => {
-          console.log('GridComponent hexData distinctUntilChanged');
-          return isSameHexArray(prev, curr, 'hexData');
-        }),
-      )
-      .subscribe((state) => {
-        this.hexData = state.hexData;
+      .pipe(distinctUntilChanged((prev, curr) => isSameHexArray(prev.hexData, curr.hexData)))
+      .pipe(pairwise())
+      .subscribe(([prevState, currState]) => {
+        // .subscribe((currState) => {
+        // this.previousHexData = prevState.hexData;
+        console.log(`>>> GridComponent hexData changed`);
+        this.previousHexData = prevState.hexData;
+        this.hexData = currState.hexData;
       });
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(distinctUntilChanged((prev, curr) => isSameHexArray(prev, curr, 'backgroundHexCoords')))
+      .pipe(distinctUntilChanged((prev, curr) => isSameHexArray(prev.backgroundHexCoords, curr.backgroundHexCoords)))
       .subscribe((state) => {
+        console.log(`>>> GridComponent backgroundHexCoords changed`);
         this.backgroundHexCoords = state.backgroundHexCoords;
       });
   }
@@ -126,6 +128,8 @@ export class GridComponent extends GridUtilityComponent {
         localHexCoords.push({ q, r, s });
       }
     }
+
+    if (localHexCoords.length === this.backgroundHexCoords.length) return;
 
     if (this.gameState === 'setup')
       this.hexManagementService.setBackgroundHexCoords(

@@ -13,7 +13,7 @@ export class NumberInputComponent {
   @Input() minValue: number = 0;
   @Output() valueChange = new EventEmitter<number>();
 
-  onInputChange(value: string) {
+  onInputChange(value: string): void {
     this.valueChange.emit(Number(value));
   }
 }

@@ -15,7 +15,7 @@ export abstract class GridUtilityComponent {
     f1: 0.0,
     f2: Math.sqrt(3.0) / 2.0, // 0.86602540378
     f3: Math.sqrt(3.0), // 1.73205080757
-  };
+  } as const;
 
   getPixelString(value: number): string {
     return value.toFixed(3) + 'px';

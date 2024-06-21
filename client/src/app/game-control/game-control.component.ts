@@ -40,14 +40,11 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
     this.hexManagementService.state$
       .pipe(takeUntilDestroyed())
-      .pipe(
-        distinctUntilChanged((prev, curr) => {
-          return isSameHexArray(prev, curr, 'hexData');
-        }),
-      )
+      .pipe(distinctUntilChanged((prev, curr) => isSameHexArray(prev.hexData, curr.hexData)))
       .subscribe((state) => {
         this.hexData = state.hexData;
 
+        // TODO: probably should remove this as it causes unnecessary double state update
         if (state.hexData.length === 0) this.setNextTurnHexData();
       });
   }
@@ -199,27 +196,27 @@ export class GameControlComponent implements OnInit, OnDestroy {
     this.setNextTurnHexData();
   }
 
-  moveQ() {
+  moveQ(): void {
     this.performMove(DIRECTION.Q);
   }
 
-  moveW() {
+  moveW(): void {
     this.performMove(DIRECTION.W);
   }
 
-  moveE() {
+  moveE(): void {
     this.performMove(DIRECTION.E);
   }
 
-  moveA() {
+  moveA(): void {
     this.performMove(DIRECTION.A);
   }
 
-  moveS() {
+  moveS(): void {
     this.performMove(DIRECTION.S);
   }
 
-  moveD() {
+  moveD(): void {
     this.performMove(DIRECTION.D);
   }
 
@@ -256,7 +253,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
     }
   }
 
-  setNextTurnHexData() {
+  setNextTurnHexData(): void {
     // TODO:
     // 1. receive an array of updated data ✅ -> done in this.performMove
     // 2. SORT the updated data ✅ -> done in this.performMove

@@ -16,7 +16,7 @@ export class GameOverControlComponent {
     private readonly hexManagementService: HexManagementService,
   ) {}
 
-  restartGame() {
+  restartGame(): void {
     this.hexManagementService.setHexData([], `GameOverControlComponent.restartGame(`);
     this.gameSetupService.setGameState('in-progress', `GameOverControlComponent.restartGame()`);
   }

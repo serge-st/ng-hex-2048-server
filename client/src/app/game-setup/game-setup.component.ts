@@ -42,7 +42,7 @@ export class GameSetupComponent implements OnInit {
     }
   }
 
-  startGame() {
+  startGame(): void {
     this.gameSetupService.setGameState('in-progress', `GameSetupComponent.startGame: setIsGameInProgress`);
   }
 }
