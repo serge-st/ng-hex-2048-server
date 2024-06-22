@@ -4,4 +4,4 @@ export type { HexCoordKey } from './hex-coord-key';
 export type { HexDataKey } from './hex-data-key';
 export type { Direction } from './direction';
 export type { HexAnimation } from './hex-animation';
-export type { ValueQuantityMap } from './value-quantity-map';
+export type { ValueQuantityMap, ValueQuantityPair } from './value-quantity';

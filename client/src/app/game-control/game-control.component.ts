@@ -12,7 +12,7 @@ import {
   sortHexDataArray,
 } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
-import { Direction, HexCoordKey, ValueQuantityMap } from '@app/shared/types';
+import { Direction, HexCoordKey, ValueQuantityMap, ValueQuantityPair } from '@app/shared/types';
 
 @Component({
   selector: 'app-game-control',
@@ -44,7 +44,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
       .subscribe((state) => {
         this.hexData = state.hexData;
 
-        // TODO: probably should remove this as it causes unnecessary double state update
         if (state.hexData.length === 0) this.setNextTurnHexData();
       });
   }
@@ -180,6 +179,43 @@ export class GameControlComponent implements OnInit, OnDestroy {
     return result.filter((hex) => !mergedHexes.includes(hex));
   }
 
+  getDuplicateHexValues(): HexData['value'][] {
+    return Array.from<ValueQuantityPair>(
+      this.hexData.reduce<ValueQuantityMap>((acc, currHex) => {
+        if (acc.has(currHex.value)) {
+          acc.set(currHex.value, acc.get(currHex.value)! + 1);
+        } else {
+          acc.set(currHex.value, 1);
+        }
+        return acc;
+      }, new Map<number, number>()),
+    ).flatMap((vqPair) => (vqPair[1] > 1 ? vqPair[0] : []));
+  }
+
+  isGameOver(): void {
+    if (this.hexData.length !== this.maxHexCount) return;
+
+    const duplicateHexValues = this.getDuplicateHexValues();
+
+    if (!duplicateHexValues.length) return this.gameSetupService.setGameState('game-over');
+
+    const potentialMergeHexes = this.hexData.filter((hex) => duplicateHexValues.includes(hex.value));
+
+    const canMerge = potentialMergeHexes.some((hex) => {
+      const neighborCoords = Object.values(DIRECTION)
+        .map((direction) => this.getNeighborCoord(hex, direction))
+        .filter((hex) => this.isHexInRange(hex));
+
+      const neighbors = neighborCoords
+        .map((neighborCoord) => this.getHex(neighborCoord, potentialMergeHexes))
+        .filter((el) => el !== undefined);
+
+      return neighbors.some((neighbor) => neighbor && neighbor.value === hex.value);
+    });
+
+    if (!canMerge) return this.gameSetupService.setGameState('game-over');
+  }
+
   performMove(direction: Direction): void {
     let localHexData = [...this.hexData];
 
@@ -192,8 +228,20 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
     if (isSameHexData) return;
 
-    this.hexManagementService.setHexData(localHexData, 'GameControlComponent.performMove()');
-    this.setNextTurnHexData();
+    this.setNextTurnHexData(localHexData);
+  }
+
+  setNextTurnHexData(thisTurnHexData: HexData[] = []): void {
+    this.hexManagementService.getNewHexCoords(this.radius, thisTurnHexData).subscribe((newHexData) => {
+      if (newHexData.length === 0) return this.gameSetupService.setGameState('game-over');
+
+      this.hexManagementService.setHexData(
+        thisTurnHexData.concat(newHexData),
+        'GameControlComponent.setNextTurnHexData()',
+      );
+
+      this.isGameOver();
+    });
   }
 
   moveQ(): void {
@@ -218,65 +266,5 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
   moveD(): void {
     this.performMove(DIRECTION.D);
-  }
-
-  isGameOver(): void {
-    if (this.hexData.length === this.maxHexCount) {
-      const duplicateHexValues = Array.from(
-        this.hexData.reduce<ValueQuantityMap>((acc, currHex) => {
-          if (acc.has(currHex.value)) {
-            acc.set(currHex.value, acc.get(currHex.value)! + 1);
-          } else {
-            acc.set(currHex.value, 1);
-          }
-          return acc;
-        }, new Map<number, number>()),
-      ).flatMap((vqPair) => (vqPair[1] > 1 ? vqPair[0] : []));
-
-      if (!duplicateHexValues.length) return this.gameSetupService.setGameState('game-over');
-
-      const potentialMergeHexes = this.hexData.filter((hex) => duplicateHexValues.includes(hex.value));
-
-      const canMerge = potentialMergeHexes.some((hex) => {
-        const neighborCoords = Object.values(DIRECTION)
-          .map((direction) => this.getNeighborCoord(hex, direction))
-          .filter((hex) => this.isHexInRange(hex));
-
-        const neighbors = neighborCoords
-          .map((neighborCoord) => this.getHex(neighborCoord, potentialMergeHexes))
-          .filter((el) => el !== undefined);
-
-        return neighbors.some((neighbor) => neighbor && neighbor.value === hex.value);
-      });
-
-      if (!canMerge) return this.gameSetupService.setGameState('game-over');
-    }
-  }
-
-  setNextTurnHexData(): void {
-    // TODO:
-    // 1. receive an array of updated data ✅ -> done in this.performMove
-    // 2. SORT the updated data ✅ -> done in this.performMove
-    // 3. check if the new array is the same as the previous ✅ -> done in this.performMove
-    // 4. if the same -> do nothing ✅ -> done in this.performMove
-    // 5. animation of moving merging?
-    // 6. update state?
-    // 7. fetch new hex data
-    // 8. SORT new data (✅ this is done in service when updating the state)
-    // 9. arrival animation
-    // 10. update state again?
-
-    /* --------- */
-    const localHexData = this.hexManagementService.getHexData();
-    this.hexManagementService.getNewHexCoords(this.radius, localHexData).subscribe((newHexCoords) => {
-      if (newHexCoords.length === 0) return this.gameSetupService.setGameState('game-over');
-
-      this.hexManagementService.setHexData(
-        localHexData.concat(newHexCoords.map((hex) => ({ ...hex, animation: 'zoom-in' }))),
-        'GameControlComponent.setNextTurnHexData()',
-      );
-
-      this.isGameOver();
-    });
   }
 }

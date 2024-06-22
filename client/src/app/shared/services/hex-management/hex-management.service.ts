@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { HexManagementState } from './interfaces/hex-management-state';
 import { sortHexDataArray } from '@app/shared/helpers';
@@ -55,6 +55,15 @@ export class HexManagementService {
     const url = `${this.serviceURL}/${radius}`;
     return this.http.post<HexData[]>(url, JSON.stringify(userCoords), this.httpOptions).pipe(
       tap((_) => console.log('fetched hex coords')),
+      map((response) =>
+        response.map((hex) => {
+          const newHex: HexData = {
+            ...hex,
+            animation: 'zoom-in',
+          };
+          return newHex;
+        }),
+      ),
       // TODO: set some UI error message if server doesn't provide a response
       catchError((err) => this.handleError(err, [])),
     );
