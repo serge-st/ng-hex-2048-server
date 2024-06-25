@@ -1,8 +1,7 @@
 import { HexAnimation } from '../types';
-import { HexCoord } from './hex-coord';
+import { HexCoordWithValue } from './hex-coord-with-value';
 
-export interface HexData extends HexCoord {
-  value: number;
+export interface HexData extends HexCoordWithValue {
+  id: number;
   animation?: HexAnimation;
-  id?: number;
 }

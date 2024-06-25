@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
-import { HexCoord, HexData } from '@app/shared/interfaces';
+import { HexCoord, HexCoordWithValue, HexData } from '@app/shared/interfaces';
 import { HexManagementState } from './interfaces/hex-management-state';
-import { sortHexDataArray } from '@app/shared/helpers';
+import { hexagonIDGenerator, sortHexDataArray } from '@app/shared/helpers';
 
 const initialState: HexManagementState = {
   hexData: [],
@@ -51,19 +51,30 @@ export class HexManagementService {
     return this.getState().hexData;
   }
 
-  getNewHexCoords(radius: number, userCoords: HexData[]): Observable<HexData[]> {
+  private getNextHexID: ReturnType<typeof hexagonIDGenerator> = hexagonIDGenerator();
+
+  private initializeHexIDGenerator(): void {
+    if (this.getState().hexData.length === 0) {
+      this.getNextHexID = hexagonIDGenerator();
+    }
+  }
+
+  private processIncomingHexes(hexCoordWithValues: HexCoordWithValue[]): HexData[] {
+    return hexCoordWithValues.map((hex) => {
+      const newHex: HexData = {
+        ...hex,
+        animation: 'zoom-in',
+        id: this.getNextHexID(),
+      };
+      return newHex;
+    });
+  }
+
+  getNewHexCoords(radius: number, userHexData: HexData[]): Observable<HexData[]> {
     const url = `${this.serviceURL}/${radius}`;
-    return this.http.post<HexData[]>(url, JSON.stringify(userCoords), this.httpOptions).pipe(
-      tap((_) => console.log('fetched hex coords')),
-      map((response) =>
-        response.map((hex) => {
-          const newHex: HexData = {
-            ...hex,
-            animation: 'zoom-in',
-          };
-          return newHex;
-        }),
-      ),
+    return this.http.post<HexCoordWithValue[]>(url, JSON.stringify(userHexData), this.httpOptions).pipe(
+      tap(() => this.initializeHexIDGenerator()),
+      map((response) => this.processIncomingHexes(response)),
       // TODO: set some UI error message if server doesn't provide a response
       catchError((err) => this.handleError(err, [])),
     );
