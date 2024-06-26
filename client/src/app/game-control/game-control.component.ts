@@ -4,13 +4,7 @@ import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
-import {
-  isSameHexArray,
-  isHexAEqualHexB,
-  CLOSEST_TO_BORDER,
-  areHexArraysEqual,
-  sortHexDataArray,
-} from '@app/shared/helpers';
+import { isSameHexArray, isHexAEqualHexB, CLOSEST_TO_BORDER, sortHexDataArray } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { Direction, HexCoordKey, ValueQuantityMap, ValueQuantityPair } from '@app/shared/types';
 
@@ -224,7 +218,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
     localHexData = this.processMove(direction, localHexData);
     localHexData = sortHexDataArray(localHexData);
 
-    const isSameHexData = areHexArraysEqual(localHexData, this.hexData);
+    const isSameHexData = isSameHexArray(localHexData, this.hexData);
 
     if (isSameHexData) return;
 
