@@ -1,4 +1,7 @@
 :host {
+  --move-time: 0.3s;
+  --zoom-in-time: 0.5s;
+
   position: absolute;
   top: var(--y-coord);
   left: var(--x-coord);
@@ -16,6 +19,19 @@
     /* Left point */ 0% 50%
   );
   background-color: tomato;
+  transition:
+    top var(--move-time),
+    left var(--move-time);
+}
+
+// TODO: remove after testing
+.count {
+  display: flex;
+  flex-direction: column;
+
+  pre {
+    font-size: 8px;
+  }
 }
 
 :host.background-hex {
@@ -27,7 +43,11 @@
 }
 
 :host.zoom-in {
-  animation: zoom-in 0.3s;
+  animation: zoom-in var(--zoom-in-time);
+}
+
+:host.merge {
+  animation: merge var(--move-time);
 }
 
 @keyframes zoom-in {
@@ -35,12 +55,30 @@
     transform: scale(0);
   }
 
-  60% {
+  50% {
+    transform: scale(0);
+  }
+
+  80% {
     transform: scale(1);
   }
 
-  70% {
+  90% {
     transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes merge {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.25);
   }
 
   100% {

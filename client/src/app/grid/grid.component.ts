@@ -8,7 +8,7 @@ import { Observable, distinctUntilChanged, map, pairwise } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { GameState } from '@app/shared/types';
-import { isSameHexArray } from '@app/shared/helpers';
+import { isHexAEqualHexB, isSameHexArray } from '@app/shared/helpers';
 
 // TODO: remove console.log
 @Component({
@@ -21,6 +21,10 @@ import { isSameHexArray } from '@app/shared/helpers';
 export class GridComponent extends GridUtilityComponent {
   trackByCoord(_index: number, hexCoord: HexCoord): string {
     return `${hexCoord.q},${hexCoord.r},${hexCoord.s}`;
+  }
+
+  trackByID(_index: number, hex: HexData): number {
+    return hex.id;
   }
 
   radius!: number;
@@ -50,11 +54,9 @@ export class GridComponent extends GridUtilityComponent {
       .pipe(distinctUntilChanged((prev, curr) => isSameHexArray(prev.hexData, curr.hexData)))
       .pipe(pairwise())
       .subscribe(([prevState, currState]) => {
-        // .subscribe((currState) => {
-        // this.previousHexData = prevState.hexData;
-        console.log(`>>> GridComponent hexData changed`);
         this.previousHexData = prevState.hexData;
-        this.hexData = currState.hexData;
+        const hexDataWithAnimations = this.setAnimations(currState.hexData);
+        this.hexData = hexDataWithAnimations;
       });
 
     this.hexManagementService.state$
@@ -136,5 +138,35 @@ export class GridComponent extends GridUtilityComponent {
         localHexCoords,
         'GridComponent.setHexCoords setBackgroundHexCoords',
       );
+  }
+
+  setAnimations(currState: HexData[]): HexData[] {
+    console.log('SETTINGS ANIMATIONS');
+
+    console.log('>>>!!! previousHexData', this.previousHexData);
+    console.log('>>>!!! hexData', currState);
+
+    return currState.map((hex) => {
+      const isNewHex = !this.previousHexData.some((oldHex) => oldHex.id === hex.id);
+      if (isNewHex) {
+        const newHex: HexData = { ...hex, animation: 'zoom-in' };
+
+        return newHex;
+      } else {
+        const oldHex = this.previousHexData.find((oldHex) => oldHex.id === hex.id);
+
+        if (!oldHex) return hex;
+        if (isHexAEqualHexB(oldHex, hex)) return hex;
+
+        const didMerge = oldHex.value !== hex.value;
+
+        if (!didMerge)
+          console.log(`cord change from:\n\n${JSON.stringify(oldHex)}\n\ncord change to:\n\n${JSON.stringify(hex)}`);
+
+        const nexHex: HexData = { ...hex, animation: didMerge ? 'merge' : 'move' };
+
+        return nexHex;
+      }
+    });
   }
 }

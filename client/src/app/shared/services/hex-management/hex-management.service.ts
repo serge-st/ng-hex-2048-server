@@ -59,11 +59,10 @@ export class HexManagementService {
     }
   }
 
-  private processIncomingHexes(hexCoordWithValues: HexCoordWithValue[]): HexData[] {
+  private transformIntoHexData(hexCoordWithValues: HexCoordWithValue[]): HexData[] {
     return hexCoordWithValues.map((hex) => {
       const newHex: HexData = {
         ...hex,
-        animation: 'zoom-in',
         id: this.getNextHexID(),
       };
       return newHex;
@@ -74,7 +73,7 @@ export class HexManagementService {
     const url = `${this.serviceURL}/${radius}`;
     return this.http.post<HexCoordWithValue[]>(url, JSON.stringify(userHexData), this.httpOptions).pipe(
       tap(() => this.initializeHexIDGenerator()),
-      map((response) => this.processIncomingHexes(response)),
+      map((response) => this.transformIntoHexData(response)),
       // TODO: set some UI error message if server doesn't provide a response
       catchError((err) => this.handleError(err, [])),
     );

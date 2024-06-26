@@ -25,6 +25,11 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     return isHexData(this.hexDetails) ? this.hexDetails?.animation : undefined;
   }
 
+  // TODO: remove after testing
+  get hexData(): string | undefined {
+    return isHexData(this.hexDetails) ? JSON.stringify(this.hexDetails, null, 2) : undefined;
+  }
+
   @HostBinding('class.background-hex') get backgroundHexClass() {
     return Boolean(!this.value);
   }
@@ -33,6 +38,12 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   }
   @HostBinding('class.zoom-in') get zoomInClass() {
     return this.animation === 'zoom-in';
+  }
+  @HostBinding('class.move') get moveClass() {
+    return this.animation === 'move';
+  }
+  @HostBinding('class.merge') get mergeClass() {
+    return this.animation === 'merge';
   }
   @HostBinding('style') get cssVariables() {
     return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height}; --x-coord: ${this.styleVariables.xCoord}; --y-coord: ${this.styleVariables.yCoord}`;
@@ -52,6 +63,12 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
 
   @HostListener('animationend')
   onAnimationend(): void {
+    if (isHexData(this.hexDetails)) {
+      this.hexDetails.animation = 'none';
+    }
+  }
+  @HostListener('transitionend')
+  onTransitionend(): void {
     if (isHexData(this.hexDetails)) {
       this.hexDetails.animation = 'none';
     }

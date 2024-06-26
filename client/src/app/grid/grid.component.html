@@ -8,7 +8,7 @@
 ></app-hexagon>
 <ng-container *ngIf="!(isSetup$ | async)">
   <app-hexagon
-    *ngFor="let hex of hexData; trackBy: trackByCoord"
+    *ngFor="let hex of hexData; trackBy: trackByID"
     [hexWidth]="hexWidth"
     [gap]="gap"
     [hexDetails]="hex"
