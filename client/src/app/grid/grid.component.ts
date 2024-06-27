@@ -33,6 +33,7 @@ export class GridComponent extends GridUtilityComponent {
   gameState!: GameState;
   previousHexData: HexData[] = [];
   hexData: HexData[] = [];
+  hexesToDelete: HexData[] = [];
   backgroundHexCoords: HexCoord[] = [];
 
   constructor(
@@ -56,6 +57,7 @@ export class GridComponent extends GridUtilityComponent {
       .subscribe(([prevState, currState]) => {
         this.previousHexData = prevState.hexData;
         const hexDataWithAnimations = this.setAnimations(currState.hexData);
+        this.hexesToDelete = currState.hexesToDelete;
         this.hexData = hexDataWithAnimations;
       });
 
@@ -140,12 +142,8 @@ export class GridComponent extends GridUtilityComponent {
       );
   }
 
+  // TODO: refactor the method
   setAnimations(currState: HexData[]): HexData[] {
-    console.log('SETTINGS ANIMATIONS');
-
-    console.log('>>>!!! previousHexData', this.previousHexData);
-    console.log('>>>!!! hexData', currState);
-
     return currState.map((hex) => {
       const isNewHex = !this.previousHexData.some((oldHex) => oldHex.id === hex.id);
       if (isNewHex) {
@@ -159,9 +157,6 @@ export class GridComponent extends GridUtilityComponent {
         if (isHexAEqualHexB(oldHex, hex)) return hex;
 
         const didMerge = oldHex.value !== hex.value;
-
-        if (!didMerge)
-          console.log(`cord change from:\n\n${JSON.stringify(oldHex)}\n\ncord change to:\n\n${JSON.stringify(hex)}`);
 
         const nexHex: HexData = { ...hex, animation: didMerge ? 'merge' : 'move' };
 

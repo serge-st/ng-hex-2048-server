@@ -7,6 +7,7 @@ import { hexagonIDGenerator, sortHexDataArray } from '@app/shared/helpers';
 
 const initialState: HexManagementState = {
   hexData: [],
+  hexesToDelete: [],
   backgroundHexCoords: [],
 };
 
@@ -47,6 +48,10 @@ export class HexManagementService {
     this.setState({ hexData: sortHexDataArray(hexData) }, whereFrom);
   }
 
+  setHexDataAndHexesToDelete(hexData: HexData[], hexesToDelete: HexData[], whereFrom?: string): void {
+    this.setState({ hexData: sortHexDataArray(hexData), hexesToDelete }, whereFrom);
+  }
+
   getHexData(): HexData[] {
     return this.getState().hexData;
   }
@@ -60,13 +65,7 @@ export class HexManagementService {
   }
 
   private transformIntoHexData(hexCoordWithValues: HexCoordWithValue[]): HexData[] {
-    return hexCoordWithValues.map((hex) => {
-      const newHex: HexData = {
-        ...hex,
-        id: this.getNextHexID(),
-      };
-      return newHex;
-    });
+    return hexCoordWithValues.map<HexData>((hex) => ({ ...hex, id: this.getNextHexID() }));
   }
 
   getNewHexCoords(radius: number, userHexData: HexData[]): Observable<HexData[]> {

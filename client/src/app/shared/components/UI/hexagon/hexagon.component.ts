@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, Input, OnChanges } from '@angular/core';
+import { Component, ElementRef, HostBinding, HostListener, Input, OnChanges, Renderer2 } from '@angular/core';
 import { StyleVariables, Position, HexCoord, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { NgIf } from '@angular/common';
@@ -13,6 +13,20 @@ import { HexAnimation } from '@app/shared/types';
   styleUrl: './hexagon.component.scss',
 })
 export class HexagonComponent extends GridUtilityComponent implements OnChanges {
+  colors: string[] = [
+    '#fff678', // Muted Yellow
+    '#ffdf73',
+    '#ffc96e',
+    '#ffb369',
+    '#ff9d64',
+    '#ff875f',
+    '#ff715a',
+    '#ff5b55',
+    '#ff454f',
+    '#ff2f4a',
+    '#eb674f', // Muted Red
+  ];
+
   @Input({ required: true }) hexDetails!: HexCoord | HexData;
   @Input({ required: true }) offset!: Position;
   @Input({ required: true }) gap!: number;
@@ -27,7 +41,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
 
   // TODO: remove after testing
   get hexData(): string | undefined {
-    return isHexData(this.hexDetails) ? JSON.stringify(this.hexDetails, null, 2) : undefined;
+    return isHexData(this.hexDetails) ? JSON.stringify({ id: this.hexDetails.id }, null, 2) : undefined;
   }
 
   @HostBinding('class.background-hex') get backgroundHexClass() {
@@ -45,8 +59,14 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   @HostBinding('class.merge') get mergeClass() {
     return this.animation === 'merge';
   }
+  @HostBinding('class.delete') get deleteClass() {
+    return this.animation === 'delete';
+  }
   @HostBinding('style') get cssVariables() {
     return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height}; --x-coord: ${this.styleVariables.xCoord}; --y-coord: ${this.styleVariables.yCoord}`;
+  }
+  @HostBinding('style.--background-color') get backgroundColor() {
+    return isHexData(this.hexDetails) ? this.colors[Math.log2(this.hexDetails.value)] : undefined;
   }
   @HostBinding('attr.data-q') get q() {
     return this.hexDetails.q;
@@ -64,6 +84,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   @HostListener('animationend')
   onAnimationend(): void {
     if (isHexData(this.hexDetails)) {
+      if (this.hexDetails.animation === 'delete') return this.handleDelete();
       this.hexDetails.animation = 'none';
     }
   }
@@ -77,6 +98,13 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   hexHeight!: number;
   pixelCoord!: Position;
   styleVariables!: StyleVariables;
+
+  constructor(
+    private readonly renderer: Renderer2,
+    private readonly elementRef: ElementRef<HTMLElement>,
+  ) {
+    super();
+  }
 
   ngOnChanges(): void {
     this.validateHexCoordinates();
@@ -111,5 +139,9 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     this.setHexHeight();
     this.setPixelCoords();
     this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
+  }
+
+  handleDelete(): void {
+    this.renderer.removeChild(this.elementRef.nativeElement.parentNode, this.elementRef.nativeElement);
   }
 }

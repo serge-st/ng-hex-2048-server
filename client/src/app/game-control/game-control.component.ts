@@ -7,6 +7,7 @@ import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
 import { isSameHexArray, isHexAEqualHexB, CLOSEST_TO_BORDER, sortHexDataArray } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { Direction, HexCoordKey, ValueQuantityMap, ValueQuantityPair } from '@app/shared/types';
+import { MergeResult } from './types';
 
 @Component({
   selector: 'app-game-control',
@@ -38,7 +39,15 @@ export class GameControlComponent implements OnInit, OnDestroy {
       .subscribe((state) => {
         this.hexData = state.hexData;
 
-        if (state.hexData.length === 0) this.setNextTurnHexData();
+        // TODO: uncomment after testing
+        // if (state.hexData.length === 0) this.setNextTurnHexData();
+        // TODO: remove after testing
+        if (state.hexData.length === 0)
+          this.hexManagementService.setHexData([
+            { q: 0, r: 0, s: 0, value: 2, id: 1001 },
+            { q: 1, r: 0, s: -1, value: 2, id: 1002 },
+            { q: -3, r: 2, s: 1, value: 2, id: 1003 },
+          ]);
       });
   }
 
@@ -146,7 +155,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
     );
   }
 
-  processMerge(direction: Direction, hexDataArray: HexData[]): HexData[] {
+  processMerge(direction: Direction, hexDataArray: HexData[]): MergeResult {
     const mergedHexes: HexData[] = [];
     const result: HexData[] = [];
 
@@ -170,7 +179,11 @@ export class GameControlComponent implements OnInit, OnDestroy {
       return result.push(newHex);
     });
 
-    return result.filter((hex) => !mergedHexes.includes(hex));
+    const hexesToDelete = this.hexData.flatMap((hex) =>
+      mergedHexes.some((mergedHex) => mergedHex.id === hex.id) ? hex : [],
+    );
+
+    return [result.filter((hex) => !mergedHexes.includes(hex)), hexesToDelete];
   }
 
   getDuplicateHexValues(): HexData['value'][] {
@@ -212,9 +225,10 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
   performMove(direction: Direction): void {
     let localHexData = [...this.hexData];
+    let hexesToDelete: HexData[];
 
     localHexData = this.processMove(direction, localHexData);
-    localHexData = this.processMerge(direction, localHexData);
+    [localHexData, hexesToDelete] = this.processMerge(direction, localHexData);
     localHexData = this.processMove(direction, localHexData);
     localHexData = sortHexDataArray(localHexData);
 
@@ -222,15 +236,24 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
     if (isSameHexData) return;
 
-    this.setNextTurnHexData(localHexData);
+    this.setNextTurnHexData(
+      localHexData,
+      hexesToDelete.map<HexData>((hex) => ({ ...hex, animation: 'delete' })),
+    );
   }
 
-  setNextTurnHexData(thisTurnHexData: HexData[] = []): void {
+  setNextTurnHexData(thisTurnHexData: HexData[] = [], hexesToDelete: HexData[] = []): void {
     this.hexManagementService.getNewHexCoords(this.radius, thisTurnHexData).subscribe((newHexData) => {
       if (newHexData.length === 0) return this.gameSetupService.setGameState('game-over');
 
-      this.hexManagementService.setHexData(
+      // this.hexManagementService.setHexData(
+      //   thisTurnHexData.concat(newHexData),
+      //   'GameControlComponent.setNextTurnHexData()',
+      // );
+
+      this.hexManagementService.setHexDataAndHexesToDelete(
         thisTurnHexData.concat(newHexData),
+        hexesToDelete,
         'GameControlComponent.setNextTurnHexData()',
       );
 

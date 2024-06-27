@@ -1,6 +1,9 @@
 :host {
-  --move-time: 0.3s;
-  --zoom-in-time: 0.5s;
+  // --move-time: 0.3s;
+  // --zoom-in-time: 0.5s;
+  // TODO: remove after testing
+  --move-time: 1s;
+  --zoom-in-time: 1.2s;
 
   position: absolute;
   top: var(--y-coord);
@@ -18,7 +21,7 @@
     /* Bottom left point */ 25% 100%,
     /* Left point */ 0% 50%
   );
-  background-color: tomato;
+  background-color: var(--background-color);
   transition:
     top var(--move-time),
     left var(--move-time);
@@ -36,6 +39,7 @@
 
 :host.background-hex {
   background-color: rgb(255 255 255);
+  transition: none;
 }
 
 :host.background-hex.setup {
@@ -48,6 +52,11 @@
 
 :host.merge {
   animation: merge var(--move-time);
+}
+
+:host.delete {
+  background-color: red;
+  animation: zoom-out var(--move-time);
 }
 
 @keyframes zoom-in {
@@ -83,5 +92,15 @@
 
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes zoom-out {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
   }
 }

@@ -4,9 +4,9 @@ import { GameSetupState } from './interfaces/game-setup-state';
 import { GameState } from '@app/shared/types';
 
 const initialState: GameSetupState = {
-  radius: 1,
+  radius: 2,
   gap: 4,
-  hexWidth: 200,
+  hexWidth: 100,
   gameState: 'setup',
 };
 
