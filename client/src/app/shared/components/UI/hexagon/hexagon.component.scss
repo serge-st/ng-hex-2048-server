@@ -55,7 +55,7 @@
 }
 
 :host.delete {
-  background-color: red;
+  transform: scale(0);
   animation: zoom-out var(--move-time);
 }
 

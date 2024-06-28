@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostBinding, HostListener, Input, OnChanges, Renderer2 } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnChanges } from '@angular/core';
 import { StyleVariables, Position, HexCoord, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { NgIf } from '@angular/common';
@@ -84,7 +84,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   @HostListener('animationend')
   onAnimationend(): void {
     if (isHexData(this.hexDetails)) {
-      if (this.hexDetails.animation === 'delete') return this.handleDelete();
+      if (this.hexDetails.animation === 'delete') return;
       this.hexDetails.animation = 'none';
     }
   }
@@ -98,13 +98,6 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
   hexHeight!: number;
   pixelCoord!: Position;
   styleVariables!: StyleVariables;
-
-  constructor(
-    private readonly renderer: Renderer2,
-    private readonly elementRef: ElementRef<HTMLElement>,
-  ) {
-    super();
-  }
 
   ngOnChanges(): void {
     this.validateHexCoordinates();
@@ -139,9 +132,5 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     this.setHexHeight();
     this.setPixelCoords();
     this.setStyleVariables(this.hexWidth, this.hexHeight, this.pixelCoord.x, this.pixelCoord.y);
-  }
-
-  handleDelete(): void {
-    this.renderer.removeChild(this.elementRef.nativeElement.parentNode, this.elementRef.nativeElement);
   }
 }
