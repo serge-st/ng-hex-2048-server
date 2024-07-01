@@ -44,9 +44,10 @@ export class GameControlComponent implements OnInit, OnDestroy {
         // TODO: remove after testing
         if (state.hexData.length === 0)
           this.hexManagementService.setHexData([
-            { q: 0, r: 0, s: 0, value: 2, id: 1001 },
+            { q: 0, r: 0, s: 0, value: 4, id: 1001 },
             { q: 1, r: 0, s: -1, value: 2, id: 1002 },
             { q: -3, r: 2, s: 1, value: 2, id: 1003 },
+            { q: 2, r: 0, s: -2, value: 2, id: 1004 },
           ]);
       });
   }
@@ -156,7 +157,8 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   processMerge(direction: Direction, hexDataArray: HexData[]): MergeResult {
-    const mergedHexes: HexData[] = [];
+    const consumedHexes: HexData[] = [];
+    const mergedHees: HexData[] = [];
     const result: HexData[] = [];
 
     hexDataArray.sort(CLOSEST_TO_BORDER[direction]).forEach((hex, i, initialArray) => {
@@ -169,21 +171,24 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
       if (!neighbor) return result.push(newHex);
 
+      const didMerge = mergedHees.some((mHex) => mHex.id === neighbor.id);
+
       const isSameValue = newHex.value === neighbor.value;
 
-      if (!isSameValue) return result.push(newHex);
+      if (!isSameValue || didMerge) return result.push(newHex);
 
       newHex = { ...newHex, value: newHex.value * 2 };
-      mergedHexes.push(neighbor);
+      consumedHexes.push(neighbor);
+      mergedHees.push(newHex);
 
       return result.push(newHex);
     });
 
     const hexesToDelete = this.hexData.flatMap((hex) =>
-      mergedHexes.some((mergedHex) => mergedHex.id === hex.id) ? hex : [],
+      consumedHexes.some((mergedHex) => mergedHex.id === hex.id) ? hex : [],
     );
 
-    return [result.filter((hex) => !mergedHexes.includes(hex)), hexesToDelete];
+    return [result.filter((hex) => !consumedHexes.includes(hex)), hexesToDelete];
   }
 
   getDuplicateHexValues(): HexData['value'][] {
