@@ -1,9 +1,6 @@
 :host {
-  // --move-time: 0.3s;
-  // --zoom-in-time: 0.5s;
-  // TODO: remove after testing
-  --move-time: 1s;
-  --zoom-in-time: 1.2s;
+  --move-time: 0.4s;
+  --zoom-in-time: 0.6s;
 
   position: absolute;
   top: var(--y-coord);
@@ -25,16 +22,6 @@
   transition:
     top var(--move-time),
     left var(--move-time);
-}
-
-// TODO: remove after testing
-.count {
-  display: flex;
-  flex-direction: column;
-
-  pre {
-    font-size: 8px;
-  }
 }
 
 :host.background-hex {

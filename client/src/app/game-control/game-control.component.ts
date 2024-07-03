@@ -39,16 +39,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
       .subscribe((state) => {
         this.hexData = state.hexData;
 
-        // TODO: uncomment after testing
-        // if (state.hexData.length === 0) this.setNextTurnHexData();
-        // TODO: remove after testing
-        if (state.hexData.length === 0)
-          this.hexManagementService.setHexData([
-            { q: 0, r: 0, s: 0, value: 4, id: 1001 },
-            { q: 1, r: 0, s: -1, value: 2, id: 1002 },
-            { q: -3, r: 2, s: 1, value: 2, id: 1003 },
-            { q: 2, r: 0, s: -2, value: 2, id: 1004 },
-          ]);
+        if (state.hexData.length === 0) this.setNextTurnHexData();
       });
   }
 

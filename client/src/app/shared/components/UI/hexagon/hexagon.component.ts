@@ -39,11 +39,6 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     return isHexData(this.hexDetails) ? this.hexDetails?.animation : undefined;
   }
 
-  // TODO: remove after testing
-  get hexData(): string | undefined {
-    return isHexData(this.hexDetails) ? JSON.stringify({ id: this.hexDetails.id }, null, 2) : undefined;
-  }
-
   @HostBinding('class.background-hex') get backgroundHexClass() {
     return Boolean(!this.value);
   }
