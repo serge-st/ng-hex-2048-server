@@ -4,6 +4,7 @@ import { GridUtilityComponent } from '@app/shared/components';
 import { NgIf } from '@angular/common';
 import { isHexData } from '@app/shared/helpers';
 import { HexAnimation } from '@app/shared/types';
+import { HexManagementService } from '@app/shared/services/hex-management';
 
 @Component({
   selector: 'app-hexagon',
@@ -26,6 +27,10 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     '#ff2f4a',
     '#eb674f', // Muted Red
   ];
+
+  constructor(private hexManagementService: HexManagementService) {
+    super();
+  }
 
   @Input({ required: true }) hexDetails!: HexCoord | HexData;
   @Input({ required: true }) offset!: Position;
@@ -76,18 +81,29 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     return this.value;
   }
 
+  @HostListener('animationstart')
+  onAnimationstart(): void {
+    this.hexManagementService.setIsAnimatingOrTransitioning(true);
+  }
+
+  @HostListener('transitionstart')
+  onTransitionstart(): void {
+    this.hexManagementService.setIsAnimatingOrTransitioning(true);
+  }
+
   @HostListener('animationend')
   onAnimationend(): void {
-    if (isHexData(this.hexDetails)) {
-      if (this.hexDetails.animation === 'delete') return;
-      this.hexDetails.animation = 'none';
-    }
+    if (!isHexData(this.hexDetails)) return;
+    if (this.hexDetails.animation === 'delete') return;
+    this.hexDetails.animation = 'none';
+    this.hexManagementService.setIsAnimatingOrTransitioning(false);
   }
+
   @HostListener('transitionend')
   onTransitionend(): void {
-    if (isHexData(this.hexDetails)) {
-      this.hexDetails.animation = 'none';
-    }
+    if (!isHexData(this.hexDetails)) return;
+    this.hexDetails.animation = 'none';
+    this.hexManagementService.setIsAnimatingOrTransitioning(false);
   }
 
   hexHeight!: number;

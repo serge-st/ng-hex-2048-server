@@ -10,6 +10,7 @@ const initialState: HexManagementState = {
   hexData: [],
   hexesToDelete: [],
   backgroundHexCoords: [],
+  isAnimatingOrTransitioning: false,
 };
 
 @Injectable({
@@ -47,6 +48,10 @@ export class HexManagementService {
 
   setHexData(hexData: HexData[], whereFrom?: string): void {
     this.setState({ hexData: sortHexDataArray(hexData) }, whereFrom);
+  }
+
+  setIsAnimatingOrTransitioning(isAnimatingOrTransitioning: boolean, whereFrom?: string): void {
+    this.setState({ isAnimatingOrTransitioning }, whereFrom);
   }
 
   setHexDataAndHexesToDelete(hexData: HexData[], hexesToDelete: HexData[], whereFrom?: string): void {

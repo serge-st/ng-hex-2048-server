@@ -20,6 +20,7 @@ export class GameControlComponent implements OnInit, OnDestroy {
   private unlisten: null | (() => void) = null;
   radius!: number;
   hexData!: HexData[];
+  isAnimatingOrTransitioning!: boolean;
 
   constructor(
     private readonly renderer: Renderer2,
@@ -41,6 +42,14 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
         if (state.hexData.length === 0) this.setNextTurnHexData();
       });
+
+    this.hexManagementService.state$
+      .pipe(takeUntilDestroyed())
+      .pipe(distinctUntilChanged((prev, curr) => prev.isAnimatingOrTransitioning === curr.isAnimatingOrTransitioning))
+      .subscribe((state) => {
+        console.log(`123 isAnimatingOrTransitioning: ${state.isAnimatingOrTransitioning}`);
+        this.isAnimatingOrTransitioning = state.isAnimatingOrTransitioning;
+      });
   }
 
   get maxHexCount(): number {
@@ -48,29 +57,36 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // TODO: refactor this
     this.unlisten = this.renderer.listen('document', 'keydown', (event) => {
       switch (event.code) {
         case 'KeyQ': {
+          if (this.isAnimatingOrTransitioning) break;
           this.moveQ();
           break;
         }
         case 'KeyW': {
+          if (this.isAnimatingOrTransitioning) break;
           this.moveW();
           break;
         }
         case 'KeyE': {
+          if (this.isAnimatingOrTransitioning) break;
           this.moveE();
           break;
         }
         case 'KeyA': {
+          if (this.isAnimatingOrTransitioning) break;
           this.moveA();
           break;
         }
         case 'KeyS': {
+          if (this.isAnimatingOrTransitioning) break;
           this.moveS();
           break;
         }
         case 'KeyD': {
+          if (this.isAnimatingOrTransitioning) break;
           this.moveD();
           break;
         }
