@@ -10,7 +10,7 @@ const initialState: HexManagementState = {
   hexData: [],
   hexesToDelete: [],
   backgroundHexCoords: [],
-  isAnimatingOrTransitioning: false,
+  isAnimatingOrTransitioning: true,
 };
 
 @Injectable({

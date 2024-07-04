@@ -3,10 +3,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
-import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
+import { DIRECTION, DIRECTIONS, KEY_DIRECTION_MAPPING } from '@app/shared/constants';
 import { isSameHexArray, isHexAEqualHexB, CLOSEST_TO_BORDER, sortHexDataArray } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
-import { Direction, HexCoordKey, ValueQuantityMap, ValueQuantityPair } from '@app/shared/types';
+import { Direction, DirectionKey, HexCoordKey, ValueQuantityMap, ValueQuantityPair } from '@app/shared/types';
 import { MergeResult } from './types';
 
 @Component({
@@ -57,41 +57,15 @@ export class GameControlComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // TODO: refactor this
-    this.unlisten = this.renderer.listen('document', 'keydown', (event) => {
-      switch (event.code) {
-        case 'KeyQ': {
-          if (this.isAnimatingOrTransitioning) break;
-          this.moveQ();
-          break;
-        }
-        case 'KeyW': {
-          if (this.isAnimatingOrTransitioning) break;
-          this.moveW();
-          break;
-        }
-        case 'KeyE': {
-          if (this.isAnimatingOrTransitioning) break;
-          this.moveE();
-          break;
-        }
-        case 'KeyA': {
-          if (this.isAnimatingOrTransitioning) break;
-          this.moveA();
-          break;
-        }
-        case 'KeyS': {
-          if (this.isAnimatingOrTransitioning) break;
-          this.moveS();
-          break;
-        }
-        case 'KeyD': {
-          if (this.isAnimatingOrTransitioning) break;
-          this.moveD();
-          break;
-        }
-      }
+    this.unlisten = this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
+      this.move(KEY_DIRECTION_MAPPING[event.code]);
     });
+  }
+
+  move(key: DirectionKey | undefined): void {
+    if (!key) return;
+    if (this.isAnimatingOrTransitioning) return;
+    this.performMove(DIRECTION[key]);
   }
 
   ngOnDestroy(): void {
@@ -271,29 +245,5 @@ export class GameControlComponent implements OnInit, OnDestroy {
 
       this.isGameOver();
     });
-  }
-
-  moveQ(): void {
-    this.performMove(DIRECTION.Q);
-  }
-
-  moveW(): void {
-    this.performMove(DIRECTION.W);
-  }
-
-  moveE(): void {
-    this.performMove(DIRECTION.E);
-  }
-
-  moveA(): void {
-    this.performMove(DIRECTION.A);
-  }
-
-  moveS(): void {
-    this.performMove(DIRECTION.S);
-  }
-
-  moveD(): void {
-    this.performMove(DIRECTION.D);
   }
 }
