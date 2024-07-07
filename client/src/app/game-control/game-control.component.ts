@@ -47,7 +47,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed())
       .pipe(distinctUntilChanged((prev, curr) => prev.isAnimatingOrTransitioning === curr.isAnimatingOrTransitioning))
       .subscribe((state) => {
-        console.log(`123 isAnimatingOrTransitioning: ${state.isAnimatingOrTransitioning}`);
         this.isAnimatingOrTransitioning = state.isAnimatingOrTransitioning;
       });
   }
