@@ -231,11 +231,6 @@ export class GameControlComponent implements OnInit, OnDestroy {
     this.hexManagementService.getNewHexCoords(this.radius, thisTurnHexData).subscribe((newHexData) => {
       if (newHexData.length === 0) return this.gameSetupService.setGameState('game-over');
 
-      // this.hexManagementService.setHexData(
-      //   thisTurnHexData.concat(newHexData),
-      //   'GameControlComponent.setNextTurnHexData()',
-      // );
-
       this.hexManagementService.setHexDataAndHexesToDelete(
         thisTurnHexData.concat(newHexData),
         hexesToDelete,
