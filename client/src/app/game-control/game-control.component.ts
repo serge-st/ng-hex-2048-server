@@ -8,11 +8,12 @@ import { isSameHexArray, isHexAEqualHexB, CLOSEST_TO_BORDER, sortHexDataArray } 
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { Direction, DirectionKey, HexCoordKey, ValueQuantityMap, ValueQuantityPair } from '@app/shared/types';
 import { MergeResult } from './types';
+import { ButtonComponent } from '@app/shared/components/UI';
 
 @Component({
   selector: 'app-game-control',
   standalone: true,
-  imports: [],
+  imports: [ButtonComponent],
   templateUrl: './game-control.component.html',
   styleUrl: './game-control.component.scss',
 })

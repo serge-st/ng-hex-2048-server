@@ -8,7 +8,7 @@ import { GameSetupService } from '@app/shared/services/game-setup';
   standalone: true,
   imports: [GridComponent, GameControlComponent],
   templateUrl: './testing-contol-page.component.html',
-  styleUrl: './testing-contol-page.component.scss',
+  styleUrls: ['../pages-styles.scss', './testing-contol-page.component.scss'],
 })
 export class TestingContolPageComponent {
   constructor(private readonly gameSetupService: GameSetupService) {

@@ -2,11 +2,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
 }
 
 .control-row {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
