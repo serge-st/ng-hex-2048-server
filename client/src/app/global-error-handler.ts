@@ -3,7 +3,6 @@ import { Injectable, ErrorHandler, NgZone } from '@angular/core';
 import { HexManagementService } from './shared/services/hex-management';
 
 // TODO re-check the implementation
-
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   constructor(
@@ -16,7 +15,8 @@ export class GlobalErrorHandler implements ErrorHandler {
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection; // get the error object
     }
-    this.zone.run(() => this.hexManagementService.setError(error));
+    // TODO: Place error handling component here
+    this.zone.run(() => {});
 
     console.error('Error from global error handler', error);
   }

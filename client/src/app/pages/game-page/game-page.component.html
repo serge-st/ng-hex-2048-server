@@ -1,8 +1,4 @@
 <main>
-  <pre>
-    {{ error | json }}
-  </pre>
-
   <h1 *ngIf="isInProgress$ | async">Let's play! 🎮</h1>
   <h1 *ngIf="isGameOver$ | async">Game Over 💀</h1>
   <h1 *ngIf="isWin$ | async">Congratulations, you won! 👑</h1>

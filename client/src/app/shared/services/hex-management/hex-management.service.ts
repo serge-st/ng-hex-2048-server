@@ -11,7 +11,6 @@ const initialState: HexManagementState = {
   hexesToDelete: [],
   backgroundHexCoords: [],
   isAnimatingOrTransitioning: true,
-  error: null,
 };
 
 @Injectable({
@@ -41,10 +40,6 @@ export class HexManagementService {
     this.state.next({ ...this.getState(), ...newState });
     // TODO remove afer testing
     console.log(`New state: ${whereFrom}`, this.getState());
-  }
-
-  setError(error: any): void {
-    this.setState({ error });
   }
 
   setBackgroundHexCoords(hexCoords: HexCoord[], whereFrom?: string): void {
