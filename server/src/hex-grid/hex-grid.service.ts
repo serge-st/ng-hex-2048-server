@@ -3,9 +3,12 @@ import { HexDataDTO, HexCoordDTO } from './common/dto';
 import {
   GAME_DIFFICULTY_THRESHOLD,
   HEX_HIGH_VALUE_PROBABILITY,
+  LARGE_HEX_BASE_COUNT,
   NEW_HEX_COUNT_INITIAL,
-} from './common/constants/constants';
+  SMALL_HEX_BASE_COUNT,
+} from './common/constants';
 import { RequiredHexCoordKey } from './common/types';
+import { getDifficultyModifier, getHexCountModifier } from './common/helpers';
 
 @Injectable()
 export class HexGridService {
@@ -15,7 +18,7 @@ export class HexGridService {
 
     const userCoordCount = userHexData.length;
 
-    const newHexCount = this.getNewHexCount(availableHexCoords.length, userCoordCount);
+    const newHexCount = this.getNewHexCount(availableHexCoords.length, userCoordCount, radius);
 
     const hexValue = this.getHexValue(userCoordCount);
 
@@ -56,10 +59,15 @@ export class HexGridService {
     return !hasMismatch;
   };
 
-  getNewHexCount(availableCoordCount: number, userCoordCount: number): number {
+  getNewHexCount(availableCoordCount: number, userCoordCount: number, radius: number): number {
     if (userCoordCount === 0) return NEW_HEX_COUNT_INITIAL;
 
-    return Math.min(availableCoordCount, this.getPercentage() > GAME_DIFFICULTY_THRESHOLD ? 2 : 1);
+    const difficultyThreshold = GAME_DIFFICULTY_THRESHOLD - getDifficultyModifier(radius);
+    const hexCountModifier = getHexCountModifier(radius);
+    const largeHexCount = LARGE_HEX_BASE_COUNT + hexCountModifier;
+    const smallHexCount = SMALL_HEX_BASE_COUNT + hexCountModifier;
+
+    return Math.min(availableCoordCount, this.getPercentage() > difficultyThreshold ? largeHexCount : smallHexCount);
   }
 
   getPercentage(): number {
