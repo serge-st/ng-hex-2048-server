@@ -1,30 +1,28 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
-import { DIRECTION, DIRECTIONS, KEY_DIRECTION_MAPPING } from '@app/shared/constants';
+import { DIRECTION, DIRECTIONS } from '@app/shared/constants';
 import { isSameHexArray, isHexAEqualHexB, CLOSEST_TO_BORDER, sortHexDataArray } from '@app/shared/helpers';
 import { HexCoord, HexData } from '@app/shared/interfaces';
 import { Direction, DirectionKey, HexCoordKey, ValueQuantityMap, ValueQuantityPair } from '@app/shared/types';
 import { MergeResult } from './types';
-import { ButtonComponent } from '@app/shared/components/UI';
+import { ControlButtonComponent } from '@app/shared/components/UI/control-button/control-button.component';
 
 @Component({
   selector: 'app-game-control',
   standalone: true,
-  imports: [ButtonComponent],
+  imports: [ControlButtonComponent],
   templateUrl: './game-control.component.html',
   styleUrl: './game-control.component.scss',
 })
-export class GameControlComponent implements OnInit, OnDestroy {
-  private unlisten: null | (() => void) = null;
+export class GameControlComponent {
   radius!: number;
   hexData!: HexData[];
   isAnimatingOrTransitioning!: boolean;
 
   constructor(
-    private readonly renderer: Renderer2,
     private readonly gameSetupService: GameSetupService,
     private readonly hexManagementService: HexManagementService,
   ) {
@@ -56,22 +54,10 @@ export class GameControlComponent implements OnInit, OnDestroy {
     return 1 + 3 * this.radius * (this.radius + 1);
   }
 
-  ngOnInit(): void {
-    this.unlisten = this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
-      this.move(KEY_DIRECTION_MAPPING[event.code]);
-    });
-  }
-
-  move(key: DirectionKey | undefined): void {
-    if (!key) return;
+  move(directionKey: DirectionKey | undefined): void {
+    if (!directionKey) return;
     if (this.isAnimatingOrTransitioning) return;
-    this.performMove(DIRECTION[key]);
-  }
-
-  ngOnDestroy(): void {
-    if (this.unlisten) {
-      this.unlisten();
-    }
+    this.performMove(DIRECTION[directionKey]);
   }
 
   canMove(direction: Direction, hexDataArray: HexData[]): boolean {
