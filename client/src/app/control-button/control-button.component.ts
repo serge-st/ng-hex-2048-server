@@ -23,8 +23,6 @@ export class ControlButtonComponent {
     if (directionKey !== this.directionLabel) return;
 
     this.appButtonActive = true;
-
-    this.emitMoveEvent(directionKey);
   }
 
   @HostListener('window:keyup', ['$event'])
