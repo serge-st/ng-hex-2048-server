@@ -1,0 +1,8 @@
+<app-button
+  [width]="40"
+  (appButtonEvent)="emitMoveEvent(directionLabel)"
+  [disabled]="disabled"
+  [active]="appButtonActive"
+>
+  <ng-content></ng-content>
+</app-button>

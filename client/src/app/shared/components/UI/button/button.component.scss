@@ -18,7 +18,8 @@ button:hover {
   border-color: #babbbc;
 }
 
-button:active {
+button:active,
+button.active {
   background-color: #babbbc;
   border-color: #a0a1a2;
 }
