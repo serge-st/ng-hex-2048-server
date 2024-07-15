@@ -4,8 +4,8 @@ button {
 
   width: var(--width);
   padding: 6px 12px;
-  background-color: #f8f9fa;
-  border-color: #f8f9fa;
+  background-color: var(--bas-bg-color);
+  border-color: var(--bas-border-color);
   border-style: solid;
   border-width: 1px;
   transition:
@@ -14,26 +14,18 @@ button {
 }
 
 button:hover {
-  background-color: #d5d6d7;
-  border-color: #babbbc;
+  background-color: var(--hov-bg-color);
+  border-color: var(--hov-border-color);
 }
 
 button:active,
 button.active {
-  background-color: #babbbc;
-  border-color: #a0a1a2;
+  background-color: var(--act-bg-color);
+  border-color: var(--act-border-color);
 }
 
 button:disabled {
-  color: #a0a1a2;
-  background-color: #f8f9fa;
-  border-color: #f8f9fa;
-}
-
-button.pressed {
-  color: red;
-
-  // color: #a0a1a2;
-  // background-color: #babbbc;
-  // border-color: #babbbc;
+  color: var(--dis-color);
+  background-color: var(--dis-bg-color);
+  border-color: var(--dis-border-color);
 }
