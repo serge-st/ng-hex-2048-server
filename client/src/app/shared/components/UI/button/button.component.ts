@@ -1,7 +1,8 @@
 import { NgClass } from '@angular/common';
 import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
-import { ButtonStyleType, ColorsType } from './types';
-import { PRIMARY_COLORS, SECONDARY_COLORS } from './constants';
+import { ButtonStyleType } from './types';
+import { PRIMARY_COLORS, SECONDARY_COLORS } from '@app/shared/constants';
+import { ColorsType } from '@app/shared/types';
 
 @Component({
   selector: 'app-button',
@@ -16,6 +17,7 @@ export class ButtonComponent {
   @Input() active: boolean = false;
   @Input() disabled: boolean = false;
   @Input() width?: number;
+
   private buttonColors: Record<ButtonStyleType, ColorsType> = {
     primary: PRIMARY_COLORS,
     secondary: SECONDARY_COLORS,
@@ -36,10 +38,11 @@ export class ButtonComponent {
 
   @HostBinding('style') get cssVariables(): string {
     const { basic, hover, active, disabled } = this.buttonColor;
-    const basicVars = `--bas-bg-color: ${basic.backgroundColor}; --bas-border-color: ${basic.borderColor};`;
+
+    const basicVars = `--bas-color: ${basic?.color}; --bas-bg-color: ${basic.backgroundColor}; --bas-border-color: ${basic.borderColor};`;
     const hoverVars = `--hov-bg-color: ${hover.backgroundColor}; --hov-border-color: ${hover.borderColor};`;
     const activeVars = `--act-bg-color: ${active.backgroundColor}; --act-border-color: ${active.borderColor};`;
-    const disabledVars = `--dis-color: ${disabled.color}; --dis-bg-color: ${disabled.backgroundColor}; --dis-border-color: ${disabled.borderColor};`;
+    const disabledVars = `--dis-color: ${disabled?.color}; --dis-bg-color: ${disabled.backgroundColor}; --dis-border-color: ${disabled.borderColor};`;
     return basicVars + hoverVars + activeVars + disabledVars;
   }
 }
