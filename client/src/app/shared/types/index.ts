@@ -5,4 +5,4 @@ export type { HexDataKey } from './hex-data-key';
 export type { Direction, DirectionKey } from './direction';
 export type { HexAnimation } from './hex-animation';
 export type { ValueQuantityMap, ValueQuantityPair } from './value-quantity';
-export type { ColorsType } from './colors-type';
+export type { ColorType } from './colors-type';

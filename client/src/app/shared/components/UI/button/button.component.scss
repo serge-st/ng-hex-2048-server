@@ -1,17 +1,15 @@
 button {
-  // TODO: extract transitions in to global variable style file
-  --button-animation-time: 0.1s;
-
   width: var(--width);
   padding: 6px 12px;
-  color: var(--bas-color);
-  background-color: var(--bas-bg-color);
-  border-color: var(--bas-border-color);
+  color: var(--bs-color);
+  background-color: var(--bs-bg-color);
+  border-color: var(--bs-border-color);
   border-style: solid;
   border-width: 1px;
   transition:
-    background-color var(--button-animation-time) ease,
-    border-color var(--button-animation-time) ease;
+    background-color var(--app-button-animation-time) ease,
+    border-color var(--app-button-animation-time) ease,
+    box-shadow var(--app-button-animation-time) ease;
 }
 
 button:hover {
@@ -25,8 +23,14 @@ button.active {
   border-color: var(--act-border-color);
 }
 
+button:focus-visible {
+  background-color: var(--hov-bg-color);
+  border-color: var(--hov-border-color);
+  box-shadow: 0 0 0 4px rgb(var(--focus-box-shadow-rgb) / 50%);
+}
+
 button:disabled {
-  color: var(--dis-color);
-  background-color: var(--dis-bg-color);
-  border-color: var(--dis-border-color);
+  color: var(--dsbld-color);
+  background-color: var(--dsbld-bg-color);
+  border-color: var(--dsbld-border-color);
 }
