@@ -1,8 +1,4 @@
 :host {
-  // TODO: extract transitions in to global variable style file
-  --move-time: 0.4s;
-  --zoom-in-time: 0.6s;
-
   position: absolute;
   top: var(--y-coord);
   left: var(--x-coord);
@@ -21,8 +17,8 @@
   );
   background-color: var(--background-color);
   transition:
-    top var(--move-time),
-    left var(--move-time);
+    top var(--app-hex-move-time),
+    left var(--app-hex-move-time);
 }
 
 :host.background-hex {
@@ -35,16 +31,16 @@
 }
 
 :host.zoom-in {
-  animation: zoom-in var(--zoom-in-time);
+  animation: zoom-in var(--app-hex-zoom-in-time);
 }
 
 :host.merge {
-  animation: merge var(--move-time);
+  animation: merge var(--app-hex-move-time);
 }
 
 :host.delete {
   transform: scale(0);
-  animation: zoom-out var(--move-time);
+  animation: zoom-out var(--app-hex-move-time);
 }
 
 @keyframes zoom-in {
