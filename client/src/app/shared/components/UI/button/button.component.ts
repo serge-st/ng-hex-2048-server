@@ -41,16 +41,16 @@ export class ButtonComponent {
 
     const cssVars = {
       'bs-color': basic?.color,
-      'bs-bg-color': basic.backgroundColor,
-      'bs-border-color': basic.borderColor,
-      'hov-bg-color': hover.backgroundColor,
-      'hov-border-color': hover.borderColor,
-      'act-bg-color': active.backgroundColor,
-      'act-border-color': active.borderColor,
+      'bs-bg-color': basic?.backgroundColor,
+      'bs-border-color': basic?.borderColor,
+      'hov-bg-color': hover?.backgroundColor,
+      'hov-border-color': hover?.borderColor,
+      'act-bg-color': active?.backgroundColor,
+      'act-border-color': active?.borderColor,
       'focus-box-shadow-rgb': focus?.boxShadowRGB,
       'dsbld-color': disabled?.color,
-      'dsbld-bg-color': disabled.backgroundColor,
-      'dsbld-border-color': disabled.borderColor,
+      'dsbld-bg-color': disabled?.backgroundColor,
+      'dsbld-border-color': disabled?.borderColor,
     };
 
     return getCSSVariableString(cssVars);

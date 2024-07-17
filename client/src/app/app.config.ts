@@ -10,11 +10,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     importProvidersFrom(HttpClientModule),
     // TODO re-check the implementation
-
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandler,
-    },
+    // {
+    //   provide: ErrorHandler,
+    //   useClass: GlobalErrorHandler,
+    // },
     provideHttpClient(withInterceptors([universalInterceptor])),
   ],
 };

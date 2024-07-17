@@ -1,6 +1,6 @@
 type ColorProperties = {
-  backgroundColor: string;
-  borderColor: string;
+  backgroundColor?: string;
+  borderColor?: string;
   color?: string;
   boxShadowRGB?: string;
 };
