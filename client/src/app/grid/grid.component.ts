@@ -1,6 +1,6 @@
 import { Component, HostBinding } from '@angular/core';
 import { HexagonComponent } from '@app/shared/components/UI';
-import { StyleVariables, Position, HexData, HexCoord } from '@app/shared/interfaces';
+import { GridUtilStyleVariables, Position, HexData, HexCoord } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -8,7 +8,7 @@ import { Observable, distinctUntilChanged, map, pairwise } from 'rxjs';
 import { GameSetupService } from '@app/shared/services/game-setup';
 import { HexManagementService } from '@app/shared/services/hex-management';
 import { GameState } from '@app/shared/types';
-import { isHexAEqualHexB, isSameHexArray } from '@app/shared/helpers';
+import { getCSSVariableString, isHexAEqualHexB, isSameHexArray } from '@app/shared/helpers';
 
 // TODO: remove console.log
 @Component({
@@ -71,7 +71,7 @@ export class GridComponent extends GridUtilityComponent {
   }
 
   @HostBinding('style') get cssVariables() {
-    return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height};`;
+    return getCSSVariableString(this.styleVariables);
   }
 
   get isSetup$(): Observable<boolean> {
@@ -82,7 +82,7 @@ export class GridComponent extends GridUtilityComponent {
   gridWidth!: number;
   gridHeight!: number;
   offset!: Position;
-  styleVariables!: StyleVariables;
+  styleVariables!: GridUtilStyleVariables;
 
   readonly HEX_HORIZONTAL_SPAN_RATIO = 0.75;
 

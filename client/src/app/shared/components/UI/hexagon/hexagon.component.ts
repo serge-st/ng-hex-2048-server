@@ -1,8 +1,8 @@
 import { Component, HostBinding, HostListener, Input, OnChanges } from '@angular/core';
-import { StyleVariables, Position, HexCoord, HexData } from '@app/shared/interfaces';
+import { GridUtilStyleVariables, Position, HexCoord, HexData } from '@app/shared/interfaces';
 import { GridUtilityComponent } from '@app/shared/components';
 import { NgIf } from '@angular/common';
-import { isHexData } from '@app/shared/helpers';
+import { getCSSVariableString, isHexData } from '@app/shared/helpers';
 import { HexAnimation } from '@app/shared/types';
 import { HexManagementService } from '@app/shared/services/hex-management';
 
@@ -63,7 +63,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     return this.animation === 'delete';
   }
   @HostBinding('style') get cssVariables() {
-    return `--width: ${this.styleVariables.width}; --height: ${this.styleVariables.height}; --x-coord: ${this.styleVariables.xCoord}; --y-coord: ${this.styleVariables.yCoord}`;
+    return getCSSVariableString(this.styleVariables);
   }
   @HostBinding('style.--background-color') get backgroundColor() {
     return isHexData(this.hexDetails) ? this.colors[Math.log2(this.hexDetails.value)] : undefined;
@@ -108,7 +108,7 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
 
   hexHeight!: number;
   pixelCoord!: Position;
-  styleVariables!: StyleVariables;
+  styleVariables!: GridUtilStyleVariables;
 
   ngOnChanges(): void {
     this.validateHexCoordinates();

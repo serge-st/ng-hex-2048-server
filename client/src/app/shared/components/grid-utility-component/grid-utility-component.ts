@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StyleVariables, CoordToPixel } from '@app/shared/interfaces';
+import { GridUtilStyleVariables, CoordToPixel } from '@app/shared/interfaces';
 
 @Component({
   selector: '',
@@ -8,7 +8,7 @@ import { StyleVariables, CoordToPixel } from '@app/shared/interfaces';
 export abstract class GridUtilityComponent {
   abstract hexWidth: number;
   abstract hexHeight: number;
-  abstract styleVariables: StyleVariables;
+  abstract styleVariables: GridUtilStyleVariables;
 
   readonly coordToPixel: CoordToPixel = {
     f0: 3.0 / 2.0, // 1.5
@@ -29,8 +29,8 @@ export abstract class GridUtilityComponent {
     this.styleVariables = {
       width: this.getPixelString(width),
       height: this.getPixelString(height),
-      xCoord: xCoord ? this.getPixelString(xCoord) : '',
-      yCoord: yCoord ? this.getPixelString(yCoord) : '',
+      'x-coord': xCoord ? this.getPixelString(xCoord) : '',
+      'y-coord': yCoord ? this.getPixelString(yCoord) : '',
     };
   }
 }

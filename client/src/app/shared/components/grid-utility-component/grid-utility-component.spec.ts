@@ -1,10 +1,10 @@
-import { StyleVariables } from '@app/shared/interfaces';
+import { GridUtilStyleVariables } from '@app/shared/interfaces';
 import { GridUtilityComponent } from './grid-utility-component';
 
 class TestGridUtilityComponent extends GridUtilityComponent {
   hexWidth: number = 0;
   hexHeight: number = 0;
-  styleVariables: StyleVariables = { width: '', height: '', xCoord: '', yCoord: '' };
+  styleVariables: GridUtilStyleVariables = { width: '', height: '', xCoord: '', yCoord: '' };
 }
 
 describe('GridUtilityComponent', () => {
