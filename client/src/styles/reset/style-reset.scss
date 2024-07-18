@@ -8,6 +8,13 @@
   margin: 0;
 }
 
+input {
+  font: inherit;
+  background-image: none;
+  border: none;
+  outline: none;
+}
+
 button,
 input[type='submit'],
 input[type='reset'] {

@@ -3,6 +3,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 @Component({
   selector: 'app-number-input',
   templateUrl: './number-input.component.html',
+  styleUrl: './number-input.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
