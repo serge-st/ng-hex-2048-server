@@ -1,4 +1,4 @@
-<div class="control-row">
+<div class="control-row desktop">
   <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="Q" (moveEvent)="move($event)"
     >Q</app-control-button
   >
@@ -9,7 +9,7 @@
     >E</app-control-button
   >
 </div>
-<div class="control-row">
+<div class="control-row desktop">
   <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="A" (moveEvent)="move($event)"
     >A</app-control-button
   >
@@ -18,5 +18,28 @@
   >
   <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="D" (moveEvent)="move($event)"
     >D</app-control-button
+  >
+</div>
+
+<div class="control-row mobile">
+  <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="Q" (moveEvent)="move($event)"
+    >↖</app-control-button
+  >
+  <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="W" (moveEvent)="move($event)"
+    >↑</app-control-button
+  >
+  <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="E" (moveEvent)="move($event)"
+    >↗</app-control-button
+  >
+</div>
+<div class="control-row mobile">
+  <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="A" (moveEvent)="move($event)"
+    >↙</app-control-button
+  >
+  <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="S" (moveEvent)="move($event)"
+    >↓</app-control-button
+  >
+  <app-control-button [disabled]="isAnimatingOrTransitioning" directionLabel="D" (moveEvent)="move($event)"
+    >↘</app-control-button
   >
 </div>
