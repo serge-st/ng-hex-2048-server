@@ -5,6 +5,7 @@ import { NgIf } from '@angular/common';
 import { getCSSVariableString, isHexData } from '@app/shared/helpers';
 import { HexAnimation } from '@app/shared/types';
 import { HexManagementService } from '@app/shared/services/hex-management';
+import { HEX_COLORS } from './constants';
 
 @Component({
   selector: 'app-hexagon',
@@ -14,19 +15,7 @@ import { HexManagementService } from '@app/shared/services/hex-management';
   styleUrl: './hexagon.component.scss',
 })
 export class HexagonComponent extends GridUtilityComponent implements OnChanges {
-  colors: string[] = [
-    '#fff678', // Muted Yellow
-    '#ffdf73',
-    '#ffc96e',
-    '#ffb369',
-    '#ff9d64',
-    '#ff875f',
-    '#ff715a',
-    '#ff5b55',
-    '#ff454f',
-    '#ff2f4a',
-    '#eb674f', // Muted Red
-  ];
+  private colors = HEX_COLORS;
 
   constructor(private hexManagementService: HexManagementService) {
     super();
@@ -83,12 +72,12 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
 
   @HostListener('animationstart')
   onAnimationstart(): void {
-    this.hexManagementService.setIsAnimatingOrTransitioning(true, `hex`);
+    this.hexManagementService.setIsAnimatingOrTransitioning(true);
   }
 
   @HostListener('transitionstart')
   onTransitionstart(): void {
-    this.hexManagementService.setIsAnimatingOrTransitioning(true, `hex`);
+    this.hexManagementService.setIsAnimatingOrTransitioning(true);
   }
 
   @HostListener('animationend')
@@ -96,14 +85,14 @@ export class HexagonComponent extends GridUtilityComponent implements OnChanges 
     if (!isHexData(this.hexDetails)) return;
     if (this.hexDetails.animation === 'delete') return;
     this.hexDetails.animation = 'none';
-    this.hexManagementService.setIsAnimatingOrTransitioning(false, `hex`);
+    this.hexManagementService.setIsAnimatingOrTransitioning(false);
   }
 
   @HostListener('transitionend')
   onTransitionend(): void {
     if (!isHexData(this.hexDetails)) return;
     this.hexDetails.animation = 'none';
-    this.hexManagementService.setIsAnimatingOrTransitioning(false, 'hex');
+    this.hexManagementService.setIsAnimatingOrTransitioning(false);
   }
 
   hexHeight!: number;
