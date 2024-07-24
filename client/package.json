@@ -7,9 +7,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "format-ts": "prettier --write \"src/**/*.ts\"",
-    "format-html": "prettier --write \"src/**/*.html\"",
-    "format-scss": "prettier --write \"src/**/*.scss\" && stylelint \"src/**/*.scss\" --fix"
+    "format:ts": "prettier --write \"src/**/*.ts\"",
+    "format:html": "prettier --write \"src/**/*.html\"",
+    "format:scss": "prettier --write \"src/**/*.scss\" && stylelint \"src/**/*.scss\" --fix",
+    "build:cicd": "pnpm i --frozen-lockfile && pnpm build"
   },
   "private": true,
   "dependencies": {

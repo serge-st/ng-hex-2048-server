@@ -4,8 +4,8 @@ import { CanActivateFn } from '@angular/router';
 import { canStartGameGuard } from './can-start-game.guard';
 
 describe('canStartGameGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => canStartGameGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => canStartGameGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

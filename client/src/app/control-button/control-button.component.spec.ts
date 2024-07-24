@@ -8,10 +8,9 @@ describe('ControlButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ControlButtonComponent]
-    })
-    .compileComponents();
-    
+      imports: [ControlButtonComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ControlButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

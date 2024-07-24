@@ -8,7 +8,6 @@ import { DirectionKey } from '@app/shared/types';
   standalone: true,
   imports: [ButtonComponent],
   templateUrl: './control-button.component.html',
-  styleUrl: './control-button.component.scss',
 })
 export class ControlButtonComponent {
   @Input() disabled: boolean = false;
