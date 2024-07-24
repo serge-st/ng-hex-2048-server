@@ -27,7 +27,7 @@ pnpm install --frozen-lockfile
 pnpm start:dev
 
 # production mode
-pnpm build && start:prod
+pnpm build && pnpm start:prod
 ```
 
 ### Additional information:
