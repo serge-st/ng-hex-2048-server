@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Post, Header } from '@nestjs/common';
-import { HexGridService } from './hex-grid.service';
-import { HexDataDTO } from './common/dto';
-import { ParseHexArrayPipe } from './validation';
+import { HexGridService } from '../service';
+import { HexDataDTO } from '../common/dto';
+import { ParseHexArrayPipe } from '../validation';
 
 @Controller('hex-grid-management')
 export class HexGridController {
@@ -9,7 +9,10 @@ export class HexGridController {
 
   @Post(':radius')
   @Header('Content-Type', 'application/json')
-  getHexGrid(@Body(new ParseHexArrayPipe({ items: HexDataDTO })) body: HexDataDTO[], @Param('radius') radius: number) {
+  getRandomHexes(
+    @Body(new ParseHexArrayPipe({ items: HexDataDTO })) body: HexDataDTO[],
+    @Param('radius') radius: number,
+  ): HexDataDTO[] {
     return this.hexGridService.calculateNextMoveCoords(Number(radius), body);
   }
 }

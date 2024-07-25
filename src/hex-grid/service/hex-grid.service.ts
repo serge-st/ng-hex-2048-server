@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { HexDataDTO, HexCoordDTO } from './common/dto';
+import { HexDataDTO, HexCoordDTO } from '../common/dto';
 import {
   GAME_DIFFICULTY_THRESHOLD,
   HEX_HIGH_VALUE_PROBABILITY,
   LARGE_HEX_BASE_COUNT,
   NEW_HEX_COUNT_INITIAL,
   SMALL_HEX_BASE_COUNT,
-} from './common/constants';
-import { RequiredHexCoordKey } from './common/types';
-import { getDifficultyModifier, getHexCountModifier } from './common/helpers';
+} from '../common/constants';
+import { RequiredHexCoordKey } from '../common/types';
+import { getDifficultyModifier, getHexCountModifier } from '../common/helpers';
 
 @Injectable()
 export class HexGridService {

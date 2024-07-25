@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { HexGridController } from './hex-grid.controller';
-import { HexGridService } from './hex-grid.service';
+import { HexGridController } from './controller';
+import { HexGridService } from './service';
 
 @Module({
   controllers: [HexGridController],
