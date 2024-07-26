@@ -16,7 +16,7 @@ export class HexGridController {
     return this.hexGridService.calculateNextMoveCoords(Number(radius), body);
   }
 
-  @Get('test')
+  @Get('test2')
   test(): string {
     return 'Hello World';
   }
