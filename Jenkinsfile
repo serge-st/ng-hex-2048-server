@@ -25,7 +25,7 @@ pipeline {
                     sourceDir = "./*"
                     destDir = "/opt/services/ng-hex-2048-server"
                 }
-                sh "cp -a ${sourceDir} ${destDir}"
+                sh "cp -ap ${sourceDir} ${destDir}"
             }
         }
     }
