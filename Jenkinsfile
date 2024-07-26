@@ -12,5 +12,21 @@ pipeline {
                 sh 'pnpm build:cicd'
             }
         }
+        stage('Test') {
+            steps {
+                sh 'pnpm lint'
+                sh 'pnpm test'
+                sh 'pnpm test:e2e'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    sourceDir = "."
+                    destDir = "/home/serge/ng-hex-2048-server"
+                }
+                sh "cp -a ${distDir} ${htmlDir}"
+            }
+        }
     }
 }

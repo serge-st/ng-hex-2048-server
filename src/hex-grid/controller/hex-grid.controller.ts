@@ -13,6 +13,8 @@ export class HexGridController {
     @Body(new ParseHexArrayPipe({ items: HexDataDTO })) body: HexDataDTO[],
     @Param('radius') radius: number,
   ): HexDataDTO[] {
-    return this.hexGridService.calculateNextMoveCoords(Number(radius), body);
+    // return this.hexGridService.calculateNextMoveCoords(Number(radius), body);
+    this.hexGridService.calculateNextMoveCoords(Number(radius), body);
+    return [];
   }
 }
