@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Header } from '@nestjs/common';
+import { Body, Controller, Param, Post, Header, Get } from '@nestjs/common';
 import { HexGridService } from '../service';
 import { HexDataDTO } from '../common/dto';
 import { ParseHexArrayPipe } from '../validation';
@@ -13,8 +13,11 @@ export class HexGridController {
     @Body(new ParseHexArrayPipe({ items: HexDataDTO })) body: HexDataDTO[],
     @Param('radius') radius: number,
   ): HexDataDTO[] {
-    // return this.hexGridService.calculateNextMoveCoords(Number(radius), body);
-    this.hexGridService.calculateNextMoveCoords(Number(radius), body);
-    return [];
+    return this.hexGridService.calculateNextMoveCoords(Number(radius), body);
+  }
+
+  @Get('test')
+  test(): string {
+    return 'Hello World';
   }
 }
