@@ -2,20 +2,23 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/serge-st/ng-hex-2048-server.git'
-            }
-        }
         stage('Build') {
             steps {
                 sh 'pnpm build:cicd'
             }
         }
-        stage('Test') {
+        stage('Lint') {
             steps {
                 sh 'pnpm lint'
+            }
+        }
+        stage('Test Unit') {
+            steps {
                 sh 'pnpm test'
+            }
+        }
+        stage('Test E2E') {
+            steps {
                 sh 'pnpm test:e2e'
             }
         }
