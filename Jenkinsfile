@@ -25,7 +25,7 @@ pipeline {
                     sourceDir = "."
                     destDir = "/home/serge/ng-hex-2048-server"
                 }
-                sh "cp -a ${distDir} ${htmlDir}"
+                sh "cp -a ${sourceDir} ${destDir}"
             }
         }
     }
