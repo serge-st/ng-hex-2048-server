@@ -22,7 +22,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sourceDir = "."
+                    sourceDir = "./*"
                     destDir = "/home/serge/ng-hex-2048-server"
                 }
                 sh "cp -a ${sourceDir} ${destDir}"
