@@ -7,6 +7,7 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 const PORT = 3000;
 const CORS_OPTIONS: CorsOptions = {
   origin: ['https://hex2048.stetsen.co'],
+  methods: ['GET', 'POST'],
 };
 
 async function bootstrap() {
