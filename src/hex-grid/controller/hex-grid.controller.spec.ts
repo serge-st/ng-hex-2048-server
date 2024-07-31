@@ -2,17 +2,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HexGridController } from './hex-grid.controller';
 import { HexGridService } from '../service/hex-grid.service';
 import { HexDataDTO } from '../common/dto';
+import { Logger } from '@nestjs/common';
 
 describe('HexGridController', () => {
   let controller: HexGridController;
   let service: HexGridService;
+  let logger: Logger;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [HexGridController],
-      providers: [HexGridService],
+      providers: [HexGridService, Logger],
     }).compile();
 
+    logger = module.get<Logger>(Logger);
     controller = module.get<HexGridController>(HexGridController);
     service = module.get<HexGridService>(HexGridService);
   });
@@ -36,5 +39,12 @@ describe('HexGridController', () => {
     jest.spyOn(service, 'calculateNextMoveCoords').mockImplementation(() => result);
 
     expect(controller.getRandomHexes([], 1)).toBe(result);
+  });
+
+  it('should log successful requests', () => {
+    jest.spyOn(logger, 'log');
+
+    controller.getRandomHexes([], 1);
+    expect(logger.log).toHaveBeenCalledTimes(1);
   });
 });
