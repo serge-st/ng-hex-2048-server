@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HexDataDTO, HexCoordDTO } from '../common/dto';
 import {
   GAME_DIFFICULTY_THRESHOLD,
+  HEX_COUNT_RADIUS_1,
   HEX_HIGH_VALUE_PROBABILITY,
   LARGE_HEX_BASE_COUNT,
   NEW_HEX_COUNT_INITIAL,
@@ -61,6 +62,7 @@ export class HexGridService {
 
   getNewHexCount(availableCoordCount: number, userCoordCount: number, radius: number): number {
     if (userCoordCount === 0) return NEW_HEX_COUNT_INITIAL;
+    if (radius === 1) return HEX_COUNT_RADIUS_1;
 
     const difficultyThreshold = GAME_DIFFICULTY_THRESHOLD - getDifficultyModifier(radius);
     const hexCountModifier = getHexCountModifier(radius);
