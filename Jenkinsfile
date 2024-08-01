@@ -25,7 +25,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sourceDir = "."
+                    sourceDir = "*"
                     destDir = "/opt/services/ng-hex-2048-server"
                 }
                 sh "cp -ap ${sourceDir} ${destDir}"
