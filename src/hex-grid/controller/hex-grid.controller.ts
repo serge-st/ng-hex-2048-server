@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Header, Logger, BadRequestException, Get } from '@nestjs/common';
+import { Body, Controller, Param, Post, Header, Logger, BadRequestException } from '@nestjs/common';
 import { HexGridService } from '../service';
 import { HexDataDTO } from '../common/dto';
 import { ParseHexArrayPipe } from '../validation';
@@ -22,10 +22,5 @@ export class HexGridController {
 
     this.logger.log(`Radius ${radius} is too large, rejecting.`, 'HexGridController');
     throw new BadRequestException('Radius is too large. Maximum allowed radius is 10.');
-  }
-
-  @Get('test')
-  getTest(): string {
-    return 'Test successful!';
   }
 }
