@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HexGridService } from './hex-grid.service';
 import { HexCoordDTO, HexDataDTO } from '../common/dto';
+import { multiIt } from '@test/helpers';
 
 describe('HexGridService', () => {
   let service: HexGridService;
@@ -71,7 +72,7 @@ describe('HexGridService', () => {
   });
 
   describe('getPercentage', () => {
-    it('should return a number from 1 to 100', () => {
+    multiIt(10, 'should return a number from 1 to 100', () => {
       expect(service.getPercentage()).toBeGreaterThanOrEqual(1);
       expect(service.getPercentage()).toBeLessThanOrEqual(100);
     });
@@ -110,14 +111,14 @@ describe('HexGridService', () => {
       expect(result).toBe(1);
     });
 
-    it('should return 1 or 2 when radius is 2 and plenty available tiles', () => {
+    multiIt(10, 'should return 1 or 2 when radius is 2 and plenty available tiles', () => {
       radius = 2;
       const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
       expect(result).toBeGreaterThanOrEqual(1);
       expect(result).toBeLessThanOrEqual(2);
     });
 
-    it('should return 1 or 2 when radius is 3 and plenty available tiles', () => {
+    multiIt(10, 'should return 2 or 3 when radius is 3 and plenty available tiles', () => {
       radius = 3;
       const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
       expect(result).toBeGreaterThanOrEqual(2);
@@ -133,7 +134,7 @@ describe('HexGridService', () => {
   });
 
   describe('getHexValue', () => {
-    it('should return 2 or 4', () => {
+    multiIt(10, 'should return 2 or 4', () => {
       const result = service.getHexValue(userCoords.length);
       expect(result === 2 || result === 4).toBeTruthy();
     });
