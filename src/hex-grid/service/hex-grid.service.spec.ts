@@ -85,10 +85,24 @@ describe('HexGridService', () => {
       userCoordCount = userCoords.length;
     });
 
-    it('should return 3 when radius is 1 is the first call to start the game', () => {
+    it('should return 2 when radius is 1 is the first call to start the game', () => {
+      userCoordCount = 0;
+      const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
+      expect(result).toBe(2);
+    });
+
+    it('should return 3 when radius is 2 is the first call to start the game', () => {
+      radius = 2;
       userCoordCount = 0;
       const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
       expect(result).toBe(3);
+    });
+
+    it('should return 4 when radius is 3 is the first call to start the game', () => {
+      radius = 3;
+      userCoordCount = 0;
+      const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
+      expect(result).toBe(4);
     });
 
     it('should return 1 when radius is 1 and plenty available tiles', () => {

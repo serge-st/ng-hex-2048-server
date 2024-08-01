@@ -12,7 +12,7 @@ export const DIFFICULTY_MODIFIER: DifficultyModifier = {
   3: 15,
 } as const;
 export const HEX_COUNT_MODIFIER: DifficultyModifier = {
-  1: 0,
+  1: -1,
   2: 0,
   3: 1,
   4: 2,

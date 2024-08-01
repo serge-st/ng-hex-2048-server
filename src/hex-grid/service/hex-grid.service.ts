@@ -61,7 +61,7 @@ export class HexGridService {
   };
 
   getNewHexCount(availableCoordCount: number, userCoordCount: number, radius: number): number {
-    if (userCoordCount === 0) return NEW_HEX_COUNT_INITIAL;
+    if (userCoordCount === 0) return NEW_HEX_COUNT_INITIAL + getHexCountModifier(radius);
     if (radius === 1) return HEX_COUNT_RADIUS_1;
 
     const difficultyThreshold = GAME_DIFFICULTY_THRESHOLD - getDifficultyModifier(radius);
