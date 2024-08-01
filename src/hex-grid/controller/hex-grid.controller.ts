@@ -23,4 +23,9 @@ export class HexGridController {
     this.logger.log(`Radius ${radius} is too large, rejecting.`, 'HexGridController');
     throw new BadRequestException('Radius is too large. Maximum allowed radius is 10.');
   }
+
+  @Post('test')
+  postTest(): string {
+    return 'Test successful!';
+  }
 }
