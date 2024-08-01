@@ -81,10 +81,16 @@ export class HexGridService {
     return this.getPercentage() > HEX_HIGH_VALUE_PROBABILITY ? 4 : 2;
   }
 
+  getOrderIndex(hexCount: number): number {
+    return Math.floor(Math.random() * hexCount);
+  }
+
   getRandomHexCoords(availableHexCoords: HexCoordDTO[], coordCount: number): HexCoordDTO[] {
+    const arrayLength = availableHexCoords.length;
+
     return availableHexCoords
       .map((hexCoord) => ({
-        order: this.getPercentage(),
+        order: this.getOrderIndex(arrayLength),
         value: hexCoord,
       }))
       .sort((a, b) => a.order - b.order)
