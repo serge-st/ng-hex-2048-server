@@ -91,14 +91,28 @@ describe('HexGridService', () => {
       expect(result).toBe(3);
     });
 
-    it('should return 1 or 2 when radius is 1 and plenty available tiles', () => {
+    it('should return 1 when radius is 1 and plenty available tiles', () => {
+      const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
+      expect(result).toBe(1);
+    });
+
+    it('should return 1 or 2 when radius is 2 and plenty available tiles', () => {
+      radius = 2;
       const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
       expect(result).toBeGreaterThanOrEqual(1);
       expect(result).toBeLessThanOrEqual(2);
     });
 
-    it('should return 1 when radius is 1 and only one tile is available', () => {
+    it('should return 1 or 2 when radius is 3 and plenty available tiles', () => {
+      radius = 3;
+      const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
+      expect(result).toBeGreaterThanOrEqual(2);
+      expect(result).toBeLessThanOrEqual(3);
+    });
+
+    it('should return 1 when radius is 2 and only one tile is available', () => {
       availableCoordCount = 1;
+      radius = 2;
       const result = service.getNewHexCount(availableCoordCount, userCoordCount, radius);
       expect(result).toBe(1);
     });
