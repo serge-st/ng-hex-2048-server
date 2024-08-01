@@ -43,6 +43,10 @@ describe('HexGridController (e2e)', () => {
         .send([{ x: 0, r: 0, s: 0, value: 2 }])
         .expect(400);
     });
+
+    it(`(POST) ${controllerRoute}/11 with URL param`, () => {
+      return request(app.getHttpServer()).post(`${controllerRoute}/11`).send([]).expect(400);
+    });
   });
 
   describe('should succeed', () => {

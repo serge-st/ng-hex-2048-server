@@ -47,4 +47,8 @@ describe('HexGridController', () => {
     controller.getRandomHexes([], 1);
     expect(logger.log).toHaveBeenCalledTimes(1);
   });
+
+  it('should throw BadRequestException if radius is greater than 10', () => {
+    expect(() => controller.getRandomHexes([], 11)).toThrow();
+  });
 });
