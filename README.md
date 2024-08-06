@@ -70,3 +70,9 @@ or this (based on the radius the new hexagon count can be from 1 to 4 and hexago
 ```
 
 As the hexagonal version of the original "squared" 2048 game is much easier, I added some additional difficulty progression, that makes the game more challenging on bigger radiuses.
+
+---
+
+**Author:** [Serge Stecenko](https://www.linkedin.com/in/serge-stecenko/)
+
+**Link:** The game is available on my website: [hex2048.stetsen.co](https://hex2048.stetsen.co/)
